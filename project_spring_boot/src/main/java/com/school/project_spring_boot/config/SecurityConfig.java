@@ -1,6 +1,7 @@
 package com.school.project_spring_boot.config;
 
 import com.school.project_spring_boot.jwt.JwtAuthenticationFilter;
+import com.school.project_spring_boot.jwt.JwtProvider;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +16,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfig{
+public class SecurityConfig {
 
-    private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtProvider jwtProvider;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
-        this.authenticationConfiguration = authenticationConfiguration;
+    public SecurityConfig(JwtProvider jwtProvider) {
+        this.jwtProvider = jwtProvider;
     }
 
     @Bean
@@ -34,33 +35,20 @@ public class SecurityConfig{
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationConfiguration authenticationConfiguration) throws Exception {
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         http
                 .csrf((auth) -> auth.disable())
-                //기존의 Session 방식은 Session이 항상 고정되어 있기 때문에 csrf를 구현이 필수 였는데
-                // JWT는 Session을 Stateless 방식으로 하기 때문에 csrf 구현이 필수가 아니게 되었다.
-
-                .formLogin((auth)->auth.disable()) //http formLogin 방식 disable
-                .httpBasic((auth) -> auth.disable())  //http basic 인증 방식 disable
-                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
-
-        http
+                .formLogin((auth) -> auth.disable())
+                .httpBasic((auth) -> auth.disable())
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/join").permitAll()
+                        .requestMatchers("/signUp").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/reissue").permitAll()
-                        .anyRequest().authenticated() //이외의 요청에는 인증이 필요하다 ( 로그인 )
-                );
-
-        http
+                        .anyRequest().authenticated())
                 .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterAt(new JwtAuthenticationFilter(authenticationManager, jwtProvider), UsernamePasswordAuthenticationFilter.class);
 
-        http
-                .addFilterAt(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 }
