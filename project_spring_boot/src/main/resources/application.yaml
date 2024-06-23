@@ -12,3 +12,5 @@ spring:
   jwt:
     secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
     issuer: admin
+    access_token_expiration_time: 86400000 #1일
+    refresh_token_expiration_time: 864000000 #7일

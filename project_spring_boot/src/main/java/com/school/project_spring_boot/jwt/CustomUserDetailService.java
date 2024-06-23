@@ -5,7 +5,9 @@ import com.school.project_spring_boot.repository.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CustomUserDetailService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
@@ -21,6 +23,8 @@ public class CustomUserDetailService implements UserDetailsService {
         if (member != null) {
             return new CustomUserDetails(member);
         }
-        return null;
+        else{
+            throw new UsernameNotFoundException(email + " not found");
+        }
     }
 }

@@ -1,12 +1,12 @@
 package com.school.project_spring_boot.config;
 
-import com.school.project_spring_boot.jwt.JwtAuthenticationFilter;
-import com.school.project_spring_boot.jwt.JwtProvider;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import com.school.project_spring_boot.jwt.CustomUserDetailService;
+import com.school.project_spring_boot.jwt.JwtAuthFilter;
+import com.school.project_spring_boot.jwt.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,37 +18,47 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    private final JwtProvider jwtProvider;
+    private final CustomUserDetailService customUserDetailService;
+    private final JwtUtil jwtUtil;
 
-    public SecurityConfig(JwtProvider jwtProvider) {
-        this.jwtProvider = jwtProvider;
+    private static final String[] AUTH_WHITELIST = {
+            "/login", "/signUp", "/h2-console/**"
+    };
+
+    public SecurityConfig(CustomUserDetailService customUserDetailService, JwtUtil jwtUtil) {
+        this.customUserDetailService = customUserDetailService;
+        this.jwtUtil = jwtUtil;
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf((csrf) -> csrf.disable());
+        http.cors(Customizer.withDefaults());
+
+        http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
+                SessionCreationPolicy.STATELESS));
+
+        // FormLogin, BasicHttp 비활성화
+        http.formLogin((form) -> form.disable());
+        http.httpBasic(AbstractHttpConfigurer::disable);
+
+        // JwtAuthFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
+        http.addFilterBefore(new JwtAuthFilter(customUserDetailService, jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
+        // H2 콘솔에 대한 프레임 옵션 허용
+        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
+
+        // 권한 규칙 작성
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(AUTH_WHITELIST).permitAll()
+                .anyRequest().authenticated()
+        );
+
+        return http.build();
     }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
-        http
-                .csrf((auth) -> auth.disable())
-                .formLogin((auth) -> auth.disable())
-                .httpBasic((auth) -> auth.disable())
-                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/signUp").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .anyRequest().authenticated())
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterAt(new JwtAuthenticationFilter(authenticationManager, jwtProvider), UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
     }
 }

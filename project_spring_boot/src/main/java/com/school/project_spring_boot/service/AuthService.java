@@ -1,15 +1,14 @@
 package com.school.project_spring_boot.service;
 
 import com.school.project_spring_boot.dto.JwtTokenDto;
+import com.school.project_spring_boot.dto.LoginRequestDto;
 import com.school.project_spring_boot.dto.MemberRequestDto;
 import com.school.project_spring_boot.dto.MemberResponseDto;
 import com.school.project_spring_boot.entity.Member;
-import com.school.project_spring_boot.jwt.JwtProvider;
+import com.school.project_spring_boot.jwt.JwtUtil;
 import com.school.project_spring_boot.repository.MemberRepository;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +16,12 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final AuthenticationManager authenticationManager;
-    private final JwtProvider jwtProvider;
+    private final JwtUtil jwtUtil;
 
-    public AuthService(MemberRepository memberRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
+    public AuthService(MemberRepository memberRepository, BCryptPasswordEncoder bCryptPasswordEncoder, JwtUtil jwtUtil) {
         this.memberRepository = memberRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtProvider = jwtProvider;
+        this.jwtUtil = jwtUtil;
     }
 
     public MemberResponseDto signUp(MemberRequestDto memberRequestDto) {
@@ -32,16 +29,18 @@ public class AuthService {
         return MemberResponseDto.from(memberRepository.save(member));
     }
 
-    public JwtTokenDto login(MemberRequestDto memberRequestDto) {
-        try {
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(memberRequestDto.getEmail(), memberRequestDto.getPassword());
-
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
-            return jwtProvider.createJwtToken(authentication);
-        } catch (AuthenticationException e) {
-            throw new RuntimeException("Invalid username or password");
+    public JwtTokenDto login(LoginRequestDto loginRequestDto) {
+        String email = loginRequestDto.getEmail();
+        String password = loginRequestDto.getPassword();
+        Member member = memberRepository.findByEmail(email);
+        if(member == null) {
+            throw new UsernameNotFoundException("not found by email");
         }
+
+        if(!bCryptPasswordEncoder.matches(password, member.getPassword())) {
+            throw new BadCredentialsException("bad credentials");
+        }
+
+        return jwtUtil.createJwtToken(member);
     }
 }

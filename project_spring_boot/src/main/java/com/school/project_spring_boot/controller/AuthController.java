@@ -1,10 +1,10 @@
 package com.school.project_spring_boot.controller;
 
 import com.school.project_spring_boot.dto.JwtTokenDto;
+import com.school.project_spring_boot.dto.LoginRequestDto;
 import com.school.project_spring_boot.dto.MemberRequestDto;
 import com.school.project_spring_boot.dto.MemberResponseDto;
 import com.school.project_spring_boot.service.AuthService;
-import com.school.project_spring_boot.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtTokenDto> login(@RequestBody MemberRequestDto memberRequestDto) {
-        return ResponseEntity.ok(authService.login(memberRequestDto));
+    public ResponseEntity<JwtTokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        return ResponseEntity.ok(authService.login(loginRequestDto));
     }
 }
