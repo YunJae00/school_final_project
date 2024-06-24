@@ -28,6 +28,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -37,13 +40,14 @@ public class Member {
     public Member() {
     }
 
-    public Member(long id, String email, String password, String nickName, Provider provider, Role role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Member(long id, String email, String password, String nickName, Provider provider, Role role, String refreshToken, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.nickName = nickName;
         this.provider = provider;
         this.role = role;
+        this.refreshToken = refreshToken;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -74,6 +78,14 @@ public class Member {
 
     public String getNickName() {
         return nickName;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public void setNickName(String nickName) {

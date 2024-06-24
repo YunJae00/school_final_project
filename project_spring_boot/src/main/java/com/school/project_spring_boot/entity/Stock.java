@@ -22,7 +22,7 @@ public class Stock {
     private String itmsNm; // 종목명
 
     @Column(nullable = false)
-    private String mrktCls; // 시장 구분
+    private String mrktCls = "Unknown"; // 시장 구분
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DailyStockData> dailyStockData = new ArrayList<>();
