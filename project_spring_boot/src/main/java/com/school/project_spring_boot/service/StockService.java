@@ -2,45 +2,48 @@ package com.school.project_spring_boot.service;
 
 import com.school.project_spring_boot.entity.DailyStockData;
 import com.school.project_spring_boot.entity.Stock;
-import com.school.project_spring_boot.exceptionHandler.StockNotFoundException;
 import com.school.project_spring_boot.repository.DailyStockDataRepository;
 import com.school.project_spring_boot.repository.StockRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StockService {
 
-    private final StockRepository stockRepository;
     private final DailyStockDataRepository dailyStockDataRepository;
+    private final StockRepository stockRepository;
 
-    public StockService(StockRepository stockRepository, DailyStockDataRepository dailyStockDataRepository) {
-        this.stockRepository = stockRepository;
+    public StockService(DailyStockDataRepository dailyStockDataRepository, StockRepository stockRepository) {
         this.dailyStockDataRepository = dailyStockDataRepository;
+        this.stockRepository = stockRepository;
     }
 
+    @Transactional
     public void saveStockData(String isinCd, String srtnCd, String itmsNm, String mrktCls, List<DailyStockData> dailyStockDataList) {
-        Stock stock = stockRepository.findByIsinCd(isinCd).orElseGet(() -> {
-            Stock newStock = new Stock();
-            newStock.setIsinCd(isinCd);
-            newStock.setSrtnCd(srtnCd);
-            newStock.setItmsNm(itmsNm);
-            newStock.setMrktCls(mrktCls);
-            return newStock;
-        });
-        stockRepository.save(stock);
+        Optional<Stock> stockOptional = stockRepository.findByIsinCd(isinCd);
+        Stock stock;
+        if (stockOptional.isPresent()) {
+            stock = stockOptional.get();
+        } else {
+            stock = new Stock();
+            stock.setIsinCd(isinCd);
+            stock.setSrtnCd(srtnCd);
+            stock.setItmsNm(itmsNm);
+            stock.setMrktCls(mrktCls);
+            stock = stockRepository.save(stock);
+        }
 
-        for (DailyStockData data : dailyStockDataList) {
-            data.setStock(stock);
-            dailyStockDataRepository.save(data);
+        for (DailyStockData dailyStockData : dailyStockDataList) {
+            dailyStockData.setStock(stock);
+            dailyStockDataRepository.save(dailyStockData);
         }
     }
 
-    public List<DailyStockData> getDailyStockData(String isinCd, LocalDate startDate, LocalDate endDate) {
-        Stock stock = stockRepository.findByIsinCd(isinCd)
-                .orElseThrow(() -> new StockNotFoundException("Stock not found for ISIN code: " + isinCd));
-        return dailyStockDataRepository.findByStockAndBasDtBetween(stock, startDate, endDate);
+    public List<DailyStockData> getStockData(String isinCd, LocalDate startDate, LocalDate endDate) {
+        return dailyStockDataRepository.findByStockIsinCdAndBasDtBetween(isinCd, startDate, endDate);
     }
 }

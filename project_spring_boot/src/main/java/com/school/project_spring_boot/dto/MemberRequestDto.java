@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 
 public class MemberRequestDto {
 
-    private final String email;
-    private final String password;
-    private final String nickName;
-    private final String provider;
-    private final String role;
+    private String email;
+    private String password;
+    private String nickName;
+    private String provider;
+    private String role;
 
     public MemberRequestDto(String email, String password, String nickName, String provider, String role) {
         this.email = email;

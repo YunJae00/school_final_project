@@ -2,10 +2,10 @@ package com.school.project_spring_boot.dto;
 
 public class JwtTokenDto {
 
-    private final String grantType;
-    private final String accessToken;
-    private final String refreshToken;
-    private final Long accessTokenExpiresIn;
+    private String grantType;
+    private String accessToken;
+    private String refreshToken;
+    private Long accessTokenExpiresIn;
 
     public JwtTokenDto(String grantType, String accessToken, String refreshToken, Long accessTokenExpiresIn) {
         this.grantType = grantType;

@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.project_spring_boot.dto.StockApiResponseDto;
 import com.school.project_spring_boot.entity.DailyStockData;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -90,6 +89,10 @@ public class PublicDataPortalService {
                                 List<DailyStockData> dailyStockDataList = new ArrayList<>();
                                 DailyStockData dailyStockData = new DailyStockData();
                                 dailyStockData.setBasDt(LocalDate.parse(item.getBasDt(), DateTimeFormatter.BASIC_ISO_DATE));
+                                dailyStockData.setClpr(new BigDecimal(item.getClpr()));
+                                dailyStockData.setHipr(new BigDecimal(item.getHipr()));
+                                dailyStockData.setLopr(new BigDecimal(item.getLopr()));
+                                dailyStockData.setMkp(new BigDecimal(item.getMkp()));
                                 dailyStockData.setVs(new BigDecimal(item.getVs()));
                                 dailyStockData.setFltRt(new BigDecimal(item.getFltRt()));
                                 dailyStockData.setTrqu(Long.parseLong(item.getTrqu()));

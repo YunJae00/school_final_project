@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StockApiResponseDto {
-
+    @JsonProperty("response")
     private Response response;
 
     public Response getResponse() {
@@ -19,7 +20,10 @@ public class StockApiResponseDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Response {
+        @JsonProperty("header")
         private Header header;
+
+        @JsonProperty("body")
         private Body body;
 
         public Header getHeader() {
@@ -41,7 +45,10 @@ public class StockApiResponseDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Header {
+        @JsonProperty("resultCode")
         private String resultCode;
+
+        @JsonProperty("resultMsg")
         private String resultMsg;
 
         public String getResultCode() {
@@ -63,34 +70,8 @@ public class StockApiResponseDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Body {
-        private int numOfRows;
-        private int pageNo;
-        private int totalCount;
+        @JsonProperty("items")
         private Items items;
-
-        public int getNumOfRows() {
-            return numOfRows;
-        }
-
-        public void setNumOfRows(int numOfRows) {
-            this.numOfRows = numOfRows;
-        }
-
-        public int getPageNo() {
-            return pageNo;
-        }
-
-        public void setPageNo(int pageNo) {
-            this.pageNo = pageNo;
-        }
-
-        public int getTotalCount() {
-            return totalCount;
-        }
-
-        public void setTotalCount(int totalCount) {
-            this.totalCount = totalCount;
-        }
 
         public Items getItems() {
             return items;
@@ -103,6 +84,7 @@ public class StockApiResponseDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Items {
+        @JsonProperty("item")
         private List<Item> item;
 
         public List<Item> getItem() {
@@ -118,34 +100,48 @@ public class StockApiResponseDto {
     public static class Item {
         @JsonProperty("basDt")
         private String basDt;
-        @JsonProperty("srtnCd")
-        private String srtnCd;
-        @JsonProperty("isinCd")
-        private String isinCd;
-        @JsonProperty("itmsNm")
-        private String itmsNm;
-        @JsonProperty("mrktCtg")
-        private String mrktCtg;
+
         @JsonProperty("clpr")
         private String clpr;
-        @JsonProperty("vs")
-        private String vs;
-        @JsonProperty("fltRt")
-        private String fltRt;
-        @JsonProperty("mkp")
-        private String mkp;
+
         @JsonProperty("hipr")
         private String hipr;
+
         @JsonProperty("lopr")
         private String lopr;
+
+        @JsonProperty("mkp")
+        private String mkp;
+
+        @JsonProperty("vs")
+        private String vs;
+
+        @JsonProperty("fltRt")
+        private String fltRt;
+
         @JsonProperty("trqu")
         private String trqu;
+
         @JsonProperty("trPrc")
         private String trPrc;
+
         @JsonProperty("lstgStCnt")
         private String lstgStCnt;
+
         @JsonProperty("mrktTotAmt")
         private String mrktTotAmt;
+
+        @JsonProperty("isinCd")
+        private String isinCd;
+
+        @JsonProperty("srtnCd")
+        private String srtnCd;
+
+        @JsonProperty("itmsNm")
+        private String itmsNm;
+
+        @JsonProperty("mrktCtg")
+        private String mrktCtg;
 
         public String getBasDt() {
             return basDt;
@@ -155,68 +151,12 @@ public class StockApiResponseDto {
             this.basDt = basDt;
         }
 
-        public String getSrtnCd() {
-            return srtnCd;
-        }
-
-        public void setSrtnCd(String srtnCd) {
-            this.srtnCd = srtnCd;
-        }
-
-        public String getIsinCd() {
-            return isinCd;
-        }
-
-        public void setIsinCd(String isinCd) {
-            this.isinCd = isinCd;
-        }
-
-        public String getItmsNm() {
-            return itmsNm;
-        }
-
-        public void setItmsNm(String itmsNm) {
-            this.itmsNm = itmsNm;
-        }
-
-        public String getMrktCtg() {
-            return mrktCtg;
-        }
-
-        public void setMrktCtg(String mrktCtg) {
-            this.mrktCtg = mrktCtg;
-        }
-
         public String getClpr() {
             return clpr;
         }
 
         public void setClpr(String clpr) {
             this.clpr = clpr;
-        }
-
-        public String getVs() {
-            return vs;
-        }
-
-        public void setVs(String vs) {
-            this.vs = vs;
-        }
-
-        public String getFltRt() {
-            return fltRt;
-        }
-
-        public void setFltRt(String fltRt) {
-            this.fltRt = fltRt;
-        }
-
-        public String getMkp() {
-            return mkp;
-        }
-
-        public void setMkp(String mkp) {
-            this.mkp = mkp;
         }
 
         public String getHipr() {
@@ -233,6 +173,30 @@ public class StockApiResponseDto {
 
         public void setLopr(String lopr) {
             this.lopr = lopr;
+        }
+
+        public String getMkp() {
+            return mkp;
+        }
+
+        public void setMkp(String mkp) {
+            this.mkp = mkp;
+        }
+
+        public String getVs() {
+            return vs;
+        }
+
+        public void setVs(String vs) {
+            this.vs = vs;
+        }
+
+        public String getFltRt() {
+            return fltRt;
+        }
+
+        public void setFltRt(String fltRt) {
+            this.fltRt = fltRt;
         }
 
         public String getTrqu() {
@@ -265,6 +229,38 @@ public class StockApiResponseDto {
 
         public void setMrktTotAmt(String mrktTotAmt) {
             this.mrktTotAmt = mrktTotAmt;
+        }
+
+        public String getIsinCd() {
+            return isinCd;
+        }
+
+        public void setIsinCd(String isinCd) {
+            this.isinCd = isinCd;
+        }
+
+        public String getSrtnCd() {
+            return srtnCd;
+        }
+
+        public void setSrtnCd(String srtnCd) {
+            this.srtnCd = srtnCd;
+        }
+
+        public String getItmsNm() {
+            return itmsNm;
+        }
+
+        public void setItmsNm(String itmsNm) {
+            this.itmsNm = itmsNm;
+        }
+
+        public String getMrktCtg() {
+            return mrktCtg;
+        }
+
+        public void setMrktCtg(String mrktCtg) {
+            this.mrktCtg = mrktCtg;
         }
     }
 }

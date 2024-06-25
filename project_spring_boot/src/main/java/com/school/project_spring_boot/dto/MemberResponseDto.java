@@ -7,12 +7,12 @@ import com.school.project_spring_boot.entity.Role;
 import java.time.LocalDateTime;
 
 public class MemberResponseDto {
-    private final String email;
-    private final String nickName;
-    private final Provider provider;
-    private final Role role;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private String email;
+    private String nickName;
+    private Provider provider;
+    private Role role;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public MemberResponseDto(String email, String nickName, Provider provider, Role role, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.email = email;
