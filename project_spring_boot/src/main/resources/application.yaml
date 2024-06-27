@@ -10,8 +10,7 @@ spring:
     password:
 
   publicData:
-    serviceKey: EmMAJUdyqGktY3WZS/hPPMhVRG3kk+wCcf9cxH5nCrsW8rh/r23MQwQG1MXLXkIodCWNP7gMNHvoQRSxVgIDKQ==
-
+    serviceKey: 
   jwt:
     secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
     issuer: admin
