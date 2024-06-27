@@ -3,11 +3,13 @@ import styled from "styled-components";
 import HeaderContainer from "./containers/HeaderContainer";
 import StockIndexContainer from "./containers/StockIndexContainer";
 import StockDetailContainer from "./containers/StockDetailContainer";
-import StockRecommentContainer from "./containers/StockRecommentContainer";
+import StockRecommendContainer from "./containers/StockRecommendContainer";
+import StockSummaryContainer from "./containers/StockSummaryContainer";
 
 const Container = styled.div`
     display: flex;
     justify-content: center;
+    align-items: start;
     width: 100%;
     height: 100%;
 `;
@@ -16,7 +18,6 @@ const InnerContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 1194px;
-    height: 100vh;
     gap: 10px;
 `;
 
@@ -26,7 +27,8 @@ const ComputerMainPage = () => {
             <InnerContainer>
                 <HeaderContainer/>
                 <StockIndexContainer/>
-                <StockRecommentContainer/>
+                <StockRecommendContainer/>
+                <StockSummaryContainer/>
                 <StockDetailContainer/>
             </InnerContainer>
         </Container>

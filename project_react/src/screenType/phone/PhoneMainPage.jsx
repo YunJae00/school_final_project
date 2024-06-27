@@ -16,7 +16,6 @@ const InnerContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 360px;
-    height: 100vh;
     gap: 10px;
 `;
 

@@ -4,20 +4,13 @@ import styled from "styled-components";
 const Container = styled.div`
     display: flex;
     justify-content: center;
-    height: 100%;
-    background-color: bisque;
-`;
-
-const StockDetailsContainer = styled.div`
-    display: flex;
-`;
-
-const StockDetail = styled.div`
-    display: flex;
     flex-direction: column;
+    width: 378px;
+    height: 100%;
+    background-color: #486284;
 `;
 
-const StockDetailContainer = () => {
+const StockDetailComponent = () => {
     return(
         <Container>
 
@@ -25,4 +18,4 @@ const StockDetailContainer = () => {
     );
 }
 
-export default StockDetailContainer;
+export default StockDetailComponent;

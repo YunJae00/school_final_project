@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Container = styled.div`
     display: flex;
     justify-content: center;
-    height: 100px;
+    height: 80px;
     background-color: #61dafb;
 `;
 
