@@ -4,6 +4,7 @@ import com.school.project_spring_boot.dto.JwtTokenDto;
 import com.school.project_spring_boot.entity.Member;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -21,9 +22,9 @@ public class JwtUtil {
     private final long refreshTokenExpire;
 
     public JwtUtil(
-            @org.springframework.beans.factory.annotation.Value("${spring.jwt.secret}") String secret,
-            @org.springframework.beans.factory.annotation.Value("${spring.jwt.access_token_expiration_time}") long accessTokenExpire,
-            @org.springframework.beans.factory.annotation.Value("${spring.jwt.refresh_token_expiration_time}") long refreshTokenExpire
+            @Value("${spring.jwt.secret}") String secret,
+            @Value("${spring.jwt.access_token_expiration_time}") long accessTokenExpire,
+            @Value("${spring.jwt.refresh_token_expiration_time}") long refreshTokenExpire
     )
     {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
