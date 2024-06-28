@@ -16,6 +16,9 @@ public class DailyStockDataDto {
     private Long lstgStCnt;
     private Long mrktTotAmt;
 
+    public DailyStockDataDto() {
+    }
+
     public DailyStockDataDto(LocalDate basDt, BigDecimal clpr, BigDecimal hipr, BigDecimal lopr, BigDecimal mkp, BigDecimal vs, BigDecimal fltRt, Long trqu, BigDecimal trPrc, Long lstgStCnt, Long mrktTotAmt) {
         this.basDt = basDt;
         this.clpr = clpr;
