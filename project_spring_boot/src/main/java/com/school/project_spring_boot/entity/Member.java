@@ -1,8 +1,11 @@
 package com.school.project_spring_boot.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="members")
@@ -11,12 +14,12 @@ public class Member {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "nick_name")
@@ -37,10 +40,14 @@ public class Member {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<MemberFavoriteStock> favoriteStocks = new ArrayList<>();
+
     public Member() {
     }
 
-    public Member(long id, String email, String password, String nickName, Provider provider, Role role, String refreshToken, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Member(Long id, String email, String password, String nickName, Provider provider, Role role, String refreshToken, LocalDateTime createdAt, LocalDateTime updatedAt, List<MemberFavoriteStock> favoriteStocks) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -50,13 +57,14 @@ public class Member {
         this.refreshToken = refreshToken;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.favoriteStocks = favoriteStocks;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -80,14 +88,6 @@ public class Member {
         return nickName;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
     public void setNickName(String nickName) {
         this.nickName = nickName;
     }
@@ -108,6 +108,14 @@ public class Member {
         this.role = role;
     }
 
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -122,5 +130,13 @@ public class Member {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<MemberFavoriteStock> getFavoriteStocks() {
+        return favoriteStocks;
+    }
+
+    public void setFavoriteStocks(List<MemberFavoriteStock> favoriteStocks) {
+        this.favoriteStocks = favoriteStocks;
     }
 }

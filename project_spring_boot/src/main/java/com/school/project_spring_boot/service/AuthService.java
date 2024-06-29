@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthService {
     private final MemberRepository memberRepository;
@@ -32,15 +34,18 @@ public class AuthService {
     public JwtTokenDto login(LoginRequestDto loginRequestDto) {
         String email = loginRequestDto.getEmail();
         String password = loginRequestDto.getPassword();
-        Member member = memberRepository.findByEmail(email);
-        if(member == null) {
-            throw new UsernameNotFoundException("not found by email");
-        }
+        Optional<Member> memberOpt = memberRepository.findByEmail(email);
+        if (memberOpt.isPresent()){
+            Member member = memberOpt.get();
+            if(member == null) {
+                throw new UsernameNotFoundException("not found by email");
+            }
+            if(!bCryptPasswordEncoder.matches(password, member.getPassword())) {
+                throw new BadCredentialsException("bad credentials");
+            }
 
-        if(!bCryptPasswordEncoder.matches(password, member.getPassword())) {
-            throw new BadCredentialsException("bad credentials");
+            return jwtUtil.createJwtToken(member);
         }
-
-        return jwtUtil.createJwtToken(member);
+        else return null;
     }
 }

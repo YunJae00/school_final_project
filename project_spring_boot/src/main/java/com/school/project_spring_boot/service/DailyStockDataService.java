@@ -14,8 +14,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,7 +31,6 @@ public class DailyStockDataService {
     ) {
         this.stockService = stockService;
         this.serviceKey = serviceKey;
-        System.out.println("Service Key: " + this.serviceKey);
     }
 
     public void fetchAndSaveAllStockData() {
@@ -46,14 +43,15 @@ public class DailyStockDataService {
             try {
                 URL url = new URL(
                         urlTemplate
-                        + "?serviceKey="
-                        + serviceKey
-                        + "&resultType="
-                        + "json"
-                        + "&pageNo="
-                        + pageNo
-                        + "&numOfRows="
-                        + "100"
+                                + "?serviceKey="
+                                + serviceKey
+                                + "&resultType=json"
+                                + "&pageNo="
+                                + pageNo
+                                + "&numOfRows=100"
+                                //일단 test로
+                                + "&beginBasDt=20240101&endBasDt=20240130"
+                                + "&isinCd=KR7000040006"
                 );
 
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
