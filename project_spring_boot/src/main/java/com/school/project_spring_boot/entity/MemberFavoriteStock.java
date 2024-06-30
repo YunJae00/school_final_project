@@ -11,13 +11,13 @@ public class MemberFavoriteStock {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "member_id")
     @JsonBackReference
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stock_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "stock_id")
     @JsonManagedReference
     private Stock stock;
 

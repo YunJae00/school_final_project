@@ -1,6 +1,6 @@
 package com.school.project_spring_boot.controller;
 
-import com.school.project_spring_boot.entity.Stock;
+import com.school.project_spring_boot.dto.StockWithRecentDataDto;
 import com.school.project_spring_boot.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +26,8 @@ public class MemberController {
         memberService.removeFavoriteStock(memberEmail, isinCd);
     }
 
-    @GetMapping("/{memberEmail}")
-    public List<Stock> getFavoriteStocks(@PathVariable String memberEmail) {
-        return memberService.getFavoriteStocks(memberEmail);
+    @GetMapping("/{memberEmail}/recent")
+    public List<StockWithRecentDataDto> getFavoriteStocksWithRecentData(@PathVariable String memberEmail) {
+        return memberService.getFavoriteStocksWithRecentData(memberEmail);
     }
 }

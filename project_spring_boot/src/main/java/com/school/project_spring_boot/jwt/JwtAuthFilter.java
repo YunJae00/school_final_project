@@ -12,11 +12,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class JwtAuthFilter extends OncePerRequestFilter {
-    private final CustomUserDetailService customUserDetailsService;
+    private final CustomUserDetailService customUserDetailService;
     private final JwtUtil jwtUtil;
 
     public JwtAuthFilter(CustomUserDetailService customUserDetailsService, JwtUtil jwtUtil) {
-        this.customUserDetailsService = customUserDetailsService;
+        this.customUserDetailService = customUserDetailsService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -32,7 +32,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 String email = jwtUtil.getEmail(token);
 
                 //유저와 토큰 일치 시 userDetails 생성
-                UserDetails userDetails = customUserDetailsService.loadUserByUsername(email.toString());
+                UserDetails userDetails = customUserDetailService.loadUserByUsername(email.toString());
 
                 if (userDetails != null) {
                     //UserDetsils, Password, Role -> 접근권한 인증 Token 생성

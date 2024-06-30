@@ -1,5 +1,6 @@
 package com.school.project_spring_boot.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ public class DailyStockData {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_id", nullable = false)
+    @JsonBackReference
     private Stock stock;
 
     @Column(nullable = false)

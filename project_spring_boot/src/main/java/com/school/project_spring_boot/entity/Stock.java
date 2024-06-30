@@ -1,6 +1,8 @@
 package com.school.project_spring_boot.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -26,11 +28,12 @@ public class Stock {
     private String mrktCls = "Unknown"; // 시장 구분
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
-    private List<MemberFavoriteStock> members = new ArrayList<>();
+    @JsonManagedReference
+    private List<DailyStockData> dailyStockData = new ArrayList<>();
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DailyStockData> dailyStockData = new ArrayList<>();
+    @JsonBackReference
+    private List<MemberFavoriteStock> members = new ArrayList<>();
 
     public Stock() {
     }
