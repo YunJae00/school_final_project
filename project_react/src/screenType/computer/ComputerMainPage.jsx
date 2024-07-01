@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import HeaderContainer from "./containers/HeaderContainer";
 import StockIndexContainer from "./containers/StockIndexContainer";
 import StockDetailContainer from "./containers/StockDetailContainer";
 import StockRecommendContainer from "./containers/StockRecommendContainer";
 import StockSummaryContainer from "./containers/StockSummaryContainer";
+import SelectButtonContainer from "./containers/SelectButtonContainer";
 
 const Container = styled.div`
     display: flex;
@@ -22,14 +23,17 @@ const InnerContainer = styled.div`
 `;
 
 const ComputerMainPage = () => {
+
+    const [selectedComponent, setSelectedComponent] = useState("summary");
+
     return(
         <Container>
             <InnerContainer>
                 <HeaderContainer/>
                 <StockIndexContainer/>
                 <StockRecommendContainer/>
-                <StockSummaryContainer/>
-                <StockDetailContainer/>
+                <SelectButtonContainer selectedComponent={selectedComponent} setSelectedComponent={setSelectedComponent}/>
+                {selectedComponent === "summary" ? <StockSummaryContainer /> : <StockDetailContainer />}
             </InnerContainer>
         </Container>
     );

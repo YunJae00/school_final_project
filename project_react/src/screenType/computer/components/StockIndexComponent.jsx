@@ -5,17 +5,17 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 276px;
+    width: 174px;
     height: 100%;
     background-color: #486284;
     border-radius: 13px;
-    gap: 30px;
+    gap: 18px;
 `;
 
 const IndexText = styled.p`
     font-weight: bold;
     color: white;
-    font-size: 26px;
+    font-size: 20px;
 `;
 
 const InnerContainer = styled.div`
@@ -31,8 +31,8 @@ const StockIndexComponent = ({indexText, indexPrice, indexFluctuation}) => {
         <Container>
             <IndexText>{indexText}</IndexText>
             <InnerContainer>
-                <p style={{fontSize: "20px", color: "white", opacity: "0.5"}}>{indexPrice}</p>
-                <p style={{fontSize: "18px", color: "red"}}>{indexFluctuation}</p>
+                <p style={{fontSize: "15px", color: "white", opacity: "0.5"}}>{indexPrice}</p>
+                <p style={{fontSize: "14px", color: "red"}}>{indexFluctuation}</p>
             </InnerContainer>
         </Container>
     );

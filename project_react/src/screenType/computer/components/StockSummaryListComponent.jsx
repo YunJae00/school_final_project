@@ -11,7 +11,7 @@ const Container = styled.div`
 
 const SummaryText = styled.p`
     color: white;
-    font-size: 18px;
+    font-size: 15px;
     opacity: 0.9;
 `;
 

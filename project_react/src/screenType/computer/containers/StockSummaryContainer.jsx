@@ -5,7 +5,6 @@ import StockMyGroupComponent from "../components/StockMyGroupComponent";
 
 const Container = styled.div`
     display: flex;
-    width: 100%;
     gap: 30px;
 `;
 
@@ -14,7 +13,6 @@ const SummaryContainer = styled.div`
     flex-direction: column;
     width: 786px;
     height: 100%;
-    background-color: bisque;
     gap: 10px;
 `;
 
@@ -23,7 +21,6 @@ const InnerContainer = styled.div`
     justify-content: center;
     width: 786px;
     height: 100%;
-    background-color: bisque;
     gap: 30px;
 `;
 

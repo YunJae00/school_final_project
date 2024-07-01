@@ -4,15 +4,15 @@ import StockIndexComponent from "../components/StockIndexComponent";
 
 const Container = styled.div`
     display: flex;
-    justify-content: space-between;
     height: 80px;
-    background-color: darkgray;
-    gap: 20px;
+    gap: 30px;
 `;
 
 const StockIndexContainer = () => {
     return(
         <Container>
+            <StockIndexComponent indexText={"KOSPI"} indexPrice={"2742.00"} indexFluctuation={"35.03(1.29)"}/>
+            <StockIndexComponent indexText={"KOSPI"} indexPrice={"2742.00"} indexFluctuation={"35.03(1.29)"}/>
             <StockIndexComponent indexText={"KOSPI"} indexPrice={"2742.00"} indexFluctuation={"35.03(1.29)"}/>
             <StockIndexComponent indexText={"KOSPI"} indexPrice={"2742.00"} indexFluctuation={"35.03(1.29)"}/>
             <StockIndexComponent indexText={"KOSPI"} indexPrice={"2742.00"} indexFluctuation={"35.03(1.29)"}/>

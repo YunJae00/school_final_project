@@ -4,7 +4,6 @@ import styled from "styled-components";
 const Container = styled.div`
     display: flex;
     justify-content: center;
-    height: 100%;
     background-color: bisque;
 `;
 
@@ -20,7 +19,7 @@ const StockDetail = styled.div`
 const StockDetailContainer = () => {
     return(
         <Container>
-
+            <div>sd</div>
         </Container>
     );
 }
