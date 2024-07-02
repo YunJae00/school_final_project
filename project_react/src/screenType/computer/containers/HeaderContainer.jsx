@@ -19,7 +19,7 @@ const Icon = styled.img`
 const ProfileIcon = styled.img`
     width: 45px;
     height: 45px;
-    opacity: 0.8; 
+    opacity: 0.7; 
 `;
 
 const LogInButton = styled.div`

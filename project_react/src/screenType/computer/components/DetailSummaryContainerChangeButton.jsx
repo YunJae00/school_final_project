@@ -7,7 +7,7 @@ const Container = styled.div`
     align-items: center;
     width: 378px;
     height: 100%;
-    border-radius: 13px;
+    border-radius: 8px;
     cursor: pointer;
     background-color: ${props => (props.isSelected ? props.selectedColor : "#FFFFFF")};
     border: ${props => (props.isSelected ? "none" : "1px solid #ccc")};

@@ -8,7 +8,7 @@ const Container = styled.div`
     width: 174px;
     height: 100%;
     background-color: #486284;
-    border-radius: 13px;
+    border-radius: 8px;
     gap: 18px;
 `;
 

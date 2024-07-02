@@ -22,7 +22,7 @@ const SelectButtonContainer = ({ selectedComponent, setSelectedComponent }) => {
             <DetailSummaryContainerChangeButton
                 isSelected={selectedComponent === "detail"}
                 onClick={() => setSelectedComponent("detail")}
-                text="세부 사항 보기"
+                text="한국 주식 자세히 보기"
                 selectedColor="#486284"
             />
         </Container>

@@ -9,7 +9,7 @@ const Container = styled.div`
     align-items: start;
     width: 378px;
     background-color: #253953;
-    border-radius: 13px;
+    border-radius: 8px;
     padding: 20px;
     gap: 15px;
 `;
