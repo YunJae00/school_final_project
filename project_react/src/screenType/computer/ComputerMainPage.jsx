@@ -1,11 +1,12 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import HeaderContainer from "./containers/HeaderContainer";
 import StockIndexContainer from "./containers/StockIndexContainer";
 import StockDetailContainer from "./containers/StockDetailContainer";
-import StockRecommendContainer from "./containers/StockRecommendContainer";
+import StockRecommendSummaryContainer from "./containers/StockRecommendSummaryContainer";
 import StockSummaryContainer from "./containers/StockSummaryContainer";
 import SelectButtonContainer from "./containers/SelectButtonContainer";
+import StockRecommendContainer from "./containers/StockRecommendContainer";
 
 const Container = styled.div`
     display: flex;
@@ -23,20 +24,24 @@ const InnerContainer = styled.div`
 `;
 
 const ComputerMainPage = () => {
-
     const [selectedComponent, setSelectedComponent] = useState("summary");
 
-    return(
+    return (
         <Container>
             <InnerContainer>
-                <HeaderContainer/>
-                <StockIndexContainer/>
-                <StockRecommendContainer/>
-                <SelectButtonContainer selectedComponent={selectedComponent} setSelectedComponent={setSelectedComponent}/>
-                {selectedComponent === "summary" ? <StockSummaryContainer /> : <StockDetailContainer />}
+                <HeaderContainer />
+                <StockIndexContainer />
+                <StockRecommendSummaryContainer />
+                <SelectButtonContainer
+                    selectedComponent={selectedComponent}
+                    setSelectedComponent={setSelectedComponent}
+                />
+                {selectedComponent === "summary" && <StockSummaryContainer />}
+                {selectedComponent === "detail" && <StockDetailContainer />}
+                {selectedComponent === "recommend" && <StockRecommendContainer />}
             </InnerContainer>
         </Container>
     );
-}
+};
 
 export default ComputerMainPage;

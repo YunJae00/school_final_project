@@ -1,32 +1,51 @@
 import React from "react";
 import styled from "styled-components";
-import DetailSummaryContainerChangeButton from "../components/DetailSummaryContainerChangeButton";
 
-const Container = styled.div`
+const ButtonContainer = styled.div`
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 45px;
-    gap: 30px;
+    gap: 32px;
+`;
+
+const Button = styled.button`
+    width: 378px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: ${(props) => (props.selected ? "#253953" : "white")};
+    color: ${(props) => (props.selected ? "white" : "black")};
+    border: ${(props) => (props.selected ? "none" : "1px solid #ccc")};
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: #253953;
+        color: white;
+    }
 `;
 
 const SelectButtonContainer = ({ selectedComponent, setSelectedComponent }) => {
     return (
-        <Container>
-            <DetailSummaryContainerChangeButton
-                isSelected={selectedComponent === "summary"}
+        <ButtonContainer>
+            <Button
+                selected={selectedComponent === "summary"}
                 onClick={() => setSelectedComponent("summary")}
-                text="내 그룹 & 시장 요약 보기"
-                selectedColor="#253953"
-            />
-            <DetailSummaryContainerChangeButton
-                isSelected={selectedComponent === "detail"}
+            >
+                내 그룹 & 시장 요약 보기
+            </Button>
+            <Button
+                selected={selectedComponent === "detail"}
                 onClick={() => setSelectedComponent("detail")}
-                text="한국 주식 자세히 보기"
-                selectedColor="#486284"
-            />
-        </Container>
+            >
+                한국 주식 자세히 보기
+            </Button>
+            <Button
+                selected={selectedComponent === "recommend"}
+                onClick={() => setSelectedComponent("recommend")}
+            >
+                AI기반 주식 수익 자세히 보기
+            </Button>
+        </ButtonContainer>
     );
-}
+};
 
 export default SelectButtonContainer;

@@ -1,19 +1,26 @@
 package com.school.project_spring_boot.controller;
 
+import com.school.project_spring_boot.dto.MemberResponseDto;
 import com.school.project_spring_boot.dto.StockWithRecentDataDto;
 import com.school.project_spring_boot.service.MemberService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 public class MemberController {
 
     private final MemberService memberService;
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
+    }
+
+    @GetMapping("/{memberEmail}")
+    public ResponseEntity<MemberResponseDto> findMemberByEmail(@PathVariable String memberEmail) {
+        return ResponseEntity.ok(memberService.findByMemberEmail(memberEmail));
     }
 
     @PostMapping("/{memberEmail}/add")

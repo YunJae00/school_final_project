@@ -1,5 +1,6 @@
 package com.school.project_spring_boot.service;
 
+import com.school.project_spring_boot.dto.MemberResponseDto;
 import com.school.project_spring_boot.dto.StockWithRecentDataDto;
 import com.school.project_spring_boot.entity.DailyStockData;
 import com.school.project_spring_boot.entity.Member;
@@ -28,6 +29,22 @@ public class MemberService {
         this.stockRepository = stockRepository;
         this.memberFavoriteStockRepository = memberFavoriteStockRepository;
         this.dailyStockDataRepository = dailyStockDataRepository;
+    }
+
+    public MemberResponseDto findByMemberEmail(String memberEmail) {
+        Optional<Member> member = memberRepository.findByEmail(memberEmail);
+        if(member.isPresent()) {
+            Member memberOpt = member.get();
+            return new MemberResponseDto(
+                    memberOpt.getEmail(),
+                    memberOpt.getNickName(),
+                    memberOpt.getProvider(),
+                    memberOpt.getRole(),
+                    memberOpt.getCreatedAt(),
+                    memberOpt.getUpdatedAt()
+            );
+        }
+        else return null;
     }
 
     public void addFavoriteStock(String memberEmail, String isinCd) {

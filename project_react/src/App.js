@@ -3,6 +3,7 @@ import ComputerMainPage from "./screenType/computer/ComputerMainPage";
 import PhoneMainPage from "./screenType/phone/PhoneMainPage";
 import TabletMainPage from "./screenType/tablet/TabletMainPage";
 import { useMediaQuery } from "react-responsive"
+import ComputerPages from "./screenType/computer/ComputerPages";
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
 
     return (
         <div>
-            {isPc && <ComputerMainPage/>}
+            {isPc && <ComputerPages/>}
             {isTablet && <TabletMainPage/>}
             {isMobile && <PhoneMainPage/>}
         </div>

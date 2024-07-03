@@ -6,12 +6,10 @@ import com.school.project_spring_boot.dto.MemberRequestDto;
 import com.school.project_spring_boot.dto.MemberResponseDto;
 import com.school.project_spring_boot.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -20,7 +18,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/signUp")
+    @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto memberRequestDto) {
         return ResponseEntity.ok(authService.signUp(memberRequestDto));
     }
