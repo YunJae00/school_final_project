@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import {useAuth} from "../../security/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 const LoginInContainer = styled.div`
     display: flex;
@@ -66,16 +68,24 @@ const LinkText = styled.a`
 `;
 
 const LoginContainer = ({ onSignupClick }) => {
+
+    const authContext = useAuth();
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
 
-    const handleLoginClick = () => {
+    const handleLoginClick = async () => {
         if (!email || !password) {
             setError(true);
         } else {
             setError(false);
-            // 로그인 처리 로직 추가
+            const loginSuccess = await authContext.login(email, password)
+                .then(
+                    console.log('login Success'),
+                    navigate('/main')
+                )
         }
     };
 
