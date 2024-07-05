@@ -22,7 +22,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
 
     private static final String[] AUTH_WHITELIST = {
-            "/api/auth/**", "/h2-console/**", "/api/members/**"
+            "/api/auth/**", "/h2-console/**", "/api/members/**", "/api/stocks/public/**"
     };
 
     public SecurityConfig(CustomUserDetailService customUserDetailService, JwtUtil jwtUtil) {

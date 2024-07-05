@@ -1,26 +1,27 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import icon from "../../../images/logo.png"
-import profileIcon from "../../../images/profile_icon.png"
-import {useAuth} from "../security/AuthContext";
+import icon from "../../../../images/logo.png"
+import profileIcon from "../../../../images/profile_icon.png"
+import {useAuth} from "../../../../security/AuthContext";
 import {useNavigate} from "react-router-dom";
 
 const Container = styled.div`
     display: flex;
     justify-content: space-between;
-    height: 80px;
+    height: 60px;
     padding-right: 10px;
     border-bottom: solid #486284 5px;
 `;
 
 const Icon = styled.img`
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
 `;
 
 const ProfileIcon = styled.img`
-    width: 45px;
-    height: 45px;
+    width: 35px;
+    height: 35px;
     opacity: 0.7; 
 `;
 
@@ -44,16 +45,11 @@ const HeaderContainer = () => {
     const authContext = useAuth();
     const navigate = useNavigate();
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
 
     useEffect(() => {
-        if(authContext.isAuthenticated){
-            setIsLoggedIn(true);
-        }
-        else{
-            setIsLoggedIn(false);
-        }
-    }, [handleLogin, handleLogout]);
+        setIsLoggedIn(authContext.isAuthenticated);
+    }, [authContext.isAuthenticated]);
 
     function handleLogin(){
         navigate('/login');
@@ -64,9 +60,12 @@ const HeaderContainer = () => {
         navigate('/login');
     }
 
+    function handleIconClick() {
+        navigate('/main');
+    }
     return (
         <Container>
-            <Icon src={icon} alt="icon"/>
+            <Icon src={icon} alt="icon" onClick={handleIconClick}/>
             <div style={{display: "flex", justifyContent: "center", alignItems: "center", gap: "20px"}}>
                 {!isLoggedIn &&
                     <LogInButton onClick={handleLogin}>

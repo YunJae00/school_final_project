@@ -11,7 +11,11 @@ import java.util.List;
 
 @Repository
 public interface DailyStockDataRepository extends JpaRepository<DailyStockData, Long> {
+
     @Query("SELECT d FROM DailyStockData d WHERE d.stock = :stock ORDER BY d.basDt DESC")
     List<DailyStockData> findTopByStockOrderByBasDtDesc(@Param("stock") Stock stock);
+
+    List<DailyStockData> findByStock(Stock stock);
+
 }
 

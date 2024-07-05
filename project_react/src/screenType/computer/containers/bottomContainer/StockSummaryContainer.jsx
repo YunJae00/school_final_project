@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import StockSummaryComponent from "../components/StockSummaryComponent";
-import StockMyGroupComponent from "../components/StockMyGroupComponent";
+import StockSummaryComponent from "./components/StockSummaryComponent";
+import MyGroupComponent from "./components/MyGroupComponent";
 
 const Container = styled.div`
     display: flex;
@@ -37,7 +37,7 @@ const StockSummaryContainer = () => {
                     <StockSummaryComponent summaryTitle={"가장 변동성이 높았던 주식 >"}/>
                 </InnerContainer>
             </SummaryContainer>
-            <StockMyGroupComponent title={"내 그룹 >"}/>
+            <MyGroupComponent title={"내 그룹 >"}/>
         </Container>
     );
 }

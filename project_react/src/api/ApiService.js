@@ -9,5 +9,5 @@ export const executeRegisterMemberService = (user) =>
 export const executeCheckEmailService = (email) =>
     apiClient.get(`/api/members/${email}`);
 
-// export const executeMemberGrouptService = (email) =>
-//     apiClient.get(``)
+export const executeGetDailyStockData = (isinCd) =>
+    apiClient.get(`/api/stocks/public/${isinCd}/daily-data`);

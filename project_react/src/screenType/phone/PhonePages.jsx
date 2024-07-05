@@ -1,20 +1,20 @@
 import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import ComputerMainPage from "./ComputerMainPage";
-import ComputerLoginPage from "./ComputerLoginPage";
+import PhoneLoginPage from "./PhoneLoginPage";
 import AuthProvider from "../../security/AuthContext";
+import PhoneMainPage from "./PhoneMainPage";
 
-const ComputerPages = () => {
+const PhonePages = () => {
     return(
         <AuthProvider>
             <BrowserRouter>
                 <Routes>
-                    <Route path='/main' element={<ComputerMainPage/>}></Route>
-                    <Route path='/login' element={<ComputerLoginPage/>}></Route>
+                    <Route path='/main' element={<PhoneMainPage/>}></Route>
+                    <Route path='/login' element={<PhoneLoginPage/>}></Route>
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
     );
 }
 
-export default ComputerPages;
+export default PhonePages;

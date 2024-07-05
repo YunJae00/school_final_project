@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import searchIcon from "../../../images/search_icon.png"
-import StockDetailListComponent from "../components/StockDetailListComponent";
+import searchIcon from "../../../../images/search_icon.png"
+import StockDetailListComponent from "./components/StockDetailListComponent";
 
 const Container = styled.div`
     display: flex;
@@ -9,7 +9,7 @@ const Container = styled.div`
     justify-content: center;
     background-color: #486284;
     padding: 20px;
-    gap: 20px;
+    gap: 18px;
     border-radius: 10px;
 `;
 
@@ -23,7 +23,7 @@ const DetailTitleContainer = styled.div`
 const DetailTitle = styled.p`
     font-weight: bold;
     color: white;
-    font-size: 20px;
+    font-size: 17px;
 `;
 
 const SearchContainer = styled.div`
@@ -62,7 +62,7 @@ const ColumnContainer = styled.div`
 const ColumnName = styled.div`
     color: white;
     width: 70px;
-    font-size: 15px;
+    font-size: 16px;
     opacity: 0.9;
 `;
 

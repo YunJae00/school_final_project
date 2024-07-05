@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {useAuth} from "../../security/AuthContext";
-import {useNavigate} from "react-router-dom";
+import { useAuth } from "../../../../security/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginInContainer = styled.div`
     display: flex;
@@ -44,7 +44,6 @@ const Button = styled.button`
     font-size: 16px;
     width: 100%;
     background-color: #2a5e9f;
-    //background: linear-gradient(45deg, #5bd167, #2a5e9f);
     color: white;
     border: none;
     border-radius: 5px;
@@ -68,24 +67,27 @@ const LinkText = styled.a`
 `;
 
 const LoginContainer = ({ onSignupClick }) => {
-
     const authContext = useAuth();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleLoginClick = async () => {
         if (!email || !password) {
             setError(true);
+            setErrorMessage("모든 필드를 입력해주세요.");
         } else {
             setError(false);
-            const loginSuccess = await authContext.login(email, password)
-                .then(
-                    console.log('login Success'),
-                    navigate('/main')
-                )
+            const loginSuccess = await authContext.login(email, password);
+            if (loginSuccess) {
+                navigate("/main");
+            } else {
+                setError(true);
+                setErrorMessage("로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.");
+            }
         }
     };
 
@@ -112,7 +114,7 @@ const LoginContainer = ({ onSignupClick }) => {
                     error={error && !password}
                 />
             </InputContainer>
-            {error && <ErrorMessage>모든 필드를 입력해주세요.</ErrorMessage>}
+            {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
             <Button onClick={handleLoginClick}>로그인</Button>
             <LinkText onClick={onSignupClick}>회원가입</LinkText>
         </LoginInContainer>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { executeCheckEmailService, executeRegisterMemberService } from "../../../../api/AuthenticationApiService";
+import { executeCheckEmailService, executeRegisterMemberService } from "../../../../api/ApiService";
 import Swal from 'sweetalert2';
 
 const SignupContainerStyled = styled.div`

@@ -25,7 +25,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtTokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
-        return ResponseEntity.ok(authService.login(loginRequestDto));
+        if((authService.login(loginRequestDto)) == null){
+            return ResponseEntity.ok(null);
+        }
+        else return ResponseEntity.ok(authService.login(loginRequestDto));
     }
 
     @GetMapping("/test")

@@ -32,16 +32,16 @@ public class MemberService {
     }
 
     public MemberResponseDto findByMemberEmail(String memberEmail) {
-        Optional<Member> member = memberRepository.findByEmail(memberEmail);
-        if(member.isPresent()) {
-            Member memberOpt = member.get();
+        Optional<Member> memberOpt = memberRepository.findByEmail(memberEmail);
+        if(memberOpt.isPresent()) {
+            Member member = memberOpt.get();
             return new MemberResponseDto(
-                    memberOpt.getEmail(),
-                    memberOpt.getNickName(),
-                    memberOpt.getProvider(),
-                    memberOpt.getRole(),
-                    memberOpt.getCreatedAt(),
-                    memberOpt.getUpdatedAt()
+                    member.getEmail(),
+                    member.getNickName(),
+                    member.getProvider(),
+                    member.getRole(),
+                    member.getCreatedAt(),
+                    member.getUpdatedAt()
             );
         }
         else return null;

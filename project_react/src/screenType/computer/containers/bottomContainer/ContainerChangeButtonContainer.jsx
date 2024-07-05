@@ -10,7 +10,7 @@ const ButtonContainer = styled.div`
 const Button = styled.button`
     width: 378px;
     padding: 10px 20px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     background-color: ${(props) => (props.selected ? "#253953" : "white")};
     color: ${(props) => (props.selected ? "white" : "black")};
@@ -23,7 +23,7 @@ const Button = styled.button`
     }
 `;
 
-const SelectButtonContainer = ({ selectedComponent, setSelectedComponent }) => {
+const ContainerChangeButtonContainer = ({ selectedComponent, setSelectedComponent }) => {
     return (
         <ButtonContainer>
             <Button
@@ -48,4 +48,4 @@ const SelectButtonContainer = ({ selectedComponent, setSelectedComponent }) => {
     );
 };
 
-export default SelectButtonContainer;
+export default ContainerChangeButtonContainer;

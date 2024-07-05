@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import StockIndexComponent from "../components/StockIndexComponent";
+import StockIndexComponent from "./components/StockIndexComponent";
 
 const Container = styled.div`
     display: flex;
-    height: 80px;
+    height: 100%;
     gap: 30px;
 `;
 

@@ -18,7 +18,7 @@ const Container = styled.div`
 const SummaryTitle = styled.p`
     font-weight: bold;
     color: white;
-    font-size: 20px;
+    font-size: 17px;
     margin-bottom: 10px;
 `;
 

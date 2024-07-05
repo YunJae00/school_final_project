@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import HeaderContainer from "./containers/HeaderContainer";
-import StockIndexContainer from "./containers/StockIndexContainer";
-import StockDetailContainer from "./containers/StockDetailContainer";
-import StockRecommendSummaryContainer from "./containers/StockRecommendSummaryContainer";
-import StockSummaryContainer from "./containers/StockSummaryContainer";
-import SelectButtonContainer from "./containers/SelectButtonContainer";
-import StockRecommendContainer from "./containers/StockRecommendContainer";
+import HeaderContainer from "./containers/headerContainer/HeaderContainer";
+import StockIndexContainer from "./containers/mainContainer/StockIndexContainer";
+import StockDetailContainer from "./containers/bottomContainer/StockDetailContainer";
+import StockChartContainer from "./containers/mainContainer/StockChartContainer";
+import StockSummaryContainer from "./containers/bottomContainer/StockSummaryContainer";
+import ContainerChangeButtonContainer from "./containers/bottomContainer/ContainerChangeButtonContainer";
+import StockRecommendContainer from "./containers/bottomContainer/StockRecommendContainer";
 
 const Container = styled.div`
     display: flex;
@@ -31,8 +31,8 @@ const ComputerMainPage = () => {
             <InnerContainer>
                 <HeaderContainer />
                 <StockIndexContainer />
-                <StockRecommendSummaryContainer />
-                <SelectButtonContainer
+                <StockChartContainer />
+                <ContainerChangeButtonContainer
                     selectedComponent={selectedComponent}
                     setSelectedComponent={setSelectedComponent}
                 />

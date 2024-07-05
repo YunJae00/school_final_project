@@ -15,12 +15,12 @@ const Container = styled.div`
     transition: background-color 0.3s, color 0.3s, border 0.3s;
 `;
 
-const DetailSummaryContainerChangeButton = ({ isSelected, onClick, text, backgroundColor, selectedColor }) => {
+const ContainerChangeButton = ({ isSelected, onClick, text, backgroundColor, selectedColor }) => {
     return (
         <Container onClick={onClick} isSelected={isSelected} selectedColor={selectedColor}>
-            <p style={{ fontSize: "20px", margin: 0, fontWeight: "bold" }}>{text}</p>
+            <p>{text}</p>
         </Container>
     );
 }
 
-export default DetailSummaryContainerChangeButton;
+export default ContainerChangeButton;
