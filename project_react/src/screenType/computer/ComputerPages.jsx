@@ -9,7 +9,7 @@ const ComputerPages = () => {
         <AuthProvider>
             <BrowserRouter>
                 <Routes>
-                    <Route path='/main' element={<ComputerMainPage/>}></Route>
+                    <Route path='/' element={<ComputerMainPage/>}></Route>
                     <Route path='/login' element={<ComputerLoginPage/>}></Route>
                 </Routes>
             </BrowserRouter>

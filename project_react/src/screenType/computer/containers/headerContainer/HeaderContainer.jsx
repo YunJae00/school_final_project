@@ -44,12 +44,14 @@ const HeaderContainer = () => {
 
     const authContext = useAuth();
     const navigate = useNavigate();
+    const localStorageLogIn= localStorage.getItem("isLoggedIn");
 
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        setIsLoggedIn(authContext.isAuthenticated);
-    }, [authContext.isAuthenticated]);
+        if(localStorageLogIn === "true")
+            setIsLoggedIn(true);
+    }, [localStorageLogIn]);
 
     function handleLogin(){
         navigate('/login');
@@ -61,7 +63,7 @@ const HeaderContainer = () => {
     }
 
     function handleIconClick() {
-        navigate('/main');
+        navigate('/');
     }
     return (
         <Container>

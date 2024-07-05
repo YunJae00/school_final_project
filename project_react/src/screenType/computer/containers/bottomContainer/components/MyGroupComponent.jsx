@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import StockSummaryListComponent from "./StockSummaryListComponent";
 import React, {useEffect, useState} from "react";
-import {useAuth} from "../../../../../security/AuthContext";
 import {useNavigate} from "react-router-dom";
 
 const Container = styled.div`
@@ -45,18 +44,19 @@ const LinkText = styled.a`
 
 const MyGroupComponent = ({title, summaryList}) => {
 
-    const authContext = useAuth();
     const navigate = useNavigate();
+    const localStorageLogIn = localStorage.getItem("isLoggedIn");
 
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const loginHandler = () => {
         navigate('/login');
     };
 
     useEffect(() => {
-        setIsLoggedIn(authContext.isAuthenticated);
-    }, [authContext.isAuthenticated]);
+        if (localStorageLogIn === "true")
+            setIsLoggedIn(true)
+    }, [localStorageLogIn]);
 
     return(
         <Container>

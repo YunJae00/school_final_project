@@ -6,7 +6,7 @@ import StockDetailContainer from "./containers/bottomContainer/StockDetailContai
 import StockChartContainer from "./containers/mainContainer/StockChartContainer";
 import StockSummaryContainer from "./containers/bottomContainer/StockSummaryContainer";
 import ContainerChangeButtonContainer from "./containers/bottomContainer/ContainerChangeButtonContainer";
-import StockRecommendContainer from "./containers/bottomContainer/StockRecommendContainer";
+import StockRecommendDetailContainer from "./containers/bottomContainer/StockRecommendDetailContainer";
 
 const Container = styled.div`
     display: flex;
@@ -38,7 +38,7 @@ const ComputerMainPage = () => {
                 />
                 {selectedComponent === "summary" && <StockSummaryContainer />}
                 {selectedComponent === "detail" && <StockDetailContainer />}
-                {selectedComponent === "recommend" && <StockRecommendContainer />}
+                {selectedComponent === "recommend" && <StockRecommendDetailContainer />}
             </InnerContainer>
         </Container>
     );
