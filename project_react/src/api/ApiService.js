@@ -11,3 +11,7 @@ export const executeCheckEmailService = (email) =>
 
 export const executeGetDailyStockData = (isinCd) =>
     apiClient.get(`/api/stocks/public/${isinCd}/daily-data`);
+
+export const executeGetLatestIndexData = () =>
+    apiClient.get(`/api/index/latest-multiple`);
+

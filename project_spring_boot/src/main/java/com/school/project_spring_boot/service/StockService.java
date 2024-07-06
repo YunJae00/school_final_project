@@ -7,7 +7,6 @@ import com.school.project_spring_boot.repository.DailyStockDataRepository;
 import com.school.project_spring_boot.repository.StockRepository;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,8 +36,11 @@ public class StockService {
         }
 
         for (DailyStockData dailyStockData : dailyStockDataList) {
-            dailyStockData.setStock(stock);
-            stock.getDailyStockData().add(dailyStockData);
+            Optional<DailyStockData> existingData = dailyStockDataRepository.findByStockAndBasDt(stock, dailyStockData.getBasDt());
+            if (!existingData.isPresent()) {
+                dailyStockData.setStock(stock);
+                stock.getDailyStockData().add(dailyStockData);
+            }
         }
 
         stockRepository.save(stock);
@@ -57,7 +59,8 @@ public class StockService {
                             data.getLopr(),
                             data.getClpr()))
                     .collect(Collectors.toList());
+        } else {
+            return null;
         }
-        else return null;
     }
 }

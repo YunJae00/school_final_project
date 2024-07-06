@@ -1,12 +1,11 @@
 package com.school.project_spring_boot.controller;
 
+import com.school.project_spring_boot.dto.IndexDataDto;
 import com.school.project_spring_boot.entity.IndexData;
 import com.school.project_spring_boot.service.IndexService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -19,8 +18,16 @@ public class IndexController {
         this.indexService = indexService;
     }
 
-    @GetMapping("/latest")
-    public List<IndexData> getLatestIndexData(@RequestParam String indexName) {
-        return indexService.fetchAndSaveLatestIndexData(indexName);
+    @PostMapping("/save-latest")
+    public void saveLatestIndexData() {
+        List<String> indexNames = Arrays.asList("코스피", "코스닥", "코스피 200", "코스닥 150", "KRX 100", "코스피 50");
+        for (String indexName : indexNames) {
+            indexService.fetchAndSaveLatestIndexData(indexName);
+        }
+    }
+
+    @GetMapping("/latest-multiple")
+    public List<IndexDataDto> getLatestMultipleIndexData() {
+        return indexService.getAllSavedIndexData();
     }
 }

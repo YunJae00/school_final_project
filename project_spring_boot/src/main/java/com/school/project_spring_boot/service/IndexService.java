@@ -2,6 +2,7 @@ package com.school.project_spring_boot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.project_spring_boot.dto.IndexApiResponseDto;
+import com.school.project_spring_boot.dto.IndexDataDto;
 import com.school.project_spring_boot.entity.IndexData;
 import com.school.project_spring_boot.repository.IndexDataRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +12,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class IndexService {
@@ -27,8 +31,7 @@ public class IndexService {
         this.serviceKey = serviceKey;
     }
 
-    public List<IndexData> fetchAndSaveLatestIndexData(String indexName) {
-
+    public void fetchAndSaveLatestIndexData(String indexName) {
         String urlTemplate = "https://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex";
 
         try {
@@ -58,20 +61,40 @@ public class IndexService {
 
                 // 데이터 저장
                 for (IndexApiResponseDto.Item item : items) {
-                    IndexData indexData = new IndexData();
-                    indexData.setBasDt(item.getBasDt());
-                    indexData.setIdxNm(item.getIdxNm());
-                    indexData.setClpr(item.getClpr());
-                    indexData.setFltRt(item.getFltRt());
-                    indexDataRepository.save(indexData);
+                    Optional<IndexData> existingIndexData = indexDataRepository.findByBasDtAndIdxNm(item.getBasDt(), item.getIdxNm());
+                    if (!existingIndexData.isPresent()) {
+                        IndexData indexData = new IndexData();
+                        indexData.setBasDt(item.getBasDt());
+                        indexData.setIdxNm(item.getIdxNm());
+                        indexData.setClpr(item.getClpr());
+                        indexData.setFltRt(item.getFltRt());
+                        indexDataRepository.save(indexData);
+                    }
                 }
-
-                return indexDataRepository.findAll();
             } else {
                 throw new RuntimeException("Failed to fetch index data: " + responseCode);
             }
         } catch (Exception e) {
             throw new RuntimeException("Exception occurred while fetching index data", e);
         }
+    }
+
+    public List<IndexDataDto> getAllSavedIndexData() {
+        List<IndexData> indexDataList = indexDataRepository.findAll();
+        List<IndexDataDto> indexDataDtoList = new ArrayList<>();
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
+        for (IndexData data : indexDataList) {
+            String fluctuation = data.getFltRt();
+            if (!fluctuation.startsWith("-") && !fluctuation.startsWith("0")) {
+                fluctuation = "+" + fluctuation;
+            }
+            fluctuation = decimalFormat.format(Double.parseDouble(fluctuation));
+
+            IndexDataDto dto = new IndexDataDto(data.getIdxNm(), data.getClpr().toString(), fluctuation, data.getBasDt());
+            indexDataDtoList.add(dto);
+        }
+
+        return indexDataDtoList;
     }
 }

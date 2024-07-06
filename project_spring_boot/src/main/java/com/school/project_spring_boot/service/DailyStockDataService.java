@@ -49,10 +49,10 @@ public class DailyStockDataService {
                                 + "&pageNo="
                                 + pageNo
                                 + "&numOfRows=100"
-                                //일단 test로
+                                // 일단 test로
                                 + "&beginBasDt=20240601"
                                 + "&endBasDt=20240602"
-                                //+ "&isinCd=KR7000040006"
+                        // + "&isinCd=KR7000040006"
                 );
 
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
