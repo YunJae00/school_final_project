@@ -1,8 +1,8 @@
 package com.school.project_spring_boot.config;
 
 import com.school.project_spring_boot.jwt.CustomUserDetailService;
-import com.school.project_spring_boot.jwt.JwtAuthFilter;
-import com.school.project_spring_boot.jwt.JwtUtil;
+import com.school.project_spring_boot.filter.JwtAuthFilter;
+import com.school.project_spring_boot.provider.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;

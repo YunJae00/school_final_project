@@ -1,4 +1,4 @@
-package com.school.project_spring_boot.jwt;
+package com.school.project_spring_boot.provider;
 
 import com.school.project_spring_boot.dto.JwtTokenDto;
 import com.school.project_spring_boot.entity.Member;

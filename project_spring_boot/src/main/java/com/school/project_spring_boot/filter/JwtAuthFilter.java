@@ -1,5 +1,7 @@
-package com.school.project_spring_boot.jwt;
+package com.school.project_spring_boot.filter;
 
+import com.school.project_spring_boot.jwt.CustomUserDetailService;
+import com.school.project_spring_boot.provider.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
