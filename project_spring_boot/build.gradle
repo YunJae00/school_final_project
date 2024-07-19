@@ -35,11 +35,12 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java:8.0.32'
 //    runtimeOnly 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation "io.jsonwebtoken:jjwt:0.9.1"
     implementation 'org.springframework.boot:spring-boot-devtools'
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    //jjwt
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
@@ -50,6 +51,10 @@ dependencies {
 
     //validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //Java Mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    //OAuth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {

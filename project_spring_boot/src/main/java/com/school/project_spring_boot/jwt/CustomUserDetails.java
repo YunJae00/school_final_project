@@ -1,6 +1,6 @@
 package com.school.project_spring_boot.jwt;
 
-import com.school.project_spring_boot.entity.Member;
+import com.school.project_spring_boot.entity.auth.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

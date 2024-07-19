@@ -1,7 +1,7 @@
 package com.school.project_spring_boot.jwt;
 
-import com.school.project_spring_boot.entity.Member;
-import com.school.project_spring_boot.repository.MemberRepository;
+import com.school.project_spring_boot.entity.auth.Member;
+import com.school.project_spring_boot.repository.auth.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +21,7 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<Member> memberOpt = memberRepository.findByEmail(email);
+        Optional<Member> memberOpt = memberRepository.findMemberByEmail(email);
         if(memberOpt.isPresent()) {
             Member member = memberOpt.get();
             if (member != null) {

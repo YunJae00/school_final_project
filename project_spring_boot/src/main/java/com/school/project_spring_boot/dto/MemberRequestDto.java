@@ -1,8 +1,8 @@
 package com.school.project_spring_boot.dto;
 
-import com.school.project_spring_boot.entity.Member;
-import com.school.project_spring_boot.entity.Provider;
-import com.school.project_spring_boot.entity.Role;
+import com.school.project_spring_boot.entity.auth.Member;
+import com.school.project_spring_boot.entity.auth.Provider;
+import com.school.project_spring_boot.entity.auth.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;

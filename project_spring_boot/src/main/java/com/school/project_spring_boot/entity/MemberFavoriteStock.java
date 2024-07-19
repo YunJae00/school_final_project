@@ -2,6 +2,7 @@ package com.school.project_spring_boot.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.school.project_spring_boot.entity.auth.Member;
 import jakarta.persistence.*;
 
 @Entity

@@ -3,11 +3,11 @@ package com.school.project_spring_boot.service;
 import com.school.project_spring_boot.dto.MemberResponseDto;
 import com.school.project_spring_boot.dto.StockWithRecentDataDto;
 import com.school.project_spring_boot.entity.DailyStockData;
-import com.school.project_spring_boot.entity.Member;
+import com.school.project_spring_boot.entity.auth.Member;
 import com.school.project_spring_boot.entity.Stock;
 import com.school.project_spring_boot.entity.MemberFavoriteStock;
 import com.school.project_spring_boot.repository.DailyStockDataRepository;
-import com.school.project_spring_boot.repository.MemberRepository;
+import com.school.project_spring_boot.repository.auth.MemberRepository;
 import com.school.project_spring_boot.repository.StockRepository;
 import com.school.project_spring_boot.repository.MemberFavoriteStockRepository;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class MemberService {
     }
 
     public MemberResponseDto findByMemberEmail(String memberEmail) {
-        Optional<Member> memberOpt = memberRepository.findByEmail(memberEmail);
+        Optional<Member> memberOpt = memberRepository.findMemberByEmail(memberEmail);
         if(memberOpt.isPresent()) {
             Member member = memberOpt.get();
             return new MemberResponseDto(
@@ -48,7 +48,7 @@ public class MemberService {
     }
 
     public void addFavoriteStock(String memberEmail, String isinCd) {
-        Optional<Member> memberOpt = memberRepository.findByEmail(memberEmail);
+        Optional<Member> memberOpt = memberRepository.findMemberByEmail(memberEmail);
         Optional<Stock> stockOpt = stockRepository.findByIsinCd(isinCd);
 
         if (memberOpt.isPresent() && stockOpt.isPresent()) {
@@ -65,7 +65,7 @@ public class MemberService {
     }
 
     public void removeFavoriteStock(String memberEmail, String isinCd) {
-        Optional<Member> memberOpt = memberRepository.findByEmail(memberEmail);
+        Optional<Member> memberOpt = memberRepository.findMemberByEmail(memberEmail);
         Optional<Stock> stockOpt = stockRepository.findByIsinCd(isinCd);
 
         if (memberOpt.isPresent() && stockOpt.isPresent()) {
@@ -76,7 +76,7 @@ public class MemberService {
     }
 
     public List<StockWithRecentDataDto> getFavoriteStocksWithRecentData(String memberEmail) {
-        Optional<Member> memberOpt = memberRepository.findByEmail(memberEmail);
+        Optional<Member> memberOpt = memberRepository.findMemberByEmail(memberEmail);
         if (memberOpt.isPresent()) {
             Member member = memberOpt.get();
             return memberFavoriteStockRepository.findAllByMember(member).stream()

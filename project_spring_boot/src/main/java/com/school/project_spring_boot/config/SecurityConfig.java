@@ -1,8 +1,6 @@
 package com.school.project_spring_boot.config;
 
-import com.school.project_spring_boot.jwt.CustomUserDetailService;
-import com.school.project_spring_boot.filter.JwtAuthFilter;
-import com.school.project_spring_boot.provider.JwtUtil;
+import com.school.project_spring_boot.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -18,20 +16,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    private final CustomUserDetailService customUserDetailService;
-    private final JwtUtil jwtUtil;
-
     private static final String[] AUTH_WHITELIST = {
-            "/api/auth/**", "/h2-console/**", "/api/members/**", "/api/stocks/public/**", "/api/index/**"
+            "/api/auth/**", "/h2-console/**", "/api/members/**", "/api/stocks/public/**", "/api/index/**", "/api/v1/**"
     };
 
-    public SecurityConfig(CustomUserDetailService customUserDetailService, JwtUtil jwtUtil) {
-        this.customUserDetailService = customUserDetailService;
-        this.jwtUtil = jwtUtil;
-    }
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http.csrf((csrf) -> csrf.disable());
         http.cors(Customizer.withDefaults());
 
@@ -43,7 +33,7 @@ public class SecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
 
         // JwtAuthFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
-        http.addFilterBefore(new JwtAuthFilter(customUserDetailService, jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         // H2 콘솔에 대한 프레임 옵션 허용
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));

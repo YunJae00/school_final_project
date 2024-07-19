@@ -1,6 +1,6 @@
 package com.school.project_spring_boot.repository;
 
-import com.school.project_spring_boot.entity.Member;
+import com.school.project_spring_boot.entity.auth.Member;
 import com.school.project_spring_boot.entity.MemberFavoriteStock;
 import com.school.project_spring_boot.entity.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
