@@ -55,3 +55,19 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+
+@font-face {
+  font-family: "inter";
+  src: url(./fonts/Inter/Inter-VariableFont_slnt,wght.ttf);
+}
+
+@font-face {
+  font-family: "pretendard";
+  src: url(./fonts/Pretendard-1.3.9/public/variable/PretendardVariable.ttf);
+}
+
+:root {
+  --font-inter: "inter";
+  --font-pretendard: "pretendard";
+}

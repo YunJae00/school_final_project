@@ -1,9 +1,8 @@
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import ComputerMainPage from "./screenType/computer/ComputerMainPage";
-import PhoneMainPage from "./screenType/phone/PhoneMainPage";
-import TabletMainPage from "./screenType/tablet/TabletMainPage";
 import { useMediaQuery } from "react-responsive"
-import ComputerPages from "./screenType/computer/ComputerPages";
+import AuthProvider from "./security/AuthContext";
+import PcScreen from "./screen/pc/PcScreen";
+import TabletScreen from "./screen/tablet/TabletScreen";
+import MobileScreen from "./screen/mobile/MobileScreen";
 
 function App() {
 
@@ -18,11 +17,11 @@ function App() {
     });
 
     return (
-        <div>
-            {isPc && <ComputerPages/>}
-            {isTablet && <TabletMainPage/>}
-            {isMobile && <PhoneMainPage/>}
-        </div>
+        <AuthProvider>
+            {isPc && <PcScreen/>}
+            {isTablet && <TabletScreen/>}
+            {isMobile && <MobileScreen/>}
+        </AuthProvider>
     );
 }
 
