@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Container = styled.div`
+const FooterWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,7 +9,7 @@ const Container = styled.div`
     padding: 6.25rem 0 6.25rem 0;
 `;
 
-const ContentWrapper = styled.div`
+const ContentContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 100.125rem;
@@ -26,8 +26,8 @@ const Content = styled.p`
 
 const Footer = () => {
     return(
-        <Container>
-            <ContentWrapper>
+        <FooterWrapper>
+            <ContentContainer>
                 <Content>
                     ⦁ 본 서비스는 "자본시장과 금융투자업에 관한 법률"을 준수합니다. 이 법률에 따라 본 서비스는 투자 자문 및 일임업을 수행하지 않으며, 투자에 대한 최종 결정은 사용자가 직접 내리셔야 합니다.
                 </Content>
@@ -55,8 +55,8 @@ const Footer = () => {
                 <Content>
                     문의사항 ➤ 개발자 email : 0109548@naver.com
                 </Content>
-            </ContentWrapper>
-        </Container>
+            </ContentContainer>
+        </FooterWrapper>
     );
 };
 
