@@ -17,6 +17,7 @@ const wrapTextWithLang = (text) => {
 
 const IntroductionBoxWrapper = styled.div`
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: space-between;
     align-items: start;
@@ -45,6 +46,7 @@ const IntroductionBoxSubTitle = styled.p`
 
 const IntroductionBoxTitle = styled.p`
     font-size: 2rem;
+    font-weight: bold;
     white-space: pre-line;
     [lang="en"] {
         font-family: 'Inter', sans-serif;
@@ -67,6 +69,7 @@ const IntroductionBoxContent = styled.p`
 
 const BottomContainer = styled.div`
     display: flex;
+    width: 100%;
     flex-direction: column;
     gap: 10px;
 `;
@@ -91,7 +94,7 @@ const IntroductionBox = ({subTitle, title, content, detail, buttonText}) => {
                 <IntroductionBoxContent>{wrapTextWithLang(content)}</IntroductionBoxContent>
             </IntroductionTitleContainer>
             <BottomContainer>
-                <IntroductionBoxDetail>{wrapTextWithLang(detail)}</IntroductionBoxDetail>
+                {detail && <IntroductionBoxDetail>{wrapTextWithLang(detail)}</IntroductionBoxDetail>}
                 {buttonText && <BlueButton buttonText={buttonText} />}
             </BottomContainer>
         </IntroductionBoxWrapper>

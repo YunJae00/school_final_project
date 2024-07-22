@@ -1,8 +1,9 @@
 import React from "react";
 import Footer from "../Footer";
 import Header from "../Header";
-import NavSection from "./NavSection";
-import StockSection from "./StockSection";
+import NavSection from "./section/NavSection";
+import StockSection from "./section/StockSection";
+import IndexSection from "./section/IndexSection";
 
 const MainPage = () => {
     return(
@@ -10,6 +11,7 @@ const MainPage = () => {
             <Header/>
             <NavSection/>
             <StockSection/>
+            <IndexSection/>
             <Footer/>
         </div>
     );

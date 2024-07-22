@@ -3,13 +3,14 @@ import styled from "styled-components";
 
 const StockBoxWrapper = styled.div`
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: space-between;
     align-items: start;
-    width: 23.625rem;
     height: 33.125rem;
     border-radius: 2.25rem;
     padding: 2.5rem;
+    background-color: white;
 `;
 
 const StockNumber = styled.p`
@@ -19,6 +20,7 @@ const StockNumber = styled.p`
 
 const StockTitle = styled.p`
     font-size: 2rem;
+    font-weight: bold;
     font-family: pretendard;
 `;
 

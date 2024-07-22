@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import NavBox from "../components/NavBox";
-import aiImage from "../../../../images/ai_character.png";
+import NavBox from "../../components/NavBox";
+import aiImage from "../../../../../images/ai_character.png";
 
 const NavSectionWrapper = styled.div`
     display: flex;
@@ -23,12 +23,12 @@ const NavSection = () => {
         <NavSectionWrapper>
             <NavSectionContainer>
                 <NavBox
+                    flex={"2"}
                     navSubTitle={"AI 모델 성과"}
                     navTitle={"AI 모델 성과 및\n수익률 분석"}
                     navContent={"딥 Q-Learning 알고리즘을 통해\n얻은 성과를 확인해보세요"}
                     navBackgroundColor={"#264653"}
                     navButton={"자세히보기"}
-                    navWidth={"100%"}
                     navImage={aiImage}
                 />
                 <NavBox

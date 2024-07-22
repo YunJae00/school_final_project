@@ -17,8 +17,9 @@ const wrapTextWithLang = (text) => {
 
 const NavBoxWrapper = styled.div`
     display: flex;
+    flex: 1;
+    flex: ${props => (props.flex ? props.flex : '1')};
     justify-content: space-between;
-    width: ${props => (props.navWidth ? props.navWidth : '25%')};
     height: 21.875rem;
     align-items: start;
     border-radius: 2.25rem;
@@ -86,9 +87,9 @@ const NavBoxImage = styled.img`
     right: 2.5rem;
 `;
 
-const NavBox = ({ navWidth, navBackgroundColor, navSubTitle, navTitle, navContent, navButton, navImage }) => {
+const NavBox = ({ flex, navBackgroundColor, navSubTitle, navTitle, navContent, navButton, navImage }) => {
     return (
-        <NavBoxWrapper navWidth={navWidth} navBackgroundColor={navBackgroundColor}>
+        <NavBoxWrapper flex={flex} navBackgroundColor={navBackgroundColor}>
             <NavBoxLeft>
                 <NavBoxLeftInner>
                     <NavSubTitle>{wrapTextWithLang(navSubTitle)}</NavSubTitle>
