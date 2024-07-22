@@ -17,11 +17,11 @@ const wrapTextWithLang = (text) => {
 
 const IntroductionBoxWrapper = styled.div`
     display: flex;
-    flex: 1;
+    flex: ${props => (props.flex ? props.flex : 1)};
     flex-direction: column;
     justify-content: space-between;
     align-items: start;
-    height: 33.125rem;
+    height: 28rem;
     border-radius: 2.25rem;
     padding: 2.5rem;
     background-color: white;
@@ -85,9 +85,9 @@ const IntroductionBoxDetail = styled.p`
     }
 `;
 
-const IntroductionBox = ({subTitle, title, content, detail, buttonText}) => {
+const IntroductionBox = ({flex, subTitle, title, content, detail, buttonText}) => {
     return(
-        <IntroductionBoxWrapper>
+        <IntroductionBoxWrapper flex={flex}>
             <IntroductionTitleContainer>
                 <IntroductionBoxSubTitle>{wrapTextWithLang(subTitle)}</IntroductionBoxSubTitle>
                 <IntroductionBoxTitle>{wrapTextWithLang(title)}</IntroductionBoxTitle>

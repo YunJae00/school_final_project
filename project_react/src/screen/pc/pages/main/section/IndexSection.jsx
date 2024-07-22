@@ -2,7 +2,7 @@ import React from "react";
 import ContainerTitle from "../../components/ContainerTitle";
 import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
-import StockBox from "../../components/StockBox";
+import IndexBox from "../../components/IndexBox";
 
 const IndexSectionWrapper = styled.div`
     display: flex;
@@ -28,6 +28,20 @@ const IndexBoxContainer = styled.div`
     gap: 1.875rem;
 `;
 
+const IndexBoxList = styled.div`
+    display: flex;
+    flex: 4;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.875rem;
+`;
+
+const ListRow = styled.div`
+    flex: 1;
+    display: flex;
+    gap: 1.875rem;
+`;
+
 const IndexSection = () => {
     return(
         <IndexSectionWrapper>
@@ -38,24 +52,18 @@ const IndexSection = () => {
                         subTitle={"지수 정보"}
                         title={"24년 7월 2주차\n지수정보 한눈에 보기"}
                         content={"지수정보를 확인해보세요"} />
-                    <StockBox
-                        stockNumber={"1"}
-                        stockTitle={"삼성전자"}
-                        stockCode={"005960"}
-                        stockPrice={"56000"}
-                        stockDate={"2024.07.17"}/>
-                    <StockBox
-                        stockNumber={"1"}
-                        stockTitle={"삼성전자"}
-                        stockCode={"005960"}
-                        stockPrice={"56000"}
-                        stockDate={"2024.07.17"}/>
-                    <StockBox
-                        stockNumber={"1"}
-                        stockTitle={"삼성전자"}
-                        stockCode={"005960"}
-                        stockPrice={"56000"}
-                        stockDate={"2024.07.17"}/>
+                    <IndexBoxList>
+                        <ListRow>
+                            <IndexBox indexTitle={"KOSPI"} indexPrice={"55000"} indexDate={"2024.07.17"}/>
+                            <IndexBox indexTitle={"KOSPI"} indexPrice={"55000"} indexDate={"2024.07.17"}/>
+                            <IndexBox indexTitle={"KOSPI"} indexPrice={"55000"} indexDate={"2024.07.17"}/>
+                        </ListRow>
+                        <ListRow>
+                            <IndexBox indexTitle={"KOSPI"} indexPrice={"55000"} indexDate={"2024.07.17"}/>
+                            <IndexBox indexTitle={"KOSPI"} indexPrice={"55000"} indexDate={"2024.07.17"}/>
+                            <IndexBox indexTitle={"KOSPI"} indexPrice={"55000"} indexDate={"2024.07.17"}/>
+                        </ListRow>
+                    </IndexBoxList>
                 </IndexBoxContainer>
             </IndexSectionContainer>
         </IndexSectionWrapper>

@@ -7,7 +7,7 @@ const StockBoxWrapper = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: start;
-    height: 33.125rem;
+    height: 28rem;
     border-radius: 2.25rem;
     padding: 2.5rem;
     background-color: white;

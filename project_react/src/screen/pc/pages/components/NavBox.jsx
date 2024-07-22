@@ -20,7 +20,7 @@ const NavBoxWrapper = styled.div`
     flex: 1;
     flex: ${props => (props.flex ? props.flex : '1')};
     justify-content: space-between;
-    height: 21.875rem;
+    height: 20rem;
     align-items: start;
     border-radius: 2.25rem;
     background-color: ${props => (props.navBackgroundColor ? props.navBackgroundColor : "white")};
