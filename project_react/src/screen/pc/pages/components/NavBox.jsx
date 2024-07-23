@@ -18,12 +18,11 @@ const wrapTextWithLang = (text) => {
 const NavBoxWrapper = styled.div`
     display: flex;
     flex: 1;
-    flex: ${props => (props.flex ? props.flex : '1')};
     justify-content: space-between;
     height: 20rem;
     align-items: start;
     border-radius: 2.25rem;
-    background-color: ${props => (props.navBackgroundColor ? props.navBackgroundColor : "white")};
+    background-color: ${props => props.navBackgroundColor ? props.navBackgroundColor : "white"};
     padding: 2.5rem;
     position: relative;
 `;
@@ -80,16 +79,16 @@ const NavContent = styled.p`
 `;
 
 const NavBoxImage = styled.img`
-    width: 21.875rem;
-    height: 21.875rem;
-    position: absolute;  
-    bottom: 2.5rem;           
+    width: 12rem;
+    height: 12rem;
+    position: absolute;
+    bottom: 2.5rem;
     right: 2.5rem;
 `;
 
 const NavBox = ({ flex, navBackgroundColor, navSubTitle, navTitle, navContent, navButton, navImage }) => {
     return (
-        <NavBoxWrapper flex={flex} navBackgroundColor={navBackgroundColor}>
+        <NavBoxWrapper navBackgroundColor={navBackgroundColor}>
             <NavBoxLeft>
                 <NavBoxLeftInner>
                     <NavSubTitle>{wrapTextWithLang(navSubTitle)}</NavSubTitle>

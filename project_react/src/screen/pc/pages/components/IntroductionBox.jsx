@@ -17,11 +17,10 @@ const wrapTextWithLang = (text) => {
 
 const IntroductionBoxWrapper = styled.div`
     display: flex;
-    flex: ${props => (props.flex ? props.flex : 1)};
+    flex: 1;
     flex-direction: column;
     justify-content: space-between;
     align-items: start;
-    height: 28rem;
     border-radius: 2.25rem;
     padding: 2.5rem;
     background-color: white;
@@ -59,6 +58,7 @@ const IntroductionBoxTitle = styled.p`
 const IntroductionBoxContent = styled.p`
     font-size: 1.25rem;
     white-space: pre-line;
+    line-height: 1.5;
     [lang="en"] {
         font-family: 'Inter', sans-serif;
     }
@@ -85,9 +85,9 @@ const IntroductionBoxDetail = styled.p`
     }
 `;
 
-const IntroductionBox = ({flex, subTitle, title, content, detail, buttonText}) => {
+const IntroductionBox = ({subTitle, title, content, detail, buttonText, onClick}) => {
     return(
-        <IntroductionBoxWrapper flex={flex}>
+        <IntroductionBoxWrapper>
             <IntroductionTitleContainer>
                 <IntroductionBoxSubTitle>{wrapTextWithLang(subTitle)}</IntroductionBoxSubTitle>
                 <IntroductionBoxTitle>{wrapTextWithLang(title)}</IntroductionBoxTitle>
@@ -95,7 +95,7 @@ const IntroductionBox = ({flex, subTitle, title, content, detail, buttonText}) =
             </IntroductionTitleContainer>
             <BottomContainer>
                 {detail && <IntroductionBoxDetail>{wrapTextWithLang(detail)}</IntroductionBoxDetail>}
-                {buttonText && <BlueButton buttonText={buttonText} />}
+                {buttonText && <BlueButton buttonText={buttonText} onClick={onClick}/>}
             </BottomContainer>
         </IntroductionBoxWrapper>
     );

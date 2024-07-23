@@ -11,10 +11,8 @@ const NavSectionWrapper = styled.div`
 
 const NavSectionContainer = styled.div`
     display: flex;
-    justify-content: center;
-    align-items: center;
     width: 100.125rem;
-    padding: 3.75rem 0 3.75rem 0;
+    padding: 3.75rem 0;
     gap: 1.875rem;
 `;
 
@@ -23,7 +21,6 @@ const NavSection = () => {
         <NavSectionWrapper>
             <NavSectionContainer>
                 <NavBox
-                    flex={"2"}
                     navSubTitle={"AI 모델 성과"}
                     navTitle={"AI 모델 성과 및\n수익률 분석"}
                     navContent={"딥 Q-Learning 알고리즘을 통해\n얻은 성과를 확인해보세요"}

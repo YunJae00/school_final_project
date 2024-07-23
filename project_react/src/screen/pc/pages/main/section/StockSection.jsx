@@ -3,6 +3,7 @@ import ContainerTitle from "../../components/ContainerTitle";
 import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
 import StockBox from "../../components/StockBox";
+import {useNavigate} from "react-router-dom";
 
 const StockSectionWrapper = styled.div`
     display: flex;
@@ -14,8 +15,6 @@ const StockSectionWrapper = styled.div`
 const StockSectionContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: start;
     width: 100.125rem;
     padding: 3.75rem 0;
     gap: 1.875rem;
@@ -29,12 +28,20 @@ const StockBoxContainer = styled.div`
 `;
 
 const StockSection = () => {
+
+    const navigate = useNavigate();
+
+    function buttonClickHandler() {
+        navigate('/stock-list')
+    }
+
     return(
         <StockSectionWrapper>
             <StockSectionContainer>
                 <ContainerTitle subTitle={"다양한 주식 추천을 알아보고 투자하세요!"}/>
                 <StockBoxContainer>
                     <IntroductionBox
+                        onClick={buttonClickHandler}
                         subTitle={"AI 모델 성과"}
                         title={"24년 7월 2주차\nTrand Trader\n선정 주식 종목"}
                         content={"서비스에서 선정된\n자산별 현황을 확인해보세요"}

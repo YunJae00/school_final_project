@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import {useNavigate} from "react-router-dom";
 
 const HeaderWrapper = styled.div`
     display: flex;
@@ -42,17 +43,20 @@ const UserIcon = styled.div`
 `;
 
 const Header = () => {
+
+    const navigate = useNavigate();
+
+    function titleOnClickHandler() {
+        navigate('/');
+    }
+
     return(
         <HeaderWrapper>
             <HeaderContainer>
-                <Title>Trand Trader</Title>
+                <Title onClick={titleOnClickHandler}>Trand Trader</Title>
                 <NavBox>
-                    <Nav>
-                        AI 성과 분석
-                    </Nav>
-                    <Nav>
-                        내 포트폴리오
-                    </Nav>
+                    <Nav>AI 성과 분석</Nav>
+                    <Nav>내 포트폴리오</Nav>
                     <UserIcon>
 
                     </UserIcon>

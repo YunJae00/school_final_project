@@ -1,8 +1,7 @@
 import React from "react";
 import ContainerTitle from "../../components/ContainerTitle";
 import styled from "styled-components";
-import IntroductionBox from "../../components/IntroductionBox";
-import StockBox from "../../components/StockBox";
+import BlueButton from "../../components/BlueButton";
 
 const StockDetailSectionWrapper = styled.div`
     display: flex;
@@ -14,25 +13,83 @@ const StockDetailSectionWrapper = styled.div`
 const StockDetailSectionContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: start;
     width: 100.125rem;
     padding: 3.75rem 0;
     gap: 1.875rem;
 `;
 
-const StockDetailBoxContainer = styled.div`
+const StockDetail = styled.div`
+    display: flex;
+    padding: 2.5rem;
+    gap: 1.875rem;
+    background-color: white;
+    border-radius: 2.25rem;
+`;
+
+const StockDetailLeft = styled.div`
     display: flex;
     flex-direction: column;
+    flex: 3;
+`;
+
+const StockDetailRight = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+`;
+
+const StockTitleBox = styled.div`
+    display: flex;
     width: 100%;
-    justify-content: center;
+    justify-content: start;
+    align-items: center;
     gap: 1.875rem;
 `;
 
-const StockDetailBoxRow = styled.div`
+const StockTitle = styled.p`
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: pretendard;
+`;
+
+const StockCode = styled.p`
+    font-size: 1.25rem;
+    font-family: pretendard;
+`;
+
+const StockGraph = styled.div`
+
+`;
+
+const StockDetailSummary = styled.div`
+    display: flex;
+    flex-direction: column;
+    border-radius: 2.25rem;
+    background-color: #264653;
+    padding: 1.875rem;
+    gap: 1.25rem;
+`;
+
+const StockDetailTitle = styled.p`
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: pretendard;
+    color: white;
+`;
+
+const StockDetailList = styled.div`
     display: flex;
     width: 100%;
-    gap: 1.875rem;
+    justify-content: space-between;
+    align-items: center;
+`;
+
+const StockValueText = styled.p`
+    font-size: 1.25rem;
+    font-family: pretendard;
+    color: white;
 `;
 
 const StockDetailSection = () => {
@@ -40,81 +97,42 @@ const StockDetailSection = () => {
         <StockDetailSectionWrapper>
             <StockDetailSectionContainer>
                 <ContainerTitle subTitle={"다양한 주식 추천을 알아보고 투자하세요!"}/>
-                <StockDetailBoxContainer>
-                    <StockDetailBoxRow>
-                        <IntroductionBox
-                            flex={2}
-                            subTitle={"AI 모델 성과"}
-                            title={"24년 7월 2주차\nTrand Trader\n선정 주식 종목"}
-                            content={"서비스에서 선정된\n자산별 현황을 확인해보세요"}
-                            detail={"⦁ 종목은 매 주 시가총액 상위 10개 종목으로 선정됩니다."}
-                            buttonText={"10 종목 모두 확인하러가기"}/>
-                        <StockBox
-                            stockNumber={"1"}
-                            stockTitle={"삼성전자"}
-                            stockCode={"005960"}
-                            stockPrice={"56000"}
-                            stockDate={"2024.07.17"}/>
-                        <StockBox
-                            stockNumber={"1"}
-                            stockTitle={"삼성전자"}
-                            stockCode={"005960"}
-                            stockPrice={"56000"}
-                            stockDate={"2024.07.17"}/>
-                    </StockDetailBoxRow>
-                    <StockDetailBoxRow>
-                        <StockBox
-                            stockNumber={"1"}
-                            stockTitle={"삼성전자"}
-                            stockCode={"005960"}
-                            stockPrice={"56000"}
-                            stockDate={"2024.07.17"}/>
-                        <StockBox
-                            stockNumber={"1"}
-                            stockTitle={"삼성전자"}
-                            stockCode={"005960"}
-                            stockPrice={"56000"}
-                            stockDate={"2024.07.17"}/>
-                        <StockBox
-                            stockNumber={"1"}
-                            stockTitle={"삼성전자"}
-                            stockCode={"005960"}
-                            stockPrice={"56000"}
-                            stockDate={"2024.07.17"}/>
-                        <StockBox
-                            stockNumber={"1"}
-                            stockTitle={"삼성전자"}
-                            stockCode={"005960"}
-                            stockPrice={"56000"}
-                            stockDate={"2024.07.17"}/>
-                    </StockDetailBoxRow>
-                    <StockDetailBoxRow>
-                        <StockBox
-                            stockNumber={"1"}
-                            stockTitle={"삼성전자"}
-                            stockCode={"005960"}
-                            stockPrice={"56000"}
-                            stockDate={"2024.07.17"}/>
-                        <StockBox
-                            stockNumber={"1"}
-                            stockTitle={"삼성전자"}
-                            stockCode={"005960"}
-                            stockPrice={"56000"}
-                            stockDate={"2024.07.17"}/>
-                        <StockBox
-                            stockNumber={"1"}
-                            stockTitle={"삼성전자"}
-                            stockCode={"005960"}
-                            stockPrice={"56000"}
-                            stockDate={"2024.07.17"}/>
-                        <StockBox
-                            stockNumber={"1"}
-                            stockTitle={"삼성전자"}
-                            stockCode={"005960"}
-                            stockPrice={"56000"}
-                            stockDate={"2024.07.17"}/>
-                    </StockDetailBoxRow>
-                </StockDetailBoxContainer>
+                <StockDetail>
+                    <StockDetailLeft>
+                        <StockTitleBox>
+                            <StockTitle>삼성전자</StockTitle>
+                            <StockCode>005960</StockCode>
+                            <BlueButton buttonText={"포트폴리오 추가하기"}/>
+                        </StockTitleBox>
+                        <StockGraph></StockGraph>
+                    </StockDetailLeft>
+                    <StockDetailRight>
+                        <StockDetailSummary>
+                            <StockDetailTitle>주식 정보</StockDetailTitle>
+                            <StockDetailList>
+                                <StockValueText>기준일</StockValueText><StockValueText>2024.07.17</StockValueText>
+                            </StockDetailList>
+                            <StockDetailList>
+                                <StockValueText>종가</StockValueText><StockValueText>2024.07.17</StockValueText>
+                            </StockDetailList>
+                            <StockDetailList>
+                                <StockValueText>고가</StockValueText><StockValueText>2024.07.17</StockValueText>
+                            </StockDetailList>
+                            <StockDetailList>
+                                <StockValueText>저가</StockValueText><StockValueText>2024.07.17</StockValueText>
+                            </StockDetailList>
+                            <StockDetailList>
+                                <StockValueText>변동</StockValueText><StockValueText>2024.07.17</StockValueText>
+                            </StockDetailList>
+                            <StockDetailList>
+                                <StockValueText>변동 %</StockValueText><StockValueText>2024.07.17</StockValueText>
+                            </StockDetailList>
+                            <StockDetailList>
+                                <StockValueText>거래량</StockValueText><StockValueText>2024.07.17</StockValueText>
+                            </StockDetailList>
+                        </StockDetailSummary>
+                    </StockDetailRight>
+                </StockDetail>
             </StockDetailSectionContainer>
         </StockDetailSectionWrapper>
     );

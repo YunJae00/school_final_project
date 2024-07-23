@@ -32,9 +32,9 @@ const ButtonWrapper = styled.div`
     background-color: #1454FF;
 `;
 
-const BlueButton = ({buttonText}) => {
+const BlueButton = ({buttonText, onClick}) => {
     return(
-        <ButtonWrapper>{wrapTextWithLang(buttonText)}</ButtonWrapper>
+        <ButtonWrapper onClick={onClick}>{wrapTextWithLang(buttonText)}</ButtonWrapper>
     );
 };
 
