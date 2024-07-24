@@ -34,7 +34,6 @@ const StockDetailAnalyzeSectionContainer = styled.div`
 `;
 
 const StockTitleContainer = styled.p`
-    display: flex;
     color: white;
     background-color: #264653;
     padding: 2.5rem;
@@ -104,7 +103,7 @@ const StockAnalyzeValueColumn = styled.div`
 const OperationExplain = styled.div`
     display: flex;
     flex-direction: column;
-    padding-top: 1.25rem;
+    padding: 1.25rem 2.5rem;
     gap: 1.875rem;
 `;
 
@@ -134,6 +133,7 @@ const OperationExplainSubTitle = styled.p`
 const OperationExplainContent = styled.p`
     font-size: 1.5rem;
     white-space: pre-line;
+    line-height: 1.3;
     [lang="en"] {
         font-family: 'Inter', sans-serif;
     }
@@ -152,6 +152,12 @@ const StockAnalyzeValue = ({valueText, value}) => {
 };
 
 const StockDetailAnalyzeSection = () => {
+
+    const explainContent1 = "AI 모델은 과거 데이터와 현재 시장 상황을 분석하여 다음 날의 주가 움직임을 예측합니다. 예측 결과에 따라 매수, 매도, 또는 보유 결정을 내립니다. 예를 들어, 주가가 상승할 것으로 예상되면 매수, 하락할 것으로 예상되면 매도합니다."
+    const explainContent2 = "각 거래의 수익률은 매수 가격과 매도 가격의 차이로 계산됩니다. 전체 수익률은 초기 자본금 대비 종료 후 자본금의 비율로 계산됩니다. 예를 들어, 초기 자본금 1,000,000원이 1,150,000원이 되었다면 수익률은 15%입니다."
+    const explainContent3 = "AI 모델은 학습된 데이터를 기반으로 매일 10개의 주식에 대한 다음 날의 투자 전략을 제공합니다. 각 주식에 대해 매수, 매도, 보유 중 하나를 추천합니다."
+
+
     return(
         <StockDetailAnalyzeSectionWrapper>
             <StockDetailAnalyzeSectionContainer>
@@ -174,10 +180,12 @@ const StockDetailAnalyzeSection = () => {
                 </StockDetail>
                 <OperationExplain>
                     <OperationExplainTitle>{wrapTextWithLang("서비스 운영 방식")}</OperationExplainTitle>
-                    <OperationExplainSubTitle>매수/매도 전략</OperationExplainSubTitle>
-                    <OperationExplainContent>
-                        AI 모델은 과거 데이터와 현재 시장 상황을 분석하여 다음 날의 주가 움직임을 예측합니다. 예측 결과에 따라 매수, 매도, 또는 보유 결정을 내립니다. 예를 들어, 주가가 상승할 것으로 예상되면 매수, 하락할 것으로 예상되면 매도합니다.
-                    </OperationExplainContent>
+                    <OperationExplainSubTitle>{wrapTextWithLang("매수/매도 전략")}</OperationExplainSubTitle>
+                    <OperationExplainContent>{wrapTextWithLang(explainContent1)}</OperationExplainContent>
+                    <OperationExplainSubTitle>{wrapTextWithLang("수익률 계산")}</OperationExplainSubTitle>
+                    <OperationExplainContent>{wrapTextWithLang(explainContent2)}</OperationExplainContent>
+                    <OperationExplainSubTitle>{wrapTextWithLang("투자전략 제공")}</OperationExplainSubTitle>
+                    <OperationExplainContent>{wrapTextWithLang(explainContent3)}</OperationExplainContent>
                 </OperationExplain>
             </StockDetailAnalyzeSectionContainer>
         </StockDetailAnalyzeSectionWrapper>
