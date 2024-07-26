@@ -9,8 +9,10 @@ import jakarta.persistence.*;
 public class MemberFavoriteStock {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_favorite_stock_seq")
+    @SequenceGenerator(name = "member_favorite_stock_seq", sequenceName = "member_favorite_stock_seq", allocationSize = 1)
     private Long id;
+
 
     @ManyToOne
     @JoinColumn(name = "member_id")

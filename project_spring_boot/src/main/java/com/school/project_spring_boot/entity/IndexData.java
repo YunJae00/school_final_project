@@ -6,8 +6,10 @@ import jakarta.persistence.*;
 public class IndexData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "index_data_seq")
+    @SequenceGenerator(name = "index_data_seq", sequenceName = "index_data_seq", allocationSize = 1)
     private Long id;
+
 
     @Column(nullable = false)
     private String basDt; // 기준일자

@@ -33,17 +33,16 @@ public class StockService {
             stock.setSrtnCd(srtnCd);
             stock.setItmsNm(itmsNm);
             stock.setMrktCls(mrktCls);
+            stockRepository.save(stock);
         }
 
         for (DailyStockData dailyStockData : dailyStockDataList) {
             Optional<DailyStockData> existingData = dailyStockDataRepository.findByStockAndBasDt(stock, dailyStockData.getBasDt());
             if (!existingData.isPresent()) {
                 dailyStockData.setStock(stock);
-                stock.getDailyStockData().add(dailyStockData);
+                dailyStockDataRepository.save(dailyStockData);
             }
         }
-
-        stockRepository.save(stock);
     }
 
     public List<StockDto> getStockData(String isinCd) {

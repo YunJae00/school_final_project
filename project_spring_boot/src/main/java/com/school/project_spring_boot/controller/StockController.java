@@ -1,15 +1,13 @@
 package com.school.project_spring_boot.controller;
 
 import com.school.project_spring_boot.dto.StockDto;
+import com.school.project_spring_boot.dto.requset.stock.StockDataRequestDto;
 import com.school.project_spring_boot.dto.response.ResponseDto;
 import com.school.project_spring_boot.dto.response.stock.FetchStockDataResponseDto;
 import com.school.project_spring_boot.service.DailyStockDataService;
 import com.school.project_spring_boot.service.StockService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,19 +23,21 @@ public class StockController {
         this.dailyStockDataService = dailyStockDataService;
     }
 
-    @GetMapping("/fetch-all")
-    public ResponseEntity<? super FetchStockDataResponseDto> fetchAllStocks() {
-        try {
-            ResponseEntity<? super FetchStockDataResponseDto> response = dailyStockDataService.fetchAndSaveAllStockData();
-            return response;
-        } catch (Exception e) {
-            return FetchStockDataResponseDto.databaseError();
-        }
-    }
-
     @GetMapping("/public/{isinCd}/daily-data")
     public ResponseEntity<List<StockDto>> getStockData(@PathVariable String isinCd) {
         List<StockDto> stockData = stockService.getStockData(isinCd);
         return ResponseEntity.ok(stockData);
+    }
+
+    @PostMapping("/fetch-by-code-and-date")
+    public ResponseEntity<? super FetchStockDataResponseDto> fetchStockDataByCodeAndDate(
+            @RequestBody StockDataRequestDto requestBody
+    ) {
+        try {
+            ResponseEntity<? super FetchStockDataResponseDto> response = dailyStockDataService.fetchAndSaveStockDataByCodeAndDate(requestBody);
+            return response;
+        } catch (Exception e) {
+            return FetchStockDataResponseDto.databaseError();
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.school.project_spring_boot.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -12,7 +11,8 @@ import java.util.List;
 public class Stock {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stock_seq")
+    @SequenceGenerator(name = "stock_seq", sequenceName = "stock_seq", allocationSize = 1)
     private Long id;
 
     @Column(unique = true, nullable = false)
