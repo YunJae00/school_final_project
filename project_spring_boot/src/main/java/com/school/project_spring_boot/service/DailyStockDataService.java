@@ -2,8 +2,11 @@ package com.school.project_spring_boot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.project_spring_boot.dto.StockApiResponseDto;
+import com.school.project_spring_boot.dto.response.ResponseDto;
+import com.school.project_spring_boot.dto.response.stock.FetchStockDataResponseDto;
 import com.school.project_spring_boot.entity.DailyStockData;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -33,7 +36,7 @@ public class DailyStockDataService {
         this.serviceKey = serviceKey;
     }
 
-    public void fetchAndSaveAllStockData() {
+    public ResponseEntity<? super FetchStockDataResponseDto> fetchAndSaveAllStockData() {
 
         String urlTemplate = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo";
         int pageNo = 1;
@@ -49,10 +52,8 @@ public class DailyStockDataService {
                                 + "&pageNo="
                                 + pageNo
                                 + "&numOfRows=100"
-                                // 일단 test로
                                 + "&beginBasDt=20240601"
                                 + "&endBasDt=20240602"
-                        // + "&isinCd=KR7000040006"
                 );
 
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -61,10 +62,7 @@ public class DailyStockDataService {
                 httpURLConnection.setRequestProperty("Accept", "application/json");
                 httpURLConnection.connect();
 
-                System.out.println(url);
-
                 int responseCode = httpURLConnection.getResponseCode();
-                System.out.println("Response code: " + responseCode); // 응답 코드 출력
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     InputStream inputStream = httpURLConnection.getInputStream();
@@ -87,18 +85,7 @@ public class DailyStockDataService {
                         } else {
                             for (StockApiResponseDto.Item item : items) {
                                 List<DailyStockData> dailyStockDataList = new ArrayList<>();
-                                DailyStockData dailyStockData = new DailyStockData();
-                                dailyStockData.setBasDt(LocalDate.parse(item.getBasDt(), DateTimeFormatter.BASIC_ISO_DATE));
-                                dailyStockData.setClpr(new BigDecimal(item.getClpr()));
-                                dailyStockData.setHipr(new BigDecimal(item.getHipr()));
-                                dailyStockData.setLopr(new BigDecimal(item.getLopr()));
-                                dailyStockData.setMkp(new BigDecimal(item.getMkp()));
-                                dailyStockData.setVs(new BigDecimal(item.getVs()));
-                                dailyStockData.setFltRt(new BigDecimal(item.getFltRt()));
-                                dailyStockData.setTrqu(Long.parseLong(item.getTrqu()));
-                                dailyStockData.setTrPrc(new BigDecimal(item.getTrPrc()));
-                                dailyStockData.setLstgStCnt(Long.parseLong(item.getLstgStCnt()));
-                                dailyStockData.setMrktTotAmt(Long.parseLong(item.getMrktTotAmt()));
+                                DailyStockData dailyStockData = getDailyStockData(item);
 
                                 dailyStockDataList.add(dailyStockData);
 
@@ -108,21 +95,34 @@ public class DailyStockDataService {
                             pageNo++;
                         }
                     } else {
-                        System.out.println("No more data.");
                         hasMoreData = false;
                     }
                 } else {
-                    System.out.println("API call failed with status code: " + responseCode);
-                    hasMoreData = false;
+                    return FetchStockDataResponseDto.databaseError();
                 }
                 httpURLConnection.disconnect();
             } catch (HttpClientErrorException | HttpServerErrorException e) {
-                System.out.println("HTTP error occurred: " + e.getMessage());
-                hasMoreData = false;
+                return FetchStockDataResponseDto.databaseError();
             } catch (Exception e) {
-                System.out.println("Exception occurred: " + e.getMessage());
-                hasMoreData = false;
+                return FetchStockDataResponseDto.databaseError();
             }
         }
+        return FetchStockDataResponseDto.success();
+    }
+
+    private static DailyStockData getDailyStockData(StockApiResponseDto.Item item) {
+        DailyStockData dailyStockData = new DailyStockData();
+        dailyStockData.setBasDt(LocalDate.parse(item.getBasDt(), DateTimeFormatter.BASIC_ISO_DATE));
+        dailyStockData.setClpr(new BigDecimal(item.getClpr()));
+        dailyStockData.setHipr(new BigDecimal(item.getHipr()));
+        dailyStockData.setLopr(new BigDecimal(item.getLopr()));
+        dailyStockData.setMkp(new BigDecimal(item.getMkp()));
+        dailyStockData.setVs(new BigDecimal(item.getVs()));
+        dailyStockData.setFltRt(new BigDecimal(item.getFltRt()));
+        dailyStockData.setTrqu(Long.parseLong(item.getTrqu()));
+        dailyStockData.setTrPrc(new BigDecimal(item.getTrPrc()));
+        dailyStockData.setLstgStCnt(Long.parseLong(item.getLstgStCnt()));
+        dailyStockData.setMrktTotAmt(Long.parseLong(item.getMrktTotAmt()));
+        return dailyStockData;
     }
 }
