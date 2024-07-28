@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import ContainerTitle from "../../components/ContainerTitle";
 import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
@@ -31,6 +31,9 @@ const StockSection = () => {
 
     const navigate = useNavigate();
 
+    const [startDate, setStartDate] = useState("20240501");
+    const [endDate, setEndDate] = useState("20240725");
+
     function buttonClickHandler() {
         navigate('/stock-list')
     }
@@ -49,22 +52,25 @@ const StockSection = () => {
                         buttonText={"10 종목 모두 확인하러가기"}/>
                     <StockBox
                         stockNumber={"1"}
-                        stockTitle={"삼성전자"}
-                        stockCode={"005960"}
-                        stockPrice={"56000"}
-                        stockDate={"2024.07.17"}/>
+                        stockTitle={"우리금융지주"}
+                        stockCode={"KR7316140003"}
+                        startDate={startDate}
+                        endDate={endDate}
+                    />
                     <StockBox
-                        stockNumber={"1"}
+                        stockNumber={"2"}
                         stockTitle={"삼성전자"}
-                        stockCode={"005960"}
-                        stockPrice={"56000"}
-                        stockDate={"2024.07.17"}/>
+                        stockCode={"KR7005930003"}
+                        startDate={startDate}
+                        endDate={endDate}
+                    />
                     <StockBox
-                        stockNumber={"1"}
-                        stockTitle={"삼성전자"}
-                        stockCode={"005960"}
-                        stockPrice={"56000"}
-                        stockDate={"2024.07.17"}/>
+                        stockNumber={"3"}
+                        stockTitle={"SK하이닉스"}
+                        stockCode={"KR7000660001"}
+                        startDate={startDate}
+                        endDate={endDate}
+                    />
                 </StockBoxContainer>
             </StockSectionContainer>
         </StockSectionWrapper>

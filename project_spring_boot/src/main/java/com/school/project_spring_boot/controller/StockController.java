@@ -2,13 +2,15 @@ package com.school.project_spring_boot.controller;
 
 import com.school.project_spring_boot.dto.StockDto;
 import com.school.project_spring_boot.dto.requset.stock.StockDataRequestDto;
-import com.school.project_spring_boot.dto.response.ResponseDto;
 import com.school.project_spring_boot.dto.response.stock.FetchStockDataResponseDto;
+import com.school.project_spring_boot.dto.response.stock.StockDataResponseDto;
 import com.school.project_spring_boot.service.DailyStockDataService;
 import com.school.project_spring_boot.service.StockService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -23,7 +25,7 @@ public class StockController {
         this.dailyStockDataService = dailyStockDataService;
     }
 
-    @GetMapping("/public/{isinCd}/daily-data")
+    @GetMapping("/{isinCd}/daily-data")
     public ResponseEntity<List<StockDto>> getStockData(@PathVariable String isinCd) {
         List<StockDto> stockData = stockService.getStockData(isinCd);
         return ResponseEntity.ok(stockData);
@@ -40,4 +42,17 @@ public class StockController {
             return FetchStockDataResponseDto.databaseError();
         }
     }
+
+    @GetMapping("/public/daily-data")
+    public ResponseEntity<List<StockDataResponseDto>> getStockDataByDateRange(
+            @RequestParam String isinCd,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate start = LocalDate.parse(startDate, formatter);
+        LocalDate end = LocalDate.parse(endDate, formatter);
+        List<StockDataResponseDto> stockData = stockService.getStockDataByDateRange(isinCd, start, end);
+        return ResponseEntity.ok(stockData);
+    }
+
 }

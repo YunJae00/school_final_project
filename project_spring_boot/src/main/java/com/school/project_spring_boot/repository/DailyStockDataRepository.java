@@ -20,5 +20,7 @@ public interface DailyStockDataRepository extends JpaRepository<DailyStockData, 
     List<DailyStockData> findByStock(Stock stock);
 
     Optional<DailyStockData> findByStockAndBasDt(Stock stock, LocalDate basDt);
+
+    List<DailyStockData> findByStockAndBasDtBetween(Stock stock, LocalDate startDate, LocalDate endDate);
 }
 

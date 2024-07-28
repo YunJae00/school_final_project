@@ -9,9 +9,14 @@ export const executeRegisterMemberService = (user) =>
 export const executeCheckEmailService = (email) =>
     apiClient.get(`/api/members/${email}`);
 
-export const executeGetDailyStockData = (isinCd) =>
-    apiClient.get(`/api/stocks/public/${isinCd}/daily-data`);
-
 export const executeGetLatestIndexData = () =>
     apiClient.get(`/api/index/latest-multiple`);
 
+export const executeGetDailyStockData = (isinCd, startDate, endDate) =>
+    apiClient.get(`/api/v1/stock/public/daily-data`, {
+        params: {
+            isinCd,
+            startDate,
+            endDate
+        }
+    });

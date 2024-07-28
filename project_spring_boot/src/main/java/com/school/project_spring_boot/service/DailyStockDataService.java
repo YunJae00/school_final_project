@@ -5,7 +5,6 @@ import com.school.project_spring_boot.dto.StockApiResponseDto;
 import com.school.project_spring_boot.dto.requset.stock.StockDataRequestDto;
 import com.school.project_spring_boot.dto.response.stock.FetchStockDataResponseDto;
 import com.school.project_spring_boot.entity.DailyStockData;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,69 +40,89 @@ public class DailyStockDataService {
 
     public ResponseEntity<? super FetchStockDataResponseDto> fetchAndSaveStockDataByCodeAndDate(StockDataRequestDto requestDto) {
         String urlTemplate = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo";
+        int pageNo = 1;
+        int totalCount = 0;
+        int numOfRows = 10; // Default rows per page, adjust if needed
+
         try {
-            URL url = new URL(
-                    urlTemplate
-                            + "?serviceKey="
-                            + serviceKey
-                            + "&resultType=json"
-                            + "&beginBasDt=" + requestDto.getStartDate()
-                            + "&endBasDt=" + requestDto.getEndDate()
-                            + "&isinCd=" + requestDto.getIsinCd()
-            );
+            do {
+                URL url = new URL(
+                        urlTemplate
+                                + "?serviceKey="
+                                + serviceKey
+                                + "&resultType=json"
+                                + "&beginBasDt=" + requestDto.getStartDate()
+                                + "&endBasDt=" + requestDto.getEndDate()
+                                + "&isinCd=" + requestDto.getIsinCd()
+                                + "&pageNo=" + pageNo
+                );
 
-            logger.info("Request URL: {}", url);
+                System.out.println("Request URL: " + url.toString());
 
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
-            httpURLConnection.setRequestProperty("Accept", "application/json");
-            httpURLConnection.connect();
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
+                httpURLConnection.setRequestProperty("Accept", "application/json");
+                httpURLConnection.connect();
 
-            int responseCode = httpURLConnection.getResponseCode();
-            logger.info("Response code: {}", responseCode);
+                int responseCode = httpURLConnection.getResponseCode();
 
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = rd.readLine()) != null) {
-                    response.append(line);
-                }
-                rd.close();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = rd.readLine()) != null) {
+                        response.append(line);
+                    }
+                    rd.close();
 
-                String jsonResponse = response.toString();
-                logger.debug("API Response: {}", jsonResponse);
+                    String jsonResponse = response.toString();
 
-                if (jsonResponse.startsWith("<")) {
-                    logger.error("Received non-JSON response: {}", jsonResponse);
+                    System.out.println("Response JSON: " + jsonResponse);
+
+                    if (jsonResponse.startsWith("<")) {
+                        logger.error("Received non-JSON response: {}", jsonResponse);
+                        return FetchStockDataResponseDto.databaseError();
+                    }
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    StockApiResponseDto stockApiResponseDto = mapper.readValue(jsonResponse, StockApiResponseDto.class);
+
+                    if (stockApiResponseDto.getResponse() != null
+                            && stockApiResponseDto.getResponse().getBody() != null
+                            && stockApiResponseDto.getResponse().getBody().getItems() != null) {
+                        List<StockApiResponseDto.Item> items = stockApiResponseDto.getResponse().getBody().getItems().getItem();
+                        totalCount = stockApiResponseDto.getResponse().getBody().getTotalCount();
+                        numOfRows = stockApiResponseDto.getResponse().getBody().getNumOfRows();
+
+                        System.out.println("Number of items received: " + items.size());
+                        if (!items.isEmpty()) {
+                            for (StockApiResponseDto.Item item : items) {
+                                List<DailyStockData> dailyStockDataList = new ArrayList<>();
+                                DailyStockData dailyStockData = getDailyStockData(item);
+
+                                dailyStockDataList.add(dailyStockData);
+
+                                String mrktCls = item.getMrktCtg() != null ? item.getMrktCtg() : "Unknown";
+                                stockService.saveStockData(item.getIsinCd(), item.getSrtnCd(), item.getItmsNm(), mrktCls, dailyStockDataList);
+
+                                // Log each item being processed
+                                System.out.println("Processed item: " + item.getBasDt() + " - " + item.getItmsNm());
+                            }
+                        }
+                    } else {
+                        return FetchStockDataResponseDto.databaseError();
+                    }
+                    httpURLConnection.disconnect();
+                } else {
                     return FetchStockDataResponseDto.databaseError();
                 }
 
-                ObjectMapper mapper = new ObjectMapper();
-                StockApiResponseDto stockApiResponseDto = mapper.readValue(jsonResponse, StockApiResponseDto.class);
+                pageNo++;
+            } while ((pageNo - 1) * numOfRows < totalCount);
 
-                if (stockApiResponseDto.getResponse() != null && stockApiResponseDto.getResponse().getBody() != null && stockApiResponseDto.getResponse().getBody().getItems() != null) {
-                    List<StockApiResponseDto.Item> items = stockApiResponseDto.getResponse().getBody().getItems().getItem();
-                    if (!items.isEmpty()) {
-                        for (StockApiResponseDto.Item item : items) {
-                            List<DailyStockData> dailyStockDataList = new ArrayList<>();
-                            DailyStockData dailyStockData = getDailyStockData(item);
-
-                            dailyStockDataList.add(dailyStockData);
-
-                            String mrktCls = item.getMrktCtg() != null ? item.getMrktCtg() : "Unknown";
-                            stockService.saveStockData(item.getIsinCd(), item.getSrtnCd(), item.getItmsNm(), mrktCls, dailyStockDataList);
-                        }
-                    }
-                }
-            } else {
-                return FetchStockDataResponseDto.databaseError();
-            }
-            httpURLConnection.disconnect();
         } catch (Exception e) {
-            logger.error("Exception occurred: ", e);
             return FetchStockDataResponseDto.databaseError();
         }
         return FetchStockDataResponseDto.success();

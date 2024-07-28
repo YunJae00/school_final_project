@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import StockGraph from './StockGraph';
+import {executeGetDailyStockData} from "../../../../api/ApiService";
 
 const StockBoxWrapper = styled.div`
     display: flex;
@@ -29,8 +31,9 @@ const StockCode = styled.p`
     font-family: pretendard;
 `;
 
-const StockGraph = styled.div`
+const StockGraphWrapper = styled.div`
     height: 15.625rem;
+    width: 100%;
 `;
 
 const StockDetailBox = styled.div`
@@ -50,20 +53,43 @@ const StockDate = styled.p`
     font-family: pretendard;
 `;
 
-const StockBox = ({stockNumber, stockTitle, stockCode, stockGraph, stockPrice, stockDate}) => {
-    return(
+const StockBox = ({ stockNumber, stockTitle, stockCode, startDate, endDate }) => {
+    const [latestPrice, setLatestPrice] = useState(null);
+    const [latestDate, setLatestDate] = useState(null);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        if (stockCode) {
+            executeGetDailyStockData(stockCode, startDate, endDate)
+                .then(response => {
+                    setData(response.data);
+                    if (response.data.length > 0) {
+                        const latestData = response.data[0];
+                        setLatestPrice(latestData.clpr);
+                        setLatestDate(latestData.basDt);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching stock data:', error);
+                });
+        }
+    }, [stockCode, startDate, endDate]);
+
+    return (
         <StockBoxWrapper>
             <StockNumber>{stockNumber}</StockNumber>
             <StockTitle>{stockTitle}</StockTitle>
             <StockCode>{stockCode}</StockCode>
-            <StockGraph></StockGraph>
+            <StockGraphWrapper>
+                <StockGraph stockCode={stockCode} startDate={startDate} endDate={endDate} />
+            </StockGraphWrapper>
             <StockDetailBox>
                 <StockPrice>현재가</StockPrice>
-                <StockPrice>{stockPrice}</StockPrice>
+                <StockPrice>{latestPrice !== null ? latestPrice : 'N/A'}</StockPrice>
             </StockDetailBox>
             <StockDetailBox>
                 <StockDate>기준일</StockDate>
-                <StockDate>{stockDate}</StockDate>
+                <StockDate>{latestDate !== null ? latestDate : 'N/A'}</StockDate>
             </StockDetailBox>
         </StockBoxWrapper>
     );

@@ -1,12 +1,14 @@
 package com.school.project_spring_boot.service;
 
 import com.school.project_spring_boot.dto.StockDto;
+import com.school.project_spring_boot.dto.response.stock.StockDataResponseDto;
 import com.school.project_spring_boot.entity.DailyStockData;
 import com.school.project_spring_boot.entity.Stock;
 import com.school.project_spring_boot.repository.DailyStockDataRepository;
 import com.school.project_spring_boot.repository.StockRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,4 +64,29 @@ public class StockService {
             return null;
         }
     }
+
+    public List<StockDataResponseDto> getStockDataByDateRange(String isinCd, LocalDate startDate, LocalDate endDate) {
+        Optional<Stock> optionalStock = stockRepository.findByIsinCd(isinCd);
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            return dailyStockDataRepository.findByStockAndBasDtBetween(stock, startDate, endDate).stream()
+                    .map(data -> new StockDataResponseDto(
+                            data.getBasDt(),
+                            data.getClpr(),
+                            data.getHipr(),
+                            data.getLopr(),
+                            data.getMkp(),
+                            data.getVs(),
+                            data.getFltRt(),
+                            data.getTrqu(),
+                            data.getTrPrc(),
+                            data.getLstgStCnt(),
+                            data.getMrktTotAmt()
+                    ))
+                    .collect(Collectors.toList());
+        } else {
+            throw new RuntimeException("Stock not found");
+        }
+    }
+
 }
