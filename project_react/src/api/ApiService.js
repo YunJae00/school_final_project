@@ -20,3 +20,16 @@ export const executeGetDailyStockData = (isinCd, startDate, endDate) =>
             endDate
         }
     });
+
+//admin용
+export const executeSearchStocks = (query) =>
+    apiClient.get(`/api/v1/stock/search`, { params: { query } });
+
+export const executeGetWeeklyStocks = (startDate) =>
+    apiClient.get(`/api/v1/stock/weekly`, { params: { startDate } });
+
+export const executeAddStockToWeekly = (startDate, stockId) =>
+    apiClient.post(`/api/v1/stock/weekly/${stockId}`, null, { params: { startDate } });
+
+export const executeRemoveStockFromWeekly = (startDate, stockId) =>
+    apiClient.delete(`/api/v1/stock/weekly/${stockId}`, { params: { startDate } });

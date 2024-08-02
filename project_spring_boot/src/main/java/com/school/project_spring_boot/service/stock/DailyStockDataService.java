@@ -5,6 +5,8 @@ import com.school.project_spring_boot.dto.response.stock.StockApiResponseDto;
 import com.school.project_spring_boot.dto.requset.stock.StockDataRequestDto;
 import com.school.project_spring_boot.dto.response.stock.FetchStockDataResponseDto;
 import com.school.project_spring_boot.entity.stock.DailyStockData;
+import com.school.project_spring_boot.entity.stock.Stock;
+import com.school.project_spring_boot.repository.DailyStockDataRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,13 +30,15 @@ public class DailyStockDataService {
     private static final Logger logger = LoggerFactory.getLogger(DailyStockDataService.class);
 
     private final StockService stockService;
+    private final DailyStockDataRepository dailyStockDataRepository;
     private final String serviceKey;
 
     public DailyStockDataService(
             StockService stockService,
-            @Value("${spring.publicData.serviceKey}") String serviceKey
-    ) {
+            DailyStockDataRepository dailyStockDataRepository,
+            @Value("${spring.publicData.serviceKey}") String serviceKey) {
         this.stockService = stockService;
+        this.dailyStockDataRepository = dailyStockDataRepository;
         this.serviceKey = serviceKey;
     }
 
@@ -99,16 +103,17 @@ public class DailyStockDataService {
                         System.out.println("Number of items received: " + items.size());
                         if (!items.isEmpty()) {
                             for (StockApiResponseDto.Item item : items) {
-                                List<DailyStockData> dailyStockDataList = new ArrayList<>();
-                                DailyStockData dailyStockData = getDailyStockData(item);
+                                // 주식 정보가 stock 테이블에 없으면 추가
+                                Stock stock = stockService.saveStockIfNotExist(item.getIsinCd(), item.getSrtnCd(), item.getItmsNm(), item.getMrktCtg());
 
-                                dailyStockDataList.add(dailyStockData);
-
-                                String mrktCls = item.getMrktCtg() != null ? item.getMrktCtg() : "Unknown";
-                                stockService.saveStockData(item.getIsinCd(), item.getSrtnCd(), item.getItmsNm(), mrktCls, dailyStockDataList);
-
-                                // Log each item being processed
-                                System.out.println("Processed item: " + item.getBasDt() + " - " + item.getItmsNm());
+                                // DailyStockData 저장
+                                if (!dailyStockDataRepository.existsByStockAndBasDt(stock, LocalDate.parse(item.getBasDt(), DateTimeFormatter.BASIC_ISO_DATE))) {
+                                    DailyStockData dailyStockData = getDailyStockData(stock, item);
+                                    dailyStockDataRepository.save(dailyStockData);
+                                    System.out.println("Saved daily stock data for date: " + item.getBasDt());
+                                } else {
+                                    System.out.println("Daily stock data already exists for date: " + item.getBasDt());
+                                }
                             }
                         }
                     } else {
@@ -128,8 +133,9 @@ public class DailyStockDataService {
         return FetchStockDataResponseDto.success();
     }
 
-    private static DailyStockData getDailyStockData(StockApiResponseDto.Item item) {
+    private static DailyStockData getDailyStockData(Stock stock, StockApiResponseDto.Item item) {
         DailyStockData dailyStockData = new DailyStockData();
+        dailyStockData.setStock(stock);
         dailyStockData.setBasDt(LocalDate.parse(item.getBasDt(), DateTimeFormatter.BASIC_ISO_DATE));
         dailyStockData.setClpr(new BigDecimal(item.getClpr()));
         dailyStockData.setHipr(new BigDecimal(item.getHipr()));

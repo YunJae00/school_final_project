@@ -6,8 +6,21 @@ const StockGraph = ({ stockCode, startDate, endDate }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
+        // 오늘 날짜 계산
+        const today = new Date();
+        const todayFormatted = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+
+        // 1년 전 날짜 계산
+        const oneYearAgo = new Date(today);
+        oneYearAgo.setFullYear(today.getFullYear() - 1);
+        const oneYearAgoFormatted = `${oneYearAgo.getFullYear()}${String(oneYearAgo.getMonth() + 1).padStart(2, '0')}${String(oneYearAgo.getDate()).padStart(2, '0')}`;
+
+        // 클라이언트에서 날짜를 보내지 않았을 때 기본값 설정
+        const finalStartDate = startDate || oneYearAgoFormatted;
+        const finalEndDate = endDate || todayFormatted;
+
         if (stockCode) {
-            executeGetDailyStockData(stockCode, startDate, endDate)
+            executeGetDailyStockData(stockCode, finalStartDate, finalEndDate)
                 .then(response => {
                     setData(response.data);
                 })

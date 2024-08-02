@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
@@ -19,4 +20,8 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
                 .map(Stock::getIsinCd)
                 .collect(Collectors.toSet());
     }
+
+    // 주식 이름에 특정 문자열이 포함된 주식을 검색하는 메서드
+    List<Stock> findByItmsNmContaining(String itmsNm);
+
 }

@@ -22,6 +22,8 @@ public interface DailyStockDataRepository extends JpaRepository<DailyStockData, 
     Optional<DailyStockData> findByStockAndBasDt(Stock stock, LocalDate basDt);
 
     List<DailyStockData> findByStockAndBasDtBetween(Stock stock, LocalDate startDate, LocalDate endDate);
+
+    // 특정 주식의 특정 날짜 데이터가 존재하는지 확인하는 메서드
     boolean existsByStockAndBasDt(Stock stock, LocalDate basDt);
 }
 

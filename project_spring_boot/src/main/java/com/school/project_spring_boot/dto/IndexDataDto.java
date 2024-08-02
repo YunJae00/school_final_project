@@ -1,7 +1,5 @@
 package com.school.project_spring_boot.dto;
 
-import java.time.LocalDate;
-
 public class IndexDataDto {
     private String indexName;
     private String price;

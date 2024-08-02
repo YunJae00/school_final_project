@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ContainerTitle from "../../components/ContainerTitle";
 import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
@@ -36,8 +36,14 @@ const StockDetailBoxRow = styled.div`
 `;
 
 const StockListSection = () => {
-    const [startDate, setStartDate] = useState("20240501");
-    const [endDate, setEndDate] = useState("20240725");
+    // 오늘 날짜 계산
+    const today = new Date();
+    const endDate = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+
+    // 1년 전 날짜 계산
+    const oneYearAgo = new Date(today);
+    oneYearAgo.setFullYear(today.getFullYear() - 1);
+    const startDate = `${oneYearAgo.getFullYear()}${String(oneYearAgo.getMonth() + 1).padStart(2, '0')}${String(oneYearAgo.getDate()).padStart(2, '0')}`;
 
     return (
         <StockDetailSectionWrapper>
