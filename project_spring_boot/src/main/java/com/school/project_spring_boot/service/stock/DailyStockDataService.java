@@ -1,10 +1,10 @@
-package com.school.project_spring_boot.service;
+package com.school.project_spring_boot.service.stock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.school.project_spring_boot.dto.StockApiResponseDto;
+import com.school.project_spring_boot.dto.response.stock.StockApiResponseDto;
 import com.school.project_spring_boot.dto.requset.stock.StockDataRequestDto;
 import com.school.project_spring_boot.dto.response.stock.FetchStockDataResponseDto;
-import com.school.project_spring_boot.entity.DailyStockData;
+import com.school.project_spring_boot.entity.stock.DailyStockData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,8 +1,6 @@
 package com.school.project_spring_boot.entity.auth;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.school.project_spring_boot.dto.requset.auth.SignUpRequestDto;
-import com.school.project_spring_boot.entity.MemberFavoriteStock;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,14 +48,10 @@ public class Member {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<MemberFavoriteStock> favoriteStocks = new ArrayList<>();
-
     public Member() {
     }
 
-    public Member(Long id, String email, String password, String nickName, Provider provider, String providerId, Role role, String refreshToken, LocalDateTime createdAt, LocalDateTime updatedAt, List<MemberFavoriteStock> favoriteStocks) {
+    public Member(Long id, String email, String password, String nickName, Provider provider, String providerId, Role role, String refreshToken, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -68,7 +62,6 @@ public class Member {
         this.refreshToken = refreshToken;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.favoriteStocks = favoriteStocks;
     }
 
     public Member(SignUpRequestDto dto){

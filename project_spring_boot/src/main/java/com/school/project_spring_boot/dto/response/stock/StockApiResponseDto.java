@@ -1,4 +1,4 @@
-package com.school.project_spring_boot.dto;
+package com.school.project_spring_boot.dto.response.stock;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

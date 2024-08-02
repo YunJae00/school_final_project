@@ -1,36 +1,71 @@
-package com.school.project_spring_boot.dto;
+package com.school.project_spring_boot.entity.stock;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class DailyStockDataDto {
-    private LocalDate basDt;
-    private BigDecimal clpr;
-    private BigDecimal hipr;
-    private BigDecimal lopr;
-    private BigDecimal mkp;
-    private BigDecimal vs;
-    private BigDecimal fltRt;
-    private Long trqu;
-    private BigDecimal trPrc;
-    private Long lstgStCnt;
-    private Long mrktTotAmt;
+@Entity
+public class DailyStockData {
 
-    public DailyStockDataDto() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "daily_stock_data_seq")
+    @SequenceGenerator(name = "daily_stock_data_seq", sequenceName = "daily_stock_data_seq", allocationSize = 1)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stock_id", nullable = false)
+    @JsonBackReference
+    private Stock stock;
+
+    @Column(nullable = false)
+    private LocalDate basDt; // 기준일자
+
+    @Column(nullable = false)
+    private BigDecimal clpr; // 종가
+
+    @Column(nullable = false)
+    private BigDecimal hipr; // 고가
+
+    @Column(nullable = false)
+    private BigDecimal lopr; // 저가
+
+    @Column(nullable = false)
+    private BigDecimal mkp; // 시가
+
+    @Column(nullable = false)
+    private BigDecimal vs; // 대비
+
+    @Column(nullable = false)
+    private BigDecimal fltRt; // 등락률
+
+    @Column(nullable = false)
+    private Long trqu; // 거래량
+
+    @Column(nullable = false)
+    private BigDecimal trPrc; // 거래대금
+
+    @Column(nullable = false)
+    private Long lstgStCnt; // 상장주식수
+
+    @Column(nullable = false)
+    private Long mrktTotAmt; // 시가총액
+
+    public Long getId() {
+        return id;
     }
 
-    public DailyStockDataDto(LocalDate basDt, BigDecimal clpr, BigDecimal hipr, BigDecimal lopr, BigDecimal mkp, BigDecimal vs, BigDecimal fltRt, Long trqu, BigDecimal trPrc, Long lstgStCnt, Long mrktTotAmt) {
-        this.basDt = basDt;
-        this.clpr = clpr;
-        this.hipr = hipr;
-        this.lopr = lopr;
-        this.mkp = mkp;
-        this.vs = vs;
-        this.fltRt = fltRt;
-        this.trqu = trqu;
-        this.trPrc = trPrc;
-        this.lstgStCnt = lstgStCnt;
-        this.mrktTotAmt = mrktTotAmt;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 
     public LocalDate getBasDt() {

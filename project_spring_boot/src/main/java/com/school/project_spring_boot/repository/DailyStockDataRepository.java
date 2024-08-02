@@ -1,7 +1,7 @@
 package com.school.project_spring_boot.repository;
 
-import com.school.project_spring_boot.entity.DailyStockData;
-import com.school.project_spring_boot.entity.Stock;
+import com.school.project_spring_boot.entity.stock.DailyStockData;
+import com.school.project_spring_boot.entity.stock.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +22,6 @@ public interface DailyStockDataRepository extends JpaRepository<DailyStockData, 
     Optional<DailyStockData> findByStockAndBasDt(Stock stock, LocalDate basDt);
 
     List<DailyStockData> findByStockAndBasDtBetween(Stock stock, LocalDate startDate, LocalDate endDate);
+    boolean existsByStockAndBasDt(Stock stock, LocalDate basDt);
 }
 

@@ -1,6 +1,6 @@
 package com.school.project_spring_boot.controller;
 
-import com.school.project_spring_boot.service.DjangoService;
+import com.school.project_spring_boot.service.django.DjangoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

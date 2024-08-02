@@ -1,6 +1,5 @@
-package com.school.project_spring_boot.entity;
+package com.school.project_spring_boot.entity.stock;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -31,21 +30,16 @@ public class Stock {
     @JsonManagedReference
     private List<DailyStockData> dailyStockData = new ArrayList<>();
 
-    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
-    private List<MemberFavoriteStock> members = new ArrayList<>();
-
     public Stock() {
     }
 
-    public Stock(Long id, String isinCd, String srtnCd, String itmsNm, String mrktCls, List<DailyStockData> dailyStockData, List<MemberFavoriteStock> members) {
+    public Stock(Long id, String isinCd, String srtnCd, String itmsNm, String mrktCls, List<DailyStockData> dailyStockData) {
         this.id = id;
         this.isinCd = isinCd;
         this.srtnCd = srtnCd;
         this.itmsNm = itmsNm;
         this.mrktCls = mrktCls;
         this.dailyStockData = dailyStockData;
-        this.members = members;
     }
 
     public Long getId() {
@@ -94,13 +88,5 @@ public class Stock {
 
     public void setDailyStockData(List<DailyStockData> dailyStockData) {
         this.dailyStockData = dailyStockData;
-    }
-
-    public List<MemberFavoriteStock> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<MemberFavoriteStock> members) {
-        this.members = members;
     }
 }

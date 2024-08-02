@@ -1,11 +1,10 @@
 package com.school.project_spring_boot.controller;
 
-import com.school.project_spring_boot.dto.StockDto;
 import com.school.project_spring_boot.dto.requset.stock.StockDataRequestDto;
 import com.school.project_spring_boot.dto.response.stock.FetchStockDataResponseDto;
 import com.school.project_spring_boot.dto.response.stock.StockDataResponseDto;
-import com.school.project_spring_boot.service.DailyStockDataService;
-import com.school.project_spring_boot.service.StockService;
+import com.school.project_spring_boot.service.stock.DailyStockDataService;
+import com.school.project_spring_boot.service.stock.StockService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +22,6 @@ public class StockController {
     public StockController(StockService stockService, DailyStockDataService dailyStockDataService) {
         this.stockService = stockService;
         this.dailyStockDataService = dailyStockDataService;
-    }
-
-    @GetMapping("/{isinCd}/daily-data")
-    public ResponseEntity<List<StockDto>> getStockData(@PathVariable String isinCd) {
-        List<StockDto> stockData = stockService.getStockData(isinCd);
-        return ResponseEntity.ok(stockData);
     }
 
     @PostMapping("/fetch-by-code-and-date")
@@ -53,6 +46,16 @@ public class StockController {
         LocalDate end = LocalDate.parse(endDate, formatter);
         List<StockDataResponseDto> stockData = stockService.getStockDataByDateRange(isinCd, start, end);
         return ResponseEntity.ok(stockData);
+    }
+
+    @PostMapping("/fetch-all-stocks-info")
+    public ResponseEntity<String> fetchAndSaveAllStocksInfo() {
+        try {
+            stockService.fetchAndSaveAllStocksInfo();
+            return ResponseEntity.ok("All stocks info fetched and saved successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred while fetching and saving all stocks info.");
+        }
     }
 
 }

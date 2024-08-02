@@ -1,4 +1,4 @@
-package com.school.project_spring_boot.service;
+package com.school.project_spring_boot.service.django;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
