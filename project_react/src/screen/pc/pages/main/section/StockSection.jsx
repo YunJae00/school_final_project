@@ -1,9 +1,10 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import ContainerTitle from "../../components/ContainerTitle";
 import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
 import StockBox from "../../components/StockBox";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { executeGetWeeklyStocksForList  } from "../../../../../api/ApiService"; // API 호출 함수 import
 
 const StockSectionWrapper = styled.div`
     display: flex;
@@ -28,20 +29,30 @@ const StockBoxContainer = styled.div`
 `;
 
 const StockSection = () => {
-
     const navigate = useNavigate();
-
+    const [stocks, setStocks] = useState([]); // 주식 데이터를 저장할 상태 변수
     const [startDate, setStartDate] = useState("20240501");
     const [endDate, setEndDate] = useState("20240725");
 
+    useEffect(() => {
+        // API 호출
+        executeGetWeeklyStocksForList("2024-08-01") // 필요에 따라 날짜를 수정하세요.
+            .then(response => {
+                setStocks(response.data.slice(0, 3)); // API에서 받은 데이터 중 3개만 상태로 설정
+            })
+            .catch(error => {
+                console.error('Error fetching weekly stocks:', error);
+            });
+    }, []);
+
     function buttonClickHandler() {
-        navigate('/stock-list')
+        navigate('/stock-list'); // 버튼 클릭 시 stock-list 페이지로 이동
     }
 
-    return(
+    return (
         <StockSectionWrapper>
             <StockSectionContainer>
-                <ContainerTitle subTitle={"다양한 주식 추천을 알아보고 투자하세요!"}/>
+                <ContainerTitle subTitle={"다양한 주식 추천을 알아보고 투자하세요!"} />
                 <StockBoxContainer>
                     <IntroductionBox
                         onClick={buttonClickHandler}
@@ -49,28 +60,17 @@ const StockSection = () => {
                         title={"24년 7월 2주차\nTrand Trader\n선정 주식 종목"}
                         content={"서비스에서 선정된\n자산별 현황을 확인해보세요"}
                         detail={"⦁ 종목은 매 주 시가총액 상위 10개 종목으로 선정됩니다."}
-                        buttonText={"10 종목 모두 확인하러가기"}/>
-                    <StockBox
-                        stockNumber={"1"}
-                        stockTitle={"우리금융지주"}
-                        stockCode={"KR7316140003"}
-                        startDate={startDate}
-                        endDate={endDate}
-                    />
-                    <StockBox
-                        stockNumber={"2"}
-                        stockTitle={"삼성전자"}
-                        stockCode={"KR7005930003"}
-                        startDate={startDate}
-                        endDate={endDate}
-                    />
-                    <StockBox
-                        stockNumber={"3"}
-                        stockTitle={"SK하이닉스"}
-                        stockCode={"KR7000660001"}
-                        startDate={startDate}
-                        endDate={endDate}
-                    />
+                        buttonText={"10 종목 모두 확인하러가기"} />
+                    {stocks.map((stock, index) => (
+                        <StockBox
+                            key={index}
+                            stockNumber={index + 1}
+                            stockTitle={stock.itmsNm}
+                            stockCode={stock.isinCd}
+                            startDate={startDate}
+                            endDate={endDate}
+                        />
+                    ))}
                 </StockBoxContainer>
             </StockSectionContainer>
         </StockSectionWrapper>

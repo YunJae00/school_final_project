@@ -7,6 +7,7 @@ import com.school.project_spring_boot.dto.response.stock.StockResponseDto;
 import com.school.project_spring_boot.entity.stock.DailyStockData;
 import com.school.project_spring_boot.entity.stock.Stock;
 import com.school.project_spring_boot.entity.stock.WeeklyStockRecommendation;
+import com.school.project_spring_boot.entity.stock.WeeklyStockRecommendationStock;
 import com.school.project_spring_boot.repository.DailyStockDataRepository;
 import com.school.project_spring_boot.repository.StockRepository;
 import com.school.project_spring_boot.repository.WeeklyStockRecommendationRepository;
@@ -62,7 +63,7 @@ public class StockService {
         if (weeklyStocksOpt.isPresent()) {
             WeeklyStockRecommendation weeklyStocks = weeklyStocksOpt.get();
             return weeklyStocks.getStocks().stream()
-                    .map(this::convertToDto)
+                    .map(stock -> convertToDto(stock.getStock())) // 여기서 Stock 객체로 변환한 후 메서드 참조를 사용합니다.
                     .collect(Collectors.toList());
         } else {
             return List.of(); // 빈 목록 반환
@@ -82,11 +83,16 @@ public class StockService {
                 });
 
         // 주식을 이미 목록에 추가한 경우 추가하지 않음
-        if (!weeklyStocks.getStocks().contains(stock)) {
-            weeklyStocks.getStocks().add(stock);
+        if (weeklyStocks.getStocks().stream().noneMatch(ws -> ws.getStock().equals(stock))) {
+            WeeklyStockRecommendationStock weeklyStockRecommendationStock = new WeeklyStockRecommendationStock();
+            weeklyStockRecommendationStock.setStock(stock);
+            weeklyStockRecommendationStock.setWeeklyStockRecommendation(weeklyStocks);
+
+            weeklyStocks.getStocks().add(weeklyStockRecommendationStock);
             weeklyStockRecommendationRepository.save(weeklyStocks); // 저장하여 변경사항을 반영
         }
     }
+
 
     public void removeStockFromWeekly(LocalDate startDate, Long stockId) {
         WeeklyStockRecommendation weeklyStocks = weeklyStockRecommendationRepository.findByStartDate(startDate)
@@ -247,5 +253,15 @@ public class StockService {
         } catch (Exception e) {
             logger.error("Error while fetching stock data: ", e);
         }
+    }
+
+    public LocalDate findStartDateOfLatestWeek() {
+        return weeklyStockRecommendationRepository.findTopByOrderByStartDateDesc()
+                .map(WeeklyStockRecommendation::getStartDate)
+                .orElseThrow(() -> new RuntimeException("최근 주의 데이터를 찾을 수 없습니다."));
+    }
+
+    public WeeklyStockRecommendation getLatestWeeklyStocks() {
+        return weeklyStockRecommendationRepository.findTopByOrderByStartDateDesc().orElse(null);
     }
 }

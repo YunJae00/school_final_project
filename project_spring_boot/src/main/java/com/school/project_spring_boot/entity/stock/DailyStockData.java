@@ -2,11 +2,15 @@ package com.school.project_spring_boot.entity.stock;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
 public class DailyStockData {
 
     @Id
@@ -52,107 +56,4 @@ public class DailyStockData {
     @Column(nullable = false)
     private Long mrktTotAmt; // 시가총액
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Stock getStock() {
-        return stock;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
-    }
-
-    public LocalDate getBasDt() {
-        return basDt;
-    }
-
-    public void setBasDt(LocalDate basDt) {
-        this.basDt = basDt;
-    }
-
-    public BigDecimal getClpr() {
-        return clpr;
-    }
-
-    public void setClpr(BigDecimal clpr) {
-        this.clpr = clpr;
-    }
-
-    public BigDecimal getHipr() {
-        return hipr;
-    }
-
-    public void setHipr(BigDecimal hipr) {
-        this.hipr = hipr;
-    }
-
-    public BigDecimal getLopr() {
-        return lopr;
-    }
-
-    public void setLopr(BigDecimal lopr) {
-        this.lopr = lopr;
-    }
-
-    public BigDecimal getMkp() {
-        return mkp;
-    }
-
-    public void setMkp(BigDecimal mkp) {
-        this.mkp = mkp;
-    }
-
-    public BigDecimal getVs() {
-        return vs;
-    }
-
-    public void setVs(BigDecimal vs) {
-        this.vs = vs;
-    }
-
-    public BigDecimal getFltRt() {
-        return fltRt;
-    }
-
-    public void setFltRt(BigDecimal fltRt) {
-        this.fltRt = fltRt;
-    }
-
-    public Long getTrqu() {
-        return trqu;
-    }
-
-    public void setTrqu(Long trqu) {
-        this.trqu = trqu;
-    }
-
-    public BigDecimal getTrPrc() {
-        return trPrc;
-    }
-
-    public void setTrPrc(BigDecimal trPrc) {
-        this.trPrc = trPrc;
-    }
-
-    public Long getLstgStCnt() {
-        return lstgStCnt;
-    }
-
-    public void setLstgStCnt(Long lstgStCnt) {
-        this.lstgStCnt = lstgStCnt;
-    }
-
-    public Long getMrktTotAmt() {
-        return mrktTotAmt;
-    }
-
-    public void setMrktTotAmt(Long mrktTotAmt) {
-        this.mrktTotAmt = mrktTotAmt;
-    }
 }

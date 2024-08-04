@@ -1,5 +1,6 @@
 package com.school.project_spring_boot.entity.stock;
 
+import com.school.project_spring_boot.dto.response.stock.StockResponseDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,13 +21,7 @@ public class WeeklyStockRecommendation {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @ManyToMany
-    @JoinTable(
-            name = "weekly_stock_recommendation_stocks",
-            joinColumns = @JoinColumn(name = "weekly_stock_recommendation_id"),
-            inverseJoinColumns = @JoinColumn(name = "stock_id")
-    )
-    private List<Stock> stocks = new ArrayList<>();
-
+    @OneToMany(mappedBy = "weeklyStockRecommendation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WeeklyStockRecommendationStock> stocks = new ArrayList<>();
 
 }

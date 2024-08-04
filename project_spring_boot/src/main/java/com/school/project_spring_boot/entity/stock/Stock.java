@@ -2,11 +2,15 @@ package com.school.project_spring_boot.entity.stock;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class Stock {
 
     @Id
@@ -30,63 +34,19 @@ public class Stock {
     @JsonManagedReference
     private List<DailyStockData> dailyStockData = new ArrayList<>();
 
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WeeklyStockRecommendationStock> weeklyStockRecommendations = new ArrayList<>();
+
     public Stock() {
     }
 
-    public Stock(Long id, String isinCd, String srtnCd, String itmsNm, String mrktCls, List<DailyStockData> dailyStockData) {
+    public Stock(Long id, String isinCd, String srtnCd, String itmsNm, String mrktCls, List<DailyStockData> dailyStockData, List<WeeklyStockRecommendationStock> weeklyStockRecommendations) {
         this.id = id;
         this.isinCd = isinCd;
         this.srtnCd = srtnCd;
         this.itmsNm = itmsNm;
         this.mrktCls = mrktCls;
         this.dailyStockData = dailyStockData;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getIsinCd() {
-        return isinCd;
-    }
-
-    public void setIsinCd(String isinCd) {
-        this.isinCd = isinCd;
-    }
-
-    public String getSrtnCd() {
-        return srtnCd;
-    }
-
-    public void setSrtnCd(String srtnCd) {
-        this.srtnCd = srtnCd;
-    }
-
-    public String getItmsNm() {
-        return itmsNm;
-    }
-
-    public void setItmsNm(String itmsNm) {
-        this.itmsNm = itmsNm;
-    }
-
-    public String getMrktCls() {
-        return mrktCls;
-    }
-
-    public void setMrktCls(String mrktCls) {
-        this.mrktCls = mrktCls;
-    }
-
-    public List<DailyStockData> getDailyStockData() {
-        return dailyStockData;
-    }
-
-    public void setDailyStockData(List<DailyStockData> dailyStockData) {
-        this.dailyStockData = dailyStockData;
+        this.weeklyStockRecommendations = weeklyStockRecommendations;
     }
 }

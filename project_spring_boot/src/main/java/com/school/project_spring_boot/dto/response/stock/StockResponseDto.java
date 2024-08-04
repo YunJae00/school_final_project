@@ -1,5 +1,12 @@
 package com.school.project_spring_boot.dto.response.stock;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Builder
+@Getter
+@Setter
 public class StockResponseDto {
 
     private Long id;
@@ -17,28 +24,4 @@ public class StockResponseDto {
         this.isinCd = isinCd;
     }
 
-    // Getter와 Setter
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getItmsNm() {
-        return itmsNm;
-    }
-
-    public void setItmsNm(String itmsNm) {
-        this.itmsNm = itmsNm;
-    }
-
-    public String getIsinCd() {
-        return isinCd;
-    }
-
-    public void setIsinCd(String isinCd) {
-        this.isinCd = isinCd;
-    }
 }

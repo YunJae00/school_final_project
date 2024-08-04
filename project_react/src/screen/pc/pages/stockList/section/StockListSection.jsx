@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ContainerTitle from "../../components/ContainerTitle";
 import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
 import StockBox from "../../components/StockBox";
+import { executeGetWeeklyStocksForList } from "../../../../../api/ApiService";
 
 const StockDetailSectionWrapper = styled.div`
     display: flex;
@@ -36,14 +37,25 @@ const StockDetailBoxRow = styled.div`
 `;
 
 const StockListSection = () => {
-    // 오늘 날짜 계산
-    const today = new Date();
-    const endDate = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+    const [stocks, setStocks] = useState([]); // 주식 데이터를 저장할 상태 변수
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
 
-    // 1년 전 날짜 계산
-    const oneYearAgo = new Date(today);
-    oneYearAgo.setFullYear(today.getFullYear() - 1);
-    const startDate = `${oneYearAgo.getFullYear()}${String(oneYearAgo.getMonth() + 1).padStart(2, '0')}${String(oneYearAgo.getDate()).padStart(2, '0')}`;
+    useEffect(() => {
+        // API 호출
+        executeGetWeeklyStocksForList()
+            .then(response => {
+                const sortedStocks = response.data.sort((a, b) => new Date(b.date) - new Date(a.date)); // 날짜 기준으로 내림차순 정렬
+                const latestDate = sortedStocks[0]?.date; // 가장 최근 날짜 가져오기
+                const latestStocks = sortedStocks.filter(stock => stock.date === latestDate); // 가장 최근 날짜의 주식 데이터 필터링
+                setStocks(latestStocks); // 최근 날짜 데이터 전체를 상태로 설정
+                setStartDate(latestDate);
+                setEndDate(latestDate);
+            })
+            .catch(error => {
+                console.error('Error fetching weekly stocks:', error);
+            });
+    }, []);
 
     return (
         <StockDetailSectionWrapper>
@@ -61,81 +73,41 @@ const StockListSection = () => {
                                 detail={"⦁ 종목은 매 주 시가총액 상위 10개 종목으로 선정됩니다."} />
                         </div>
                         <div style={{ display: "flex", flex: "1", gap: "1.875rem" }}>
-                            <StockBox
-                                stockNumber={"1"}
-                                stockTitle={"우리금융지주"}
-                                stockCode={"KR7316140003"}
-                                startDate={startDate}
-                                endDate={endDate}
-                            />
-                            <StockBox
-                                stockNumber={"2"}
-                                stockTitle={"삼성전자"}
-                                stockCode={"KR7005930003"}
-                                startDate={startDate}
-                                endDate={endDate}
-                            />
+                            {stocks.slice(0, 2).map((stock, index) => (
+                                <StockBox
+                                    key={index}
+                                    stockNumber={index + 1}
+                                    stockTitle={stock.itmsNm}
+                                    stockCode={stock.isinCd}
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                />
+                            ))}
                         </div>
                     </StockDetailBoxRow>
                     <StockDetailBoxRow>
-                        <StockBox
-                            stockNumber={"3"}
-                            stockTitle={"SK하이닉스"}
-                            stockCode={"KR7000660001"}
-                            startDate={startDate}
-                            endDate={endDate}
-                        />
-                        <StockBox
-                            stockNumber={"4"}
-                            stockTitle={"두산에너빌리티"}
-                            stockCode={"KR7034020008"}
-                            startDate={startDate}
-                            endDate={endDate}
-                        />
-                        <StockBox
-                            stockNumber={"5"}
-                            stockTitle={"신한지주"}
-                            stockCode={"KR7055550008"}
-                            startDate={startDate}
-                            endDate={endDate}
-                        />
-                        <StockBox
-                            stockNumber={"6"}
-                            stockTitle={"현대차"}
-                            stockCode={"KR7005380001"}
-                            startDate={startDate}
-                            endDate={endDate}
-                        />
+                        {stocks.slice(2, 6).map((stock, index) => (
+                            <StockBox
+                                key={index + 2}
+                                stockNumber={index + 3}
+                                stockTitle={stock.itmsNm}
+                                stockCode={stock.isinCd}
+                                startDate={startDate}
+                                endDate={endDate}
+                            />
+                        ))}
                     </StockDetailBoxRow>
                     <StockDetailBoxRow>
-                        <StockBox
-                            stockNumber={"7"}
-                            stockTitle={"기업은행"}
-                            stockCode={"KR7024110009"}
-                            startDate={startDate}
-                            endDate={endDate}
-                        />
-                        <StockBox
-                            stockNumber={"8"}
-                            stockTitle={"KB금융"}
-                            stockCode={"KR7105560007"}
-                            startDate={startDate}
-                            endDate={endDate}
-                        />
-                        <StockBox
-                            stockNumber={"9"}
-                            stockTitle={"하나금융지주"}
-                            stockCode={"KR7086790003"}
-                            startDate={startDate}
-                            endDate={endDate}
-                        />
-                        <StockBox
-                            stockNumber={"10"}
-                            stockTitle={"기아"}
-                            stockCode={"KR7000270009"}
-                            startDate={startDate}
-                            endDate={endDate}
-                        />
+                        {stocks.slice(6, 10).map((stock, index) => (
+                            <StockBox
+                                key={index + 6}
+                                stockNumber={index + 7}
+                                stockTitle={stock.itmsNm}
+                                stockCode={stock.isinCd}
+                                startDate={startDate}
+                                endDate={endDate}
+                            />
+                        ))}
                     </StockDetailBoxRow>
                 </StockDetailBoxContainer>
             </StockDetailSectionContainer>
