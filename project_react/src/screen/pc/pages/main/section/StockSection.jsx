@@ -31,8 +31,6 @@ const StockBoxContainer = styled.div`
 const StockSection = () => {
     const navigate = useNavigate();
     const [stocks, setStocks] = useState([]); // 주식 데이터를 저장할 상태 변수
-    const [startDate, setStartDate] = useState("20240501");
-    const [endDate, setEndDate] = useState("20240725");
 
     useEffect(() => {
         // API 호출
@@ -67,8 +65,7 @@ const StockSection = () => {
                             stockNumber={index + 1}
                             stockTitle={stock.itmsNm}
                             stockCode={stock.isinCd}
-                            startDate={startDate}
-                            endDate={endDate}
+                            stockData={stock.stockData}
                         />
                     ))}
                 </StockBoxContainer>

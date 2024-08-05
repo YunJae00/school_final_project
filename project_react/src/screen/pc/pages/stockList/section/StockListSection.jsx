@@ -38,19 +38,12 @@ const StockDetailBoxRow = styled.div`
 
 const StockListSection = () => {
     const [stocks, setStocks] = useState([]); // 주식 데이터를 저장할 상태 변수
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
 
     useEffect(() => {
         // API 호출
-        executeGetWeeklyStocksForList()
+        executeGetWeeklyStocksForList("2024-08-01") // 필요에 따라 날짜를 수정하세요.
             .then(response => {
-                const sortedStocks = response.data.sort((a, b) => new Date(b.date) - new Date(a.date)); // 날짜 기준으로 내림차순 정렬
-                const latestDate = sortedStocks[0]?.date; // 가장 최근 날짜 가져오기
-                const latestStocks = sortedStocks.filter(stock => stock.date === latestDate); // 가장 최근 날짜의 주식 데이터 필터링
-                setStocks(latestStocks); // 최근 날짜 데이터 전체를 상태로 설정
-                setStartDate(latestDate);
-                setEndDate(latestDate);
+                setStocks(response.data); // 모든 데이터를 설정
             })
             .catch(error => {
                 console.error('Error fetching weekly stocks:', error);
@@ -79,8 +72,7 @@ const StockListSection = () => {
                                     stockNumber={index + 1}
                                     stockTitle={stock.itmsNm}
                                     stockCode={stock.isinCd}
-                                    startDate={startDate}
-                                    endDate={endDate}
+                                    stockData={stock.stockData}
                                 />
                             ))}
                         </div>
@@ -92,8 +84,7 @@ const StockListSection = () => {
                                 stockNumber={index + 3}
                                 stockTitle={stock.itmsNm}
                                 stockCode={stock.isinCd}
-                                startDate={startDate}
-                                endDate={endDate}
+                                stockData={stock.stockData}
                             />
                         ))}
                     </StockDetailBoxRow>
@@ -104,8 +95,7 @@ const StockListSection = () => {
                                 stockNumber={index + 7}
                                 stockTitle={stock.itmsNm}
                                 stockCode={stock.isinCd}
-                                startDate={startDate}
-                                endDate={endDate}
+                                stockData={stock.stockData}
                             />
                         ))}
                     </StockDetailBoxRow>

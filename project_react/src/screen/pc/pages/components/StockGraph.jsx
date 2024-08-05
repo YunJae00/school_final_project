@@ -1,38 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ApexChart from 'react-apexcharts';
-import { executeGetDailyStockData } from '../../../../api/ApiService';
 
-const StockGraph = ({ stockCode, startDate, endDate }) => {
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-        // 오늘 날짜 계산
-        const today = new Date();
-        const todayFormatted = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
-
-        // 1년 전 날짜 계산
-        const oneYearAgo = new Date(today);
-        oneYearAgo.setFullYear(today.getFullYear() - 1);
-        const oneYearAgoFormatted = `${oneYearAgo.getFullYear()}${String(oneYearAgo.getMonth() + 1).padStart(2, '0')}${String(oneYearAgo.getDate()).padStart(2, '0')}`;
-
-        // 클라이언트에서 날짜를 보내지 않았을 때 기본값 설정
-        const finalStartDate = startDate || oneYearAgoFormatted;
-        const finalEndDate = endDate || todayFormatted;
-
-        if (stockCode) {
-            executeGetDailyStockData(stockCode, finalStartDate, finalEndDate)
-                .then(response => {
-                    setData(response.data);
-                })
-                .catch(error => {
-                    console.error('Error fetching stock data:', error);
-                });
-        }
-    }, [stockCode, startDate, endDate]);
-
+const StockGraph = ({ stockData }) => {
     const series = [
         {
-            data: data.map(price => ({
+            data: stockData.map(price => ({
                 x: new Date(price.basDt),
                 y: [price.mkp, price.hipr, price.lopr, price.clpr],
             })),
@@ -43,7 +15,6 @@ const StockGraph = ({ stockCode, startDate, endDate }) => {
         chart: {
             type: 'candlestick',
             height: '100%',
-            width: '100%',
             toolbar: {
                 show: false,
             },
@@ -64,12 +35,10 @@ const StockGraph = ({ stockCode, startDate, endDate }) => {
             },
         },
         xaxis: {
+            type: 'datetime',
             labels: {
-                show: true,
                 format: 'MM.dd',
             },
-            type: 'datetime',
-            categories: data.map(date => date.basDt),
             axisBorder: {
                 show: false,
             },
@@ -78,10 +47,15 @@ const StockGraph = ({ stockCode, startDate, endDate }) => {
             },
         },
         yaxis: {
-            show: true,
+            tooltip: {
+                enabled: true,
+            },
         },
         tooltip: {
-            enabled: false,
+            enabled: true,
+            x: {
+                format: 'yyyy-MM-dd',
+            },
         },
     };
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import StockGraph from './StockGraph';
-import {executeGetDailyStockData} from "../../../../api/ApiService";
 
 const StockBoxWrapper = styled.div`
     display: flex;
@@ -53,27 +52,19 @@ const StockDate = styled.p`
     font-family: pretendard;
 `;
 
-const StockBox = ({ stockNumber, stockTitle, stockCode, startDate, endDate }) => {
+const StockBox = ({ stockNumber, stockTitle, stockCode, stockData }) => {
     const [latestPrice, setLatestPrice] = useState(null);
     const [latestDate, setLatestDate] = useState(null);
-    const [data, setData] = useState([]);
 
     useEffect(() => {
-        if (stockCode) {
-            executeGetDailyStockData(stockCode, startDate, endDate)
-                .then(response => {
-                    setData(response.data);
-                    if (response.data.length > 0) {
-                        const latestData = response.data[0];
-                        setLatestPrice(latestData.clpr);
-                        setLatestDate(latestData.basDt);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching stock data:', error);
-                });
+        if (stockData && stockData.length > 0) {
+            // 최신 날짜 기준으로 데이터 정렬 (가장 최근이 첫 번째로 오도록)
+            const sortedData = [...stockData].sort((a, b) => new Date(b.basDt) - new Date(a.basDt));
+            const latestData = sortedData[0]; // 가장 최근 날짜의 데이터를 가져옴
+            setLatestPrice(latestData.clpr);
+            setLatestDate(latestData.basDt);
         }
-    }, [stockCode, startDate, endDate]);
+    }, [stockData]);
 
     return (
         <StockBoxWrapper>
@@ -81,7 +72,7 @@ const StockBox = ({ stockNumber, stockTitle, stockCode, startDate, endDate }) =>
             <StockTitle>{stockTitle}</StockTitle>
             <StockCode>{stockCode}</StockCode>
             <StockGraphWrapper>
-                <StockGraph stockCode={stockCode} startDate={startDate} endDate={endDate} />
+                <StockGraph stockData={stockData} />
             </StockGraphWrapper>
             <StockDetailBox>
                 <StockPrice>현재가</StockPrice>

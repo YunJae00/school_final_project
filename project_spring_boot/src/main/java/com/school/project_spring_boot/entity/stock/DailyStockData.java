@@ -55,5 +55,4 @@ public class DailyStockData {
 
     @Column(nullable = false)
     private Long mrktTotAmt; // 시가총액
-
 }

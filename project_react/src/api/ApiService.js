@@ -12,17 +12,10 @@ export const executeCheckEmailService = (email) =>
 export const executeGetLatestIndexData = () =>
     apiClient.get(`/api/index/latest-multiple`);
 
-export const executeGetDailyStockData = (isinCd, startDate, endDate) =>
-    apiClient.get(`/api/v1/stock/public/daily-data`, {
-        params: {
-            isinCd,
-            startDate,
-            endDate
-        }
-    });
 
 export const executeGetWeeklyStocksForList = (startDate) =>
     apiClient.get(`/api/v1/stock/weekly/latest`, { params: { startDate } });
+
 
 //admin용
 export const executeSearchStocks = (query) =>
@@ -36,3 +29,6 @@ export const executeAddStockToWeekly = (startDate, stockId) =>
 
 export const executeRemoveStockFromWeekly = (startDate, stockId) =>
     apiClient.delete(`/api/v1/stock/weekly/${stockId}`, { params: { startDate } });
+
+export const executeFetchMultipleStockData = (stockRequests) =>
+    apiClient.post(`/api/v1/stock/fetch-multiple-stocks`, stockRequests);

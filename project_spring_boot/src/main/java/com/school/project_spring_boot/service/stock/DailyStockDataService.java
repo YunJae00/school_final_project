@@ -48,6 +48,19 @@ public class DailyStockDataService {
         int totalCount = 0;
         int numOfRows = 10; // Default rows per page, adjust if needed
 
+        // 오늘 날짜 계산
+        LocalDate today = LocalDate.now();
+        // 1년 전 날짜 계산
+        LocalDate oneYearAgo = today.minusYears(1);
+
+        // 클라이언트가 날짜를 보내지 않았을 때만 자동으로 날짜 설정
+        if (requestDto.getStartDate() == null || requestDto.getStartDate().isEmpty()) {
+            requestDto.setStartDate(oneYearAgo.format(DateTimeFormatter.BASIC_ISO_DATE));
+        }
+        if (requestDto.getEndDate() == null || requestDto.getEndDate().isEmpty()) {
+            requestDto.setEndDate(today.format(DateTimeFormatter.BASIC_ISO_DATE));
+        }
+
         try {
             do {
                 URL url = new URL(
