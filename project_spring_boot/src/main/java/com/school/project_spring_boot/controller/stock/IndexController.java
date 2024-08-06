@@ -1,7 +1,7 @@
-package com.school.project_spring_boot.controller;
+package com.school.project_spring_boot.controller.stock;
 
-import com.school.project_spring_boot.dto.IndexDataDto;
-import com.school.project_spring_boot.service.IndexService;
+import com.school.project_spring_boot.dto.response.stock.IndexDataDto;
+import com.school.project_spring_boot.service.stock.IndexService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;

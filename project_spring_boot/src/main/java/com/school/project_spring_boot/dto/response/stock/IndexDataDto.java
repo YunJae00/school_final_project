@@ -1,4 +1,4 @@
-package com.school.project_spring_boot.dto;
+package com.school.project_spring_boot.dto.response.stock;
 
 public class IndexDataDto {
     private String indexName;

@@ -1,21 +1,25 @@
 package com.school.project_spring_boot.service.stock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.school.project_spring_boot.dto.requset.stock.StockDataRequestDto;
+import com.school.project_spring_boot.dto.response.stock.FetchStockDataResponseDto;
 import com.school.project_spring_boot.dto.response.stock.StockApiResponseDto;
 import com.school.project_spring_boot.dto.response.stock.StockDataResponseDto;
 import com.school.project_spring_boot.dto.response.stock.StockResponseDto;
+import com.school.project_spring_boot.dto.response.stock.StockWithDataResponseDto;
 import com.school.project_spring_boot.entity.stock.DailyStockData;
 import com.school.project_spring_boot.entity.stock.Stock;
 import com.school.project_spring_boot.entity.stock.WeeklyStockRecommendation;
 import com.school.project_spring_boot.entity.stock.WeeklyStockRecommendationStock;
-import com.school.project_spring_boot.repository.DailyStockDataRepository;
-import com.school.project_spring_boot.repository.StockRepository;
-import com.school.project_spring_boot.repository.WeeklyStockRecommendationRepository;
-import jakarta.transaction.Transactional;
+import com.school.project_spring_boot.repository.stock.DailyStockDataRepository;
+import com.school.project_spring_boot.repository.stock.StockRepository;
+import com.school.project_spring_boot.repository.stock.WeeklyStockRecommendationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -25,7 +29,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +56,7 @@ public class StockService {
         this.serviceKey = serviceKey;
     }
 
-    // weekly data
+    // 주식 검색
     public List<StockResponseDto> searchStocks(String query) {
         return stockRepository.findByItmsNmContaining(query).stream()
                 .map(this::convertToDto)
@@ -114,6 +121,166 @@ public class StockService {
         }
     }
 
+    // 다수의 주식 데이터 가져오기 및 저장
+    public void fetchMultipleStockData(List<StockDataRequestDto> stockRequests) {
+        for (StockDataRequestDto request : stockRequests) {
+            fetchAndSaveStockDataByCodeAndDate(request.getIsinCd(), LocalDate.parse(request.getStartDate()), LocalDate.parse(request.getEndDate()));
+        }
+    }
+
+    // 전체 주식 정보 가져오기 및 저장
+    @Transactional
+    public void fetchAndSaveAllStocksInfo() {
+        String urlTemplate = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo";
+        String today = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE); // 오늘 날짜를 "yyyyMMdd" 형식으로 포맷
+        int pageNo = 1;
+        int numOfRows = 100;
+
+        try {
+            Set<String> existingIsinCodes = stockRepository.findAllIsinCodes();
+            while (true) {
+                URL url = new URL(
+                        urlTemplate
+                                + "?serviceKey="
+                                + serviceKey
+                                + "&resultType=json"
+                                + "&beginBasDt=" + today
+                                + "&endBasDt=" + today
+                                + "&pageNo=" + pageNo
+                                + "&numOfRows=" + numOfRows
+                );
+
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
+                httpURLConnection.setRequestProperty("Accept", "application/json");
+                httpURLConnection.connect();
+
+                int responseCode = httpURLConnection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = rd.readLine()) != null) {
+                        response.append(line);
+                    }
+                    rd.close();
+
+                    String jsonResponse = response.toString();
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    StockApiResponseDto stockApiResponseDto = mapper.readValue(jsonResponse, StockApiResponseDto.class);
+
+                    if (stockApiResponseDto.getResponse() != null
+                            && stockApiResponseDto.getResponse().getBody() != null
+                            && stockApiResponseDto.getResponse().getBody().getItems() != null) {
+                        List<StockApiResponseDto.Item> items = stockApiResponseDto.getResponse().getBody().getItems().getItem();
+
+                        if (items.isEmpty()) {
+                            break; // 더 이상 가져올 데이터가 없으면 루프 종료
+                        }
+
+                        for (StockApiResponseDto.Item item : items) {
+                            if (!existingIsinCodes.contains(item.getIsinCd())) {
+                                String mrktCls = item.getMrktCtg() != null ? item.getMrktCtg() : "Unknown";
+                                saveStockIfNotExist(item.getIsinCd(), item.getSrtnCd(), item.getItmsNm(), mrktCls);
+                            }
+                        }
+                    } else {
+                        break; // 데이터를 더 가져올 수 없는 경우 루프 종료
+                    }
+
+                    httpURLConnection.disconnect();
+                } else {
+                    break; // 에러 발생 시 루프 종료
+                }
+
+                pageNo++;
+            }
+
+        } catch (Exception e) {
+            logger.error("Error while fetching stock data: ", e);
+        }
+    }
+
+    // 최신 주차별 주식 데이터 가져오기
+    public List<StockWithDataResponseDto> getLatestWeeklyStocksData() {
+        WeeklyStockRecommendation latestWeeklyStocks = getLatestWeeklyStocks();
+        if (latestWeeklyStocks == null) {
+            return new ArrayList<>();
+        }
+
+        List<StockWithDataResponseDto> responseList = new ArrayList<>();
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusYears(1);
+
+        for (WeeklyStockRecommendationStock stockRec : latestWeeklyStocks.getStocks()) {
+            Stock stock = stockRec.getStock();
+            List<StockDataResponseDto> stockData = getStockDataByDateRange(stock.getIsinCd(), startDate, endDate);
+
+            StockWithDataResponseDto stockWithData = new StockWithDataResponseDto(
+                    stock.getIsinCd(),
+                    stock.getItmsNm(),
+                    stockData
+            );
+            responseList.add(stockWithData);
+        }
+
+        return responseList;
+    }
+
+    // 주식 데이터 가져오기 및 저장
+    public ResponseEntity<? super FetchStockDataResponseDto> fetchStockDataByCodeAndDate(StockDataRequestDto requestBody) {
+        try {
+            LocalDate today = LocalDate.now();
+            LocalDate oneYearAgo = today.minusYears(1);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+            String startDate = requestBody.getStartDate() != null && !requestBody.getStartDate().isEmpty()
+                    ? requestBody.getStartDate()
+                    : oneYearAgo.format(formatter);
+
+            String endDate = requestBody.getEndDate() != null && !requestBody.getEndDate().isEmpty()
+                    ? requestBody.getEndDate()
+                    : today.format(formatter);
+
+            fetchAndSaveStockDataByCodeAndDate(requestBody.getIsinCd(), LocalDate.parse(startDate, formatter), LocalDate.parse(endDate, formatter));
+
+            return FetchStockDataResponseDto.success();
+        } catch (Exception e) {
+            logger.error("Error while fetching and saving stock data: ", e);
+            return FetchStockDataResponseDto.databaseError();
+        }
+    }
+
+    // 주식 데이터 범위에 따라 가져오기
+    private List<StockDataResponseDto> getStockDataByDateRange(String isinCd, LocalDate startDate, LocalDate endDate) {
+        Optional<Stock> optionalStock = stockRepository.findByIsinCd(isinCd);
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            return dailyStockDataRepository.findByStockAndBasDtBetween(stock, startDate, endDate).stream()
+                    .map(data -> new StockDataResponseDto(
+                            data.getBasDt(),
+                            data.getClpr(),
+                            data.getHipr(),
+                            data.getLopr(),
+                            data.getMkp(),
+                            data.getVs(),
+                            data.getFltRt(),
+                            data.getTrqu(),
+                            data.getTrPrc(),
+                            data.getLstgStCnt(),
+                            data.getMrktTotAmt()
+                    ))
+                    .collect(Collectors.toList());
+        } else {
+            throw new RuntimeException("Stock not found");
+        }
+    }
+
     // 주식 데이터를 가져와 저장하는 메서드
     private void fetchAndSaveStockDataByCodeAndDate(String isinCd, LocalDate startDate, LocalDate endDate) {
         String urlTemplate = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo";
@@ -130,6 +297,7 @@ public class StockService {
                                 + "&resultType=json"
                                 + "&beginBasDt=" + start
                                 + "&endBasDt=" + end
+                                + "&isinCd=" + isinCd
                                 + "&pageNo=" + pageNo
                                 + "&numOfRows=" + numOfRows
                 );
@@ -187,7 +355,7 @@ public class StockService {
     }
 
     // 주식 데이터를 저장하는 메서드
-    public void saveStockData(String isinCd, StockApiResponseDto.Item item) {
+    private void saveStockData(String isinCd, StockApiResponseDto.Item item) {
         Stock stock = stockRepository.findByIsinCd(isinCd)
                 .orElseThrow(() -> new RuntimeException("주식을 찾을 수 없습니다."));
 
@@ -214,11 +382,6 @@ public class StockService {
         }
     }
 
-
-    private StockResponseDto convertToDto(Stock stock) {
-        return new StockResponseDto(stock.getId(), stock.getItmsNm(), stock.getIsinCd());
-    }
-
     // 주식이 존재하지 않으면 저장하는 메서드
     public Stock saveStockIfNotExist(String isinCd, String srtnCd, String itmsNm, String mrktCls) {
         Optional<Stock> optionalStock = stockRepository.findByIsinCd(isinCd);
@@ -235,147 +398,13 @@ public class StockService {
         return optionalStock.get();
     }
 
-
-    public void saveStockData(String isinCd, String srtnCd, String itmsNm, String mrktCls, List<DailyStockData> dailyStockDataList) {
-        // 주식이 이미 존재하는지 확인
-        if (stockRepository.existsByIsinCd(isinCd)) {
-            // 이미 존재하면 저장하지 않음
-            return;
-        }
-
-        // 주식이 존재하지 않으면 새로 저장
-        Stock stock = new Stock();
-        stock.setIsinCd(isinCd);
-        stock.setSrtnCd(srtnCd);
-        stock.setItmsNm(itmsNm);
-        stock.setMrktCls(mrktCls);
-        stockRepository.save(stock);
-
-        // DailyStockData가 존재하는 경우에만 저장
-        if (dailyStockDataList != null) {
-            for (DailyStockData dailyStockData : dailyStockDataList) {
-                if (!dailyStockDataRepository.existsByStockAndBasDt(stock, dailyStockData.getBasDt())) {
-                    dailyStockData.setStock(stock);
-                    dailyStockDataRepository.save(dailyStockData);
-                }
-            }
-        }
-    }
-
-
-    public List<StockDataResponseDto> getStockDataByDateRange(String isinCd, LocalDate startDate, LocalDate endDate) {
-        Optional<Stock> optionalStock = stockRepository.findByIsinCd(isinCd);
-        if (optionalStock.isPresent()) {
-            Stock stock = optionalStock.get();
-            return dailyStockDataRepository.findByStockAndBasDtBetween(stock, startDate, endDate).stream()
-                    .map(data -> new StockDataResponseDto(
-                            data.getBasDt(),
-                            data.getClpr(),
-                            data.getHipr(),
-                            data.getLopr(),
-                            data.getMkp(),
-                            data.getVs(),
-                            data.getFltRt(),
-                            data.getTrqu(),
-                            data.getTrPrc(),
-                            data.getLstgStCnt(),
-                            data.getMrktTotAmt()
-                    ))
-                    .collect(Collectors.toList());
-        } else {
-            throw new RuntimeException("Stock not found");
-        }
-    }
-
-    @Transactional
-    public void fetchAndSaveAllStocksInfo() {
-        String urlTemplate = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo";
-//        String today = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE); // 오늘 날짜를 "yyyyMMdd" 형식으로 포맷
-        String today = "20240801";
-        String endDate = "20240802";
-        int pageNo = 1;
-        int numOfRows = 100; // 한 페이지에 최대 데이터를 가져오도록 설정
-
-        try {
-            // 모든 기존 주식 ISIN 코드를 한 번에 조회
-            Set<String> existingIsinCodes = stockRepository.findAllIsinCodes();
-            while (true) {
-                URL url = new URL(
-                        urlTemplate
-                                + "?serviceKey="
-                                + serviceKey
-                                + "&resultType=json"
-                                + "&beginBasDt=" + today
-                                + "&endBasDt=" + endDate
-                                + "&pageNo=" + pageNo
-                                + "&numOfRows=" + numOfRows
-                );
-
-                System.out.println(url);
-
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("GET");
-                httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
-                httpURLConnection.setRequestProperty("Accept", "application/json");
-                httpURLConnection.connect();
-
-                int responseCode = httpURLConnection.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = rd.readLine()) != null) {
-                        response.append(line);
-                    }
-                    rd.close();
-
-                    String jsonResponse = response.toString();
-
-                    ObjectMapper mapper = new ObjectMapper();
-                    StockApiResponseDto stockApiResponseDto = mapper.readValue(jsonResponse, StockApiResponseDto.class);
-
-                    if (stockApiResponseDto.getResponse() != null
-                            && stockApiResponseDto.getResponse().getBody() != null
-                            && stockApiResponseDto.getResponse().getBody().getItems() != null) {
-                        List<StockApiResponseDto.Item> items = stockApiResponseDto.getResponse().getBody().getItems().getItem();
-
-                        if (items.isEmpty()) {
-                            break; // 더 이상 가져올 데이터가 없으면 루프 종료
-                        }
-
-                        for (StockApiResponseDto.Item item : items) {
-                            // 이미 저장된 ISIN 코드인지 확인하고, 존재하지 않는 경우에만 저장
-                            if (!existingIsinCodes.contains(item.getIsinCd())) {
-                                String mrktCls = item.getMrktCtg() != null ? item.getMrktCtg() : "Unknown";
-                                saveStockData(item.getIsinCd(), item.getSrtnCd(), item.getItmsNm(), mrktCls, null);
-                            }
-                        }
-                    } else {
-                        break; // 데이터를 더 가져올 수 없는 경우 루프 종료
-                    }
-
-                    httpURLConnection.disconnect();
-                } else {
-                    break; // 에러 발생 시 루프 종료
-                }
-
-                pageNo++;
-            }
-
-        } catch (Exception e) {
-            logger.error("Error while fetching stock data: ", e);
-        }
-    }
-
-    public LocalDate findStartDateOfLatestWeek() {
-        return weeklyStockRecommendationRepository.findTopByOrderByStartDateDesc()
-                .map(WeeklyStockRecommendation::getStartDate)
-                .orElseThrow(() -> new RuntimeException("최근 주의 데이터를 찾을 수 없습니다."));
-    }
-
-    public WeeklyStockRecommendation getLatestWeeklyStocks() {
+    // 최신 주차별 추천 목록 가져오기
+    private WeeklyStockRecommendation getLatestWeeklyStocks() {
         return weeklyStockRecommendationRepository.findTopByOrderByStartDateDesc().orElse(null);
+    }
+
+    // DTO 변환 메서드
+    private StockResponseDto convertToDto(Stock stock) {
+        return new StockResponseDto(stock.getId(), stock.getItmsNm(), stock.getIsinCd());
     }
 }

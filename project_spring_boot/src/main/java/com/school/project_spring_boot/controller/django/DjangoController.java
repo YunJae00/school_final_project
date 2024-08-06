@@ -1,4 +1,4 @@
-package com.school.project_spring_boot.controller;
+package com.school.project_spring_boot.controller.django;
 
 import com.school.project_spring_boot.service.django.DjangoService;
 import org.springframework.http.ResponseEntity;

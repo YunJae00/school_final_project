@@ -1,10 +1,10 @@
-package com.school.project_spring_boot.service;
+package com.school.project_spring_boot.service.stock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.school.project_spring_boot.dto.IndexApiResponseDto;
-import com.school.project_spring_boot.dto.IndexDataDto;
+import com.school.project_spring_boot.dto.response.stock.IndexApiResponseDto;
+import com.school.project_spring_boot.dto.response.stock.IndexDataDto;
 import com.school.project_spring_boot.entity.stock.IndexData;
-import com.school.project_spring_boot.repository.IndexDataRepository;
+import com.school.project_spring_boot.repository.stock.IndexDataRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

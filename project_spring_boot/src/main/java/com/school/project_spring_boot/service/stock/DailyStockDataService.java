@@ -6,7 +6,7 @@ import com.school.project_spring_boot.dto.requset.stock.StockDataRequestDto;
 import com.school.project_spring_boot.dto.response.stock.FetchStockDataResponseDto;
 import com.school.project_spring_boot.entity.stock.DailyStockData;
 import com.school.project_spring_boot.entity.stock.Stock;
-import com.school.project_spring_boot.repository.DailyStockDataRepository;
+import com.school.project_spring_boot.repository.stock.DailyStockDataRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
