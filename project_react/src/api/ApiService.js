@@ -16,7 +16,6 @@ export const executeGetLatestIndexData = () =>
 export const executeGetWeeklyStocksForList = (startDate) =>
     apiClient.get(`/api/v1/stock/weekly/latest`, { params: { startDate } });
 
-
 //admin용
 export const executeSearchStocks = (query) =>
     apiClient.get(`/api/v1/stock/search`, { params: { query } });

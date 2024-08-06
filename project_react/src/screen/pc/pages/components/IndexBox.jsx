@@ -10,6 +10,7 @@ const IndexBoxWrapper = styled.div`
     border-radius: 2.25rem;
     padding: 2.5rem;
     background-color: white;
+    gap: 1rem;
 `;
 
 const IndexTitle = styled.p`
@@ -35,8 +36,21 @@ const IndexDate = styled.p`
     font-family: pretendard;
 `;
 
-const IndexBox = ({indexTitle, indexPrice, indexDate}) => {
-    return(
+const formatDate = (dateString) => {
+    // 이미 YYYY-MM-DD 형식이라면 그대로 사용
+    if (dateString.includes('-')) {
+        return dateString;
+    }
+
+    // YYYYMMDD 또는 다른 형식의 문자열을 YYYY-MM-DD로 변환
+    const year = dateString.slice(0, 4);
+    const month = dateString.slice(4, 6);
+    const day = dateString.slice(6, 8);
+    return `${year}-${month}-${day}`;
+};
+
+const IndexBox = ({ indexTitle, indexPrice, indexDate }) => {
+    return (
         <IndexBoxWrapper>
             <IndexTitle>{indexTitle}</IndexTitle>
             <IndexDetailBox>
@@ -45,7 +59,7 @@ const IndexBox = ({indexTitle, indexPrice, indexDate}) => {
             </IndexDetailBox>
             <IndexDetailBox>
                 <IndexDate>기준일</IndexDate>
-                <IndexDate>{indexDate}</IndexDate>
+                <IndexDate>{formatDate(indexDate)}</IndexDate> {/* 날짜 형식 변환 */}
             </IndexDetailBox>
         </IndexBoxWrapper>
     );

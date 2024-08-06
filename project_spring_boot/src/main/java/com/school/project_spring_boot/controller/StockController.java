@@ -91,6 +91,7 @@ public class StockController {
     }
 
     // stock 기본 정보 table 채우기
+    // todo : 배포 이후에는 주기적으로 업데이트해줘야함
     @PostMapping("/fetch-all-stocks-info")
     public ResponseEntity<String> fetchAndSaveAllStocksInfo() {
         try {

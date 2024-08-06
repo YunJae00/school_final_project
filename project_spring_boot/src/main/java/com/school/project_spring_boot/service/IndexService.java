@@ -3,7 +3,7 @@ package com.school.project_spring_boot.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.project_spring_boot.dto.IndexApiResponseDto;
 import com.school.project_spring_boot.dto.IndexDataDto;
-import com.school.project_spring_boot.entity.IndexData;
+import com.school.project_spring_boot.entity.stock.IndexData;
 import com.school.project_spring_boot.repository.IndexDataRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

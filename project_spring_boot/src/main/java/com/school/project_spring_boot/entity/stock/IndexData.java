@@ -1,4 +1,4 @@
-package com.school.project_spring_boot.entity;
+package com.school.project_spring_boot.entity.stock;
 
 import jakarta.persistence.*;
 
