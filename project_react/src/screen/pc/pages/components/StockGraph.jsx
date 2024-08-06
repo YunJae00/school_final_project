@@ -16,7 +16,17 @@ const StockGraph = ({ stockData }) => {
             type: 'candlestick',
             height: '100%',
             toolbar: {
-                show: false,
+                show: true, // 툴바를 표시하여 resetZoom 버튼을 추가
+                tools: {
+                    download: false, // 다운로드 버튼을 제거합니다.
+                    reset: true, // resetZoom 버튼을 활성화합니다.
+                    zoom: false, // 줌 비활성화
+                    pan: true, // 드래그 이동 활성화
+                    zoomin: true,
+                    zoomout: true,
+                    selection: false, // 선택 비활성화
+                },
+                autoSelected: 'pan' // 기본 도구를 pan으로 설정합니다.
             },
         },
         grid: {

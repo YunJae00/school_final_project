@@ -12,6 +12,7 @@ const StockBoxWrapper = styled.div`
     border-radius: 2.25rem;
     padding: 2.5rem;
     background-color: white;
+    cursor: pointer; // 클릭 가능하도록 커서 스타일 추가
 `;
 
 const StockNumber = styled.p`
@@ -52,7 +53,7 @@ const StockDate = styled.p`
     font-family: pretendard;
 `;
 
-const StockBox = ({ stockNumber, stockTitle, stockCode, stockData }) => {
+const StockBox = ({ stockNumber, stockTitle, stockCode, stockData, onClick }) => {
     const [latestPrice, setLatestPrice] = useState(null);
     const [latestDate, setLatestDate] = useState(null);
 
@@ -67,7 +68,7 @@ const StockBox = ({ stockNumber, stockTitle, stockCode, stockData }) => {
     }, [stockData]);
 
     return (
-        <StockBoxWrapper>
+        <StockBoxWrapper onClick={onClick}>
             <StockNumber>{stockNumber}</StockNumber>
             <StockTitle>{stockTitle}</StockTitle>
             <StockCode>{stockCode}</StockCode>

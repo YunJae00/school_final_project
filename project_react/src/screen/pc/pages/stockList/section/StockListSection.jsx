@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // useNavigate 사용
 import ContainerTitle from "../../components/ContainerTitle";
 import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
@@ -38,6 +39,7 @@ const StockDetailBoxRow = styled.div`
 
 const StockListSection = () => {
     const [stocks, setStocks] = useState([]); // 주식 데이터를 저장할 상태 변수
+    const navigate = useNavigate(); // useNavigate 훅을 사용
 
     useEffect(() => {
         // API 호출
@@ -49,6 +51,10 @@ const StockListSection = () => {
                 console.error('Error fetching weekly stocks:', error);
             });
     }, []);
+
+    const handleStockClick = (stock) => {
+        navigate(`/stock-detail/${stock.isinCd}`, { state: { stock } }); // 주식 데이터와 함께 이동
+    };
 
     return (
         <StockDetailSectionWrapper>
@@ -73,6 +79,7 @@ const StockListSection = () => {
                                     stockTitle={stock.itmsNm}
                                     stockCode={stock.isinCd}
                                     stockData={stock.stockData}
+                                    onClick={() => handleStockClick(stock)} // 클릭 이벤트 추가
                                 />
                             ))}
                         </div>
@@ -85,6 +92,7 @@ const StockListSection = () => {
                                 stockTitle={stock.itmsNm}
                                 stockCode={stock.isinCd}
                                 stockData={stock.stockData}
+                                onClick={() => handleStockClick(stock)} // 클릭 이벤트 추가
                             />
                         ))}
                     </StockDetailBoxRow>
@@ -96,6 +104,7 @@ const StockListSection = () => {
                                 stockTitle={stock.itmsNm}
                                 stockCode={stock.isinCd}
                                 stockData={stock.stockData}
+                                onClick={() => handleStockClick(stock)} // 클릭 이벤트 추가
                             />
                         ))}
                     </StockDetailBoxRow>
