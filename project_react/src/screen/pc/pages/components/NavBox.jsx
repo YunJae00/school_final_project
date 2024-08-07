@@ -15,6 +15,7 @@ const wrapTextWithLang = (text) => {
     ));
 };
 
+// $navBackgroundColor로 prop을 전달하여 DOM 요소로 전달되지 않도록 설정
 const NavBoxWrapper = styled.div`
     display: flex;
     flex: 1;
@@ -22,7 +23,7 @@ const NavBoxWrapper = styled.div`
     height: 20rem;
     align-items: start;
     border-radius: 2.25rem;
-    background-color: ${props => props.navBackgroundColor ? props.navBackgroundColor : "white"};
+    background-color: ${({ $navBackgroundColor }) => $navBackgroundColor || "white"};
     padding: 2.5rem;
     position: relative;
 `;
@@ -86,9 +87,9 @@ const NavBoxImage = styled.img`
     right: 2.5rem;
 `;
 
-const NavBox = ({ flex, navBackgroundColor, navSubTitle, navTitle, navContent, navButton, navImage }) => {
+const NavBox = ({ navBackgroundColor, navSubTitle, navTitle, navContent, navButton, navImage }) => {
     return (
-        <NavBoxWrapper navBackgroundColor={navBackgroundColor}>
+        <NavBoxWrapper $navBackgroundColor={navBackgroundColor}>
             <NavBoxLeft>
                 <NavBoxLeftInner>
                     <NavSubTitle>{wrapTextWithLang(navSubTitle)}</NavSubTitle>
@@ -97,7 +98,7 @@ const NavBox = ({ flex, navBackgroundColor, navSubTitle, navTitle, navContent, n
                 </NavBoxLeftInner>
                 <BlueButton buttonText={navButton} />
             </NavBoxLeft>
-            {navImage && <NavBoxImage src={navImage} alt={"image"}/>}
+            {navImage && <NavBoxImage src={navImage} alt={"image"} />}
         </NavBoxWrapper>
     );
 };

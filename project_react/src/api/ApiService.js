@@ -13,8 +13,8 @@ export const executeGetLatestIndexData = () =>
     apiClient.get(`/api/index/latest-multiple`);
 
 
-export const executeGetWeeklyStocksForList = (startDate) =>
-    apiClient.get(`/api/v1/stock/weekly/latest`, { params: { startDate } });
+export const executeGetWeeklyStocksForList = () =>
+    apiClient.get(`/api/v1/stock/weekly/latest`);
 
 //admin용
 export const executeSearchStocks = (query) =>

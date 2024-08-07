@@ -9,12 +9,11 @@ const TitleWrapper = styled.div`
     gap: 0.5rem;
 `;
 
-const Title = styled.p`
+const Title = styled.span`
     color: white;
-    font-family: pretendard;
+    font-family: pretendard,serif;
     font-size: 2.25rem;
 `;
-
 
 const ContainerTitle = ({subTitle}) => {
     return(

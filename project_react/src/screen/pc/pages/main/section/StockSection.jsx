@@ -4,7 +4,7 @@ import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
 import StockBox from "../../components/StockBox";
 import { useNavigate } from "react-router-dom";
-import { executeGetWeeklyStocksForList  } from "../../../../../api/ApiService"; // API 호출 함수 import
+import { executeGetWeeklyStocksForList } from "../../../../../api/ApiService"; // API 호출 함수 import
 
 const StockSectionWrapper = styled.div`
     display: flex;
@@ -34,7 +34,7 @@ const StockSection = () => {
 
     useEffect(() => {
         // API 호출
-        executeGetWeeklyStocksForList("2024-08-01") // 필요에 따라 날짜를 수정하세요.
+        executeGetWeeklyStocksForList() // 필요에 따라 날짜를 수정하세요.
             .then(response => {
                 setStocks(response.data.slice(0, 3)); // API에서 받은 데이터 중 3개만 상태로 설정
             })
@@ -46,6 +46,10 @@ const StockSection = () => {
     function buttonClickHandler() {
         navigate('/stock-list'); // 버튼 클릭 시 stock-list 페이지로 이동
     }
+
+    const handleStockClick = (stock) => {
+        navigate(`/stock-detail/${stock.isinCd}`, { state: { stock } }); // 주식 데이터와 함께 상세 페이지로 이동
+    };
 
     return (
         <StockSectionWrapper>
@@ -66,6 +70,7 @@ const StockSection = () => {
                             stockTitle={stock.itmsNm}
                             stockCode={stock.isinCd}
                             stockData={stock.stockData}
+                            onClick={() => handleStockClick(stock)} // 각 StockBox에 클릭 이벤트 추가
                         />
                     ))}
                 </StockBoxContainer>

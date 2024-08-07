@@ -25,7 +25,7 @@ const NavSection = () => {
                     navTitle={"AI 모델 성과 및\n수익률 분석"}
                     navContent={"딥 Q-Learning 알고리즘을 통해\n얻은 성과를 확인해보세요"}
                     navBackgroundColor={"#264653"}
-                    navButton={"자세히보기"}
+                    navButton={"서비스 자세히보기"}
                     navImage={aiImage}
                 />
                 <NavBox

@@ -43,7 +43,7 @@ const StockListSection = () => {
 
     useEffect(() => {
         // API 호출
-        executeGetWeeklyStocksForList("2024-08-01") // 필요에 따라 날짜를 수정하세요.
+        executeGetWeeklyStocksForList() // 필요에 따라 날짜를 수정하세요.
             .then(response => {
                 setStocks(response.data); // 모든 데이터를 설정
             })

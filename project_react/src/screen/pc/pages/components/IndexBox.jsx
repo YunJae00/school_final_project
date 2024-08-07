@@ -49,10 +49,22 @@ const formatDate = (dateString) => {
     return `${year}-${month}-${day}`;
 };
 
+const translateIndexName = (indexName) => {
+    const translations = {
+        "코스피 200": "KOSPI 200",
+        "코스피": "KOSPI",
+        "코스피 50": "KOSPI 50",
+        "코스닥": "KOSDAQ",
+        "코스닥 150": "KOSDAQ 150",
+        "KRX 100": "KRX 100",
+    };
+    return translations[indexName] || indexName; // 매칭되지 않는 경우 원래 이름 반환
+};
+
 const IndexBox = ({ indexTitle, indexPrice, indexDate }) => {
     return (
         <IndexBoxWrapper>
-            <IndexTitle>{indexTitle}</IndexTitle>
+            <IndexTitle>{translateIndexName(indexTitle)}</IndexTitle> {/* 이름 변환 */}
             <IndexDetailBox>
                 <IndexPrice>현재가</IndexPrice>
                 <IndexPrice>{indexPrice}</IndexPrice>
