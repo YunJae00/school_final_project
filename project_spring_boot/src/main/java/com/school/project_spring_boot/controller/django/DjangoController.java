@@ -41,4 +41,16 @@ public class DjangoController {
             @RequestParam int windowSize) {
         return djangoService.predictAction(stockName, daysAgo, windowSize);
     }
+
+    @PostMapping("/test-weekly")
+    public ResponseEntity<Void> testAndSaveWeeklyStocks() {
+        djangoService.testAndSaveWeeklyStocks();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/predict-weekly")
+    public ResponseEntity<Void> predictAndSaveWeeklyStocks() {
+        djangoService.predictAndSaveWeeklyStocks();
+        return ResponseEntity.ok().build();
+    }
 }

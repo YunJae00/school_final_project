@@ -24,4 +24,6 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     // 주식 이름에 특정 문자열이 포함된 주식을 검색하는 메서드
     List<Stock> findByItmsNmContaining(String itmsNm);
 
+    Optional<Stock> findBySrtnCd(String srtnCd);
+
 }
