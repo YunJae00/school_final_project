@@ -16,6 +16,13 @@ export const executeGetLatestIndexData = () =>
 export const executeGetWeeklyStocksForList = () =>
     apiClient.get(`/api/v1/stock/weekly/latest`);
 
+// analyze
+export const fetchTestResultByStockId = (stockId) =>
+    apiClient.get(`/api/v1/test-result/${stockId}`);
+
+export const fetchPredictionResultByStockId = (stockId) =>
+    apiClient.get(`/api/v1/prediction-result/${stockId}`);
+
 //admin용
 export const executeSearchStocks = (query) =>
     apiClient.get(`/api/v1/stock/search`, { params: { query } });

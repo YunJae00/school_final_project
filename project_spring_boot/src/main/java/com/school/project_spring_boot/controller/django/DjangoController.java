@@ -53,4 +53,5 @@ public class DjangoController {
         djangoService.predictAndSaveWeeklyStocks();
         return ResponseEntity.ok().build();
     }
+
 }

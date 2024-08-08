@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const wrapTextWithLang = (text) => {
+    if (!text) return null; // text가 undefined나 null인 경우 아무것도 반환하지 않음
     return text.split('\n').map((line, index) => (
         <React.Fragment key={index}>
             {line.split('').map((char, index) => {
@@ -69,7 +70,7 @@ const StockReturnsPercentText = styled.p`
     font-size: 6rem;
     font-family: pretendard;
     font-weight: bold;
-    color: red;
+    color: ${({ profit }) => (profit >= 0 ? 'red' : 'blue')};
     white-space: pre-line;
     [lang="en"] {
         font-family: 'Inter', sans-serif;
@@ -142,50 +143,55 @@ const OperationExplainContent = styled.p`
     }
 `;
 
-const StockAnalyzeValue = ({valueText, value}) => {
-    return(
-        <div style={{display: "flex", flex: "1", justifyContent: "space-between", padding: "1.25rem", borderRadius: "1.125rem", backgroundColor: "#BEC8CC"}}>
-            <p style={{fontSize: "1.5rem", fontFamily: "pretendard", fontWeight: "bold", color: "#5F6466"}}>{wrapTextWithLang(valueText)}</p>
-            <p style={{fontSize: "1.5rem", fontFamily: "pretendard", fontWeight: "bold"}}>{wrapTextWithLang(value)}</p>
+const StockAnalyzeValue = ({ valueText, value }) => {
+    return (
+        <div style={{ display: "flex", flex: "1", justifyContent: "space-between", padding: "1.25rem", borderRadius: "1.125rem", backgroundColor: "#BEC8CC" }}>
+            <p style={{ fontSize: "1.5rem", fontFamily: "pretendard", fontWeight: "bold", color: "#5F6466" }}>{wrapTextWithLang(valueText)}</p>
+            <p style={{ fontSize: "1.5rem", fontFamily: "pretendard", fontWeight: "bold" }}>{wrapTextWithLang(value)}</p>
         </div>
     );
 };
 
-const StockDetailAnalyzeSection = () => {
+const StockDetailAnalyzeSection = ({ testResult, predictionResult }) => {
+    if (!testResult || !predictionResult) {
+        return <p>Loading...</p>; // 데이터를 불러오는 동안 표시할 내용
+    }
 
-    const explainContent1 = "AI 모델은 과거 데이터와 현재 시장 상황을 분석하여 다음 날의 주가 움직임을 예측합니다. 예측 결과에 따라 매수, 매도, 또는 보유 결정을 내립니다. 예를 들어, 주가가 상승할 것으로 예상되면 매수, 하락할 것으로 예상되면 매도합니다."
-    const explainContent2 = "각 거래의 수익률은 매수 가격과 매도 가격의 차이로 계산됩니다. 전체 수익률은 초기 자본금 대비 종료 후 자본금의 비율로 계산됩니다. 예를 들어, 초기 자본금 1,000,000원이 1,150,000원이 되었다면 수익률은 15%입니다."
-    const explainContent3 = "AI 모델은 학습된 데이터를 기반으로 매일 10개의 주식에 대한 다음 날의 투자 전략을 제공합니다. 각 주식에 대해 매수, 매도, 보유 중 하나를 추천합니다."
+    const initialCapital = 1000000;
+    const endCapital = initialCapital+testResult.averageProfit;
+    const testCount = '10회'
+    const tradingUnit = '10주';
+    const profitRate = ((endCapital - initialCapital) / initialCapital) * 100;
 
+    const formattedEndCapital = testResult.endCapital ? testResult.endCapital.toLocaleString() : "N/A";
+    const formattedAverageProfit = profitRate !== undefined ? `${profitRate}%` : "N/A";
 
-    return(
+    return (
         <StockDetailAnalyzeSectionWrapper>
             <StockDetailAnalyzeSectionContainer>
                 <StockTitleContainer>{wrapTextWithLang("삼성전자 AI 기반 주식 분석")}</StockTitleContainer>
                 <StockDetail>
                     <StockReturnsPercentBox>
-                        <StockReturnsPercentText>20%</StockReturnsPercentText>
-                        <StockAIRecommendText>{wrapTextWithLang("AI 추천 : HOLD")}</StockAIRecommendText>
+                        <StockReturnsPercentText profit={testResult.averageProfit}>
+                            {wrapTextWithLang(formattedAverageProfit)}
+                        </StockReturnsPercentText>
+                        <StockAIRecommendText>{wrapTextWithLang(`AI 추천 : ${predictionResult.action}`)}</StockAIRecommendText>
                     </StockReturnsPercentBox>
                     <StockAnalyzeValueColumn>
-                        <StockAnalyzeValue valueText={"초기 자본금"} value={'10,000,000'}/>
-                        <StockAnalyzeValue valueText={"테스트 시작일"} value={'10,000,000'}/>
-                        <StockAnalyzeValue valueText={"테스트 종료일"} value={'10,000,000'}/>
+                        <StockAnalyzeValue valueText={"초기 자본금"} value={initialCapital.toLocaleString()} />
+                        <StockAnalyzeValue valueText={"테스트 시작일"} value={testResult.startDate || "N/A"} />
+                        <StockAnalyzeValue valueText={"테스트 종료일"} value={testResult.endDate || "N/A"} />
                     </StockAnalyzeValueColumn>
                     <StockAnalyzeValueColumn>
-                        <StockAnalyzeValue valueText={"종료 후 자본금"} value={'10,000,000'}/>
-                        <StockAnalyzeValue valueText={"거래 단위"} value={'10,000,000'}/>
-                        <StockAnalyzeValue valueText={"테스트 횟수"} value={'10,000,000'}/>
+                        <StockAnalyzeValue valueText={"종료 후 자본금"} value={endCapital.toLocaleString()} />
+                        <StockAnalyzeValue valueText={"거래 단위"} value={tradingUnit.toLocaleString()} />
+                        <StockAnalyzeValue valueText={"테스트 횟수"} value={testCount.toLocaleString()} />
                     </StockAnalyzeValueColumn>
                 </StockDetail>
                 <OperationExplain>
                     <OperationExplainTitle>{wrapTextWithLang("서비스 운영 방식")}</OperationExplainTitle>
                     <OperationExplainSubTitle>{wrapTextWithLang("매수/매도 전략")}</OperationExplainSubTitle>
-                    <OperationExplainContent>{wrapTextWithLang(explainContent1)}</OperationExplainContent>
-                    <OperationExplainSubTitle>{wrapTextWithLang("수익률 계산")}</OperationExplainSubTitle>
-                    <OperationExplainContent>{wrapTextWithLang(explainContent2)}</OperationExplainContent>
-                    <OperationExplainSubTitle>{wrapTextWithLang("투자전략 제공")}</OperationExplainSubTitle>
-                    <OperationExplainContent>{wrapTextWithLang(explainContent3)}</OperationExplainContent>
+                    <OperationExplainContent>{wrapTextWithLang("AI 모델은 과거 데이터와 현재 시장 상황을 분석하여 다음 날의 주가 움직임을 예측합니다. 예측 결과에 따라 매수, 매도, 또는 보유 결정을 내립니다.")}</OperationExplainContent>
                 </OperationExplain>
             </StockDetailAnalyzeSectionContainer>
         </StockDetailAnalyzeSectionWrapper>

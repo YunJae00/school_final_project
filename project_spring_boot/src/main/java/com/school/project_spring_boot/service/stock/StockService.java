@@ -407,4 +407,8 @@ public class StockService {
     private StockResponseDto convertToDto(Stock stock) {
         return new StockResponseDto(stock.getId(), stock.getItmsNm(), stock.getIsinCd());
     }
+
+    public Stock getStockByIsin(String isinCd) {
+        return stockRepository.findByIsinCd(isinCd).orElseThrow(() -> new RuntimeException("Stock not found with ISIN: " + isinCd));
+    }
 }
