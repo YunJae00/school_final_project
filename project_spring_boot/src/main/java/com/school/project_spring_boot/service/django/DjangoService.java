@@ -69,7 +69,6 @@ public class DjangoService {
         return CompletableFuture.completedFuture(response);
     }
 
-    @Async
     public CompletableFuture<Void> testAndSaveWeeklyStocks() {
         WeeklyStockRecommendation latestWeeklyRecommendation = weeklyStockRecommendationRepository.findTopByOrderByStartDateDesc()
                 .orElseThrow(() -> new RuntimeException("No weekly stock recommendations found"));
@@ -92,7 +91,7 @@ public class DjangoService {
                         ResponseEntity<String> testResponse = restTemplate.getForEntity(
                                 String.format("http://127.0.0.1:8000/api/test/?stock=%s&start_date=%s&test_runs=%d&window_size=%d",
                                         stockName, formattedDate, 10, 10), String.class);
-                        saveTestResult(stock, testResponse.getBody());
+                        saveTestResult(stock, testResponse.getBody(), formattedDate);
                     });
                 }).toList();
 
@@ -119,12 +118,13 @@ public class DjangoService {
         return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
     }
 
-    private void saveTestResult(Stock stock, String testResult) {
+    private void saveTestResult(Stock stock, String testResult, String startDate) {
         try {
             JsonNode jsonNode = objectMapper.readTree(testResult);
 
             TestResult result = new TestResult();
             result.setStock(stock);
+            result.setStartDate(LocalDate.parse(startDate));
             result.setAverageProfit(jsonNode.get("average_profit").asDouble());
             result.setTestRewards(jsonNode.get("test_rewards").toString());
             result.setTestProfits(jsonNode.get("test_profits").toString());

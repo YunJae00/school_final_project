@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -23,4 +25,6 @@ public class TestResult {
     private double averageProfit;
     private String testRewards;  // JSON 문자열로 저장
     private String testProfits;  // JSON 문자열로 저장
+
+    private LocalDate startDate;
 }
