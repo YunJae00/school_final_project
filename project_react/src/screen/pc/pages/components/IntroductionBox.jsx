@@ -47,6 +47,7 @@ const IntroductionBoxTitle = styled.p`
     font-size: 2rem;
     font-weight: bold;
     white-space: pre-line;
+    line-height: 1.3;
     [lang="en"] {
         font-family: 'Inter', sans-serif;
     }

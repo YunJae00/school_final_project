@@ -3,7 +3,8 @@ import ContainerTitle from "../../components/ContainerTitle";
 import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
 import IndexBox from "../../components/IndexBox";
-import { executeGetLatestIndexData } from "../../../../../api/ApiService"; // API 호출 함수 import
+import { executeGetLatestIndexData } from "../../../../../api/ApiService";
+import {useDate} from "../../../../../context/date/DateContext"; // API 호출 함수 import
 
 const IndexSectionWrapper = styled.div`
     display: flex;
@@ -34,7 +35,19 @@ const IndexColumn = styled.div`
     gap: 1.875rem;
 `;
 
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("ko-KR", { month: "long", day: "numeric" });
+};
+
+const getYear = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getFullYear()}년`; // 2024년이라면 "2024년"으로 변환
+};
+
 const IndexSection = () => {
+    const { startDate, endDate } = useDate();
+
     const [indexData, setIndexData] = useState([]);
 
     useEffect(() => {
@@ -58,7 +71,7 @@ const IndexSection = () => {
                     <IndexColumn>
                         <IntroductionBox
                             subTitle={"지수 정보"}
-                            title={"24년 7월 2주차\n지수정보 한눈에 보기"}
+                            title={`${getYear(startDate)}\n${formatDate(startDate)} ~ ${formatDate(endDate)}\n지수정보 한눈에 보기`}
                             content={"지수정보를 확인해보세요"}
                             flex={1}
                         />

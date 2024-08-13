@@ -1,7 +1,7 @@
 import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import PhoneLoginPage from "./PhoneLoginPage";
-import AuthProvider from "../../security/AuthContext";
+import AuthProvider from "../../context/security/AuthContext";
 import PhoneMainPage from "./PhoneMainPage";
 
 const PhonePages = () => {

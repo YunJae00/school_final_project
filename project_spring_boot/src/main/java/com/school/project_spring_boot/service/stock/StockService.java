@@ -284,8 +284,9 @@ public class StockService {
     // 주식 데이터를 가져와 저장하는 메서드
     private void fetchAndSaveStockDataByCodeAndDate(String isinCd, LocalDate startDate, LocalDate endDate) {
         String urlTemplate = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo";
-        String start = startDate.format(DateTimeFormatter.BASIC_ISO_DATE); // "yyyyMMdd" 형식으로 포맷
         String end = endDate.format(DateTimeFormatter.BASIC_ISO_DATE);
+        String start = endDate.minusYears(1).toString();
+
         int pageNo = 1;
         int numOfRows = 100;
 

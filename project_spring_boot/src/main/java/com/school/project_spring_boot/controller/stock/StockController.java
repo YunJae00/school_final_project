@@ -55,6 +55,7 @@ public class StockController {
         }
     }
 
+    // admin 페이지에서 주식 10개를 넘겨서 저장하는 controller
     @PostMapping("/fetch-multiple-stocks")
     public ResponseEntity<String> fetchMultipleStockDataByCodeAndDate(@RequestBody List<StockDataRequestDto> stockRequests) {
         try {

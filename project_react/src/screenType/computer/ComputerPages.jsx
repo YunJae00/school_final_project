@@ -2,7 +2,7 @@ import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ComputerMainPage from "./ComputerMainPage";
 import ComputerLoginPage from "./ComputerLoginPage";
-import AuthProvider from "../../security/AuthContext";
+import AuthProvider from "../../context/security/AuthContext";
 
 const ComputerPages = () => {
     return(

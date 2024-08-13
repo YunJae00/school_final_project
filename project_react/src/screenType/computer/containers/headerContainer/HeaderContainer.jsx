@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import icon from "../../../../images/logo.png"
 import profileIcon from "../../../../images/profile_icon.png"
-import {useAuth} from "../../../../security/AuthContext";
+import {useAuth} from "../../../../context/security/AuthContext";
 import {useNavigate} from "react-router-dom";
 
 const Container = styled.div`

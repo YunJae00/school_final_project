@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { executeLoginService } from "../api/ApiService";
-import { apiClient } from "../api/ApiClient";
+import { executeLoginService } from "../../api/ApiService";
+import { apiClient } from "../../api/ApiClient";
 
 export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);

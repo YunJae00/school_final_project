@@ -5,6 +5,7 @@ import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
 import StockBox from "../../components/StockBox";
 import { executeGetWeeklyStocksForList } from "../../../../../api/ApiService";
+import {useDate} from "../../../../../context/date/DateContext";
 
 const StockDetailSectionWrapper = styled.div`
     display: flex;
@@ -37,7 +38,19 @@ const StockDetailBoxRow = styled.div`
     gap: 1.875rem;
 `;
 
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("ko-KR", { month: "long", day: "numeric" });
+}
+
+const getYear = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getFullYear()}년`;
+};
+
 const StockListSection = () => {
+    const { startDate, endDate } = useDate();
+
     const [stocks, setStocks] = useState([]); // 주식 데이터를 저장할 상태 변수
     const navigate = useNavigate(); // useNavigate 훅을 사용
 
@@ -65,7 +78,7 @@ const StockListSection = () => {
                         <div style={{ display: "flex", flex: "1", gap: "1.875rem" }}>
                             <IntroductionBox
                                 subTitle={"AI 모델 성과"}
-                                title={"24년 7월 2주차\nTrand Trader 선정 주식 종목"}
+                                title={`${getYear(startDate)}\n${formatDate(startDate)} ~ ${formatDate(endDate)}\nTrand Trader 선정 주식 종목`}
                                 content={"1. 서비스에서 선정된 자산별 현황을 확인해보세요\n"
                                     + "2. 선정된 종목을 확인하고 개인 포트폴리오에 추가해보세요\n"
                                     + "3. 선정된 종목의 AI 분석을 확인해보세요"}

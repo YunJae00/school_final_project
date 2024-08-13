@@ -4,7 +4,8 @@ import styled from "styled-components";
 import IntroductionBox from "../../components/IntroductionBox";
 import StockBox from "../../components/StockBox";
 import { useNavigate } from "react-router-dom";
-import { executeGetWeeklyStocksForList } from "../../../../../api/ApiService"; // API 호출 함수 import
+import { executeGetWeeklyStocksForList } from "../../../../../api/ApiService";
+import {useDate} from "../../../../../context/date/DateContext";
 
 const StockSectionWrapper = styled.div`
     display: flex;
@@ -28,7 +29,19 @@ const StockBoxContainer = styled.div`
     gap: 1.875rem;
 `;
 
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("ko-KR", { month: "long", day: "numeric" });
+};
+
+const getYear = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getFullYear()}년`; // 2024년이라면 "2024년"으로 변환
+};
+
 const StockSection = () => {
+    const { startDate, endDate} = useDate();
+
     const navigate = useNavigate();
     const [stocks, setStocks] = useState([]); // 주식 데이터를 저장할 상태 변수
 
@@ -59,7 +72,7 @@ const StockSection = () => {
                     <IntroductionBox
                         onClick={buttonClickHandler}
                         subTitle={"AI 모델 성과"}
-                        title={"24년 7월 2주차\nTrand Trader\n선정 주식 종목"}
+                        title={`${getYear(startDate)}\n${formatDate(startDate)} ~ ${formatDate(endDate)}\nTrand Trader\n선정 주식 종목`}
                         content={"서비스에서 선정된\n자산별 현황을 확인해보세요"}
                         detail={"⦁ 종목은 매 주 시가총액 상위 10개 종목으로 선정됩니다."}
                         buttonText={"10 종목 모두 확인하러가기"} />
