@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -69,6 +70,7 @@ public class DjangoService {
         return CompletableFuture.completedFuture(response);
     }
 
+    @Async
     public CompletableFuture<Void> testAndSaveWeeklyStocks() {
         WeeklyStockRecommendation latestWeeklyRecommendation = weeklyStockRecommendationRepository.findTopByOrderByStartDateDesc()
                 .orElseThrow(() -> new RuntimeException("No weekly stock recommendations found"));
@@ -77,24 +79,29 @@ public class DjangoService {
         String startDateStr = String.valueOf(latestWeeklyRecommendation.getStartDate());
         LocalDate startDate = LocalDate.parse(startDateStr);
 
-        // 1년 전의 날짜 계산
+        // 테스트할 때 사용할 날짜 (5년 전)
+        LocalDate fiveYearsBeforeStartDate = startDate.minusYears(5);
+
+        // 저장할 때 사용할 날짜 (1년 전)
         LocalDate oneYearBeforeStartDate = startDate.minusYears(1);
 
-        // 다시 String으로 포맷팅
-        String formattedDate = oneYearBeforeStartDate.format(DateTimeFormatter.ISO_DATE);
+        // 포맷팅
+        String testFormattedDate = fiveYearsBeforeStartDate.format(DateTimeFormatter.ISO_DATE);
+        String saveFormattedDate = oneYearBeforeStartDate.format(DateTimeFormatter.ISO_DATE);
 
         List<CompletableFuture<Void>> futures = latestWeeklyRecommendation.getStocks().stream()
                 .map(weeklyStock -> {
                     Stock stock = weeklyStock.getStock();
                     String stockName = stock.getSrtnCd();
-                    return CompletableFuture.runAsync(() -> {
-                        ResponseEntity<String> testResponse = restTemplate.getForEntity(
-                                String.format("http://127.0.0.1:8000/api/test/?stock=%s&start_date=%s&test_runs=%d&window_size=%d",
-                                        stockName, formattedDate, 10, 10), String.class);
-                        saveTestResult(stock, testResponse.getBody(), formattedDate);
-                    });
-                }).toList();
 
+                    // 개별적으로 startTesting 메서드를 호출하여 비동기 작업 수행
+                    return startTesting(stockName, testFormattedDate, 10, 10)
+                            // **저장할 때는 1년 전의 날짜를 사용**
+                            .thenAccept(response -> saveTestResult(stock, response.getBody(), saveFormattedDate));
+                })
+                .toList();
+
+        // 모든 비동기 작업이 완료될 때까지 기다림
         return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
     }
 
@@ -120,6 +127,7 @@ public class DjangoService {
 
     private void saveTestResult(Stock stock, String testResult, String startDate) {
         try {
+            System.out.println("Received test result: " + testResult);  // 로그 추가
             JsonNode jsonNode = objectMapper.readTree(testResult);
 
             TestResult result = new TestResult();
@@ -148,5 +156,19 @@ public class DjangoService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public LocalDate calculateTrainingStartDate(LocalDate startDate, double splitRatio) {
+        // Calculate the total period from startDate to now
+        LocalDate now = LocalDate.now();
+        long totalDays = ChronoUnit.DAYS.between(startDate, now);
+
+        // Calculate the required length of training data
+        long requiredTrainingDays = (long) (totalDays * splitRatio);
+
+        // Calculate the new start date for training
+        LocalDate trainingStartDate = now.minusDays(requiredTrainingDays);
+
+        return trainingStartDate;
     }
 }
