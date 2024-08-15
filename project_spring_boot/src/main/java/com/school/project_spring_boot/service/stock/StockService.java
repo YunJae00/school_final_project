@@ -132,7 +132,10 @@ public class StockService {
     @Transactional
     public void fetchAndSaveAllStocksInfo() {
         String urlTemplate = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo";
-        String today = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE); // 오늘 날짜를 "yyyyMMdd" 형식으로 포맷
+        LocalDate today = LocalDate.now(); // 오늘 날짜
+        LocalDate yesterday = today.minusDays(1); // 어제 날짜
+        String formattedToday = today.format(DateTimeFormatter.BASIC_ISO_DATE); // 오늘 날짜를 "yyyyMMdd" 형식으로 포맷
+        String formattedYesterday = yesterday.format(DateTimeFormatter.BASIC_ISO_DATE); // 어제 날짜를 "yyyyMMdd" 형식으로 포맷
         int pageNo = 1;
         int numOfRows = 100;
 
@@ -144,11 +147,13 @@ public class StockService {
                                 + "?serviceKey="
                                 + serviceKey
                                 + "&resultType=json"
-                                + "&beginBasDt=" + today
-                                + "&endBasDt=" + today
+                                + "&beginBasDt=" + formattedYesterday
+                                + "&endBasDt=" + formattedToday
                                 + "&pageNo=" + pageNo
                                 + "&numOfRows=" + numOfRows
                 );
+
+                System.out.println(url);
 
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("GET");

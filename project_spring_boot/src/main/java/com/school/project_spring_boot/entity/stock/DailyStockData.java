@@ -14,8 +14,7 @@ import java.time.LocalDate;
 public class DailyStockData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "daily_stock_data_seq")
-    @SequenceGenerator(name = "daily_stock_data_seq", sequenceName = "daily_stock_data_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

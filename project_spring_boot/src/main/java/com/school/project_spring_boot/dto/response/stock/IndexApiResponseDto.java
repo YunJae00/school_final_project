@@ -75,8 +75,6 @@ public class IndexApiResponseDto {
         @JsonProperty("fltRt")
         private String fltRt;
 
-        // 필요한 다른 필드 추가
-
         public String getBasDt() {
             return basDt;
         }

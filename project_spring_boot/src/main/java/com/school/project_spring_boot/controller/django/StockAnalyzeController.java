@@ -6,7 +6,6 @@ import com.school.project_spring_boot.entity.stock.Stock;
 import com.school.project_spring_boot.service.django.PredictionResultService;
 import com.school.project_spring_boot.service.django.TestResultService;
 import com.school.project_spring_boot.service.stock.StockService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

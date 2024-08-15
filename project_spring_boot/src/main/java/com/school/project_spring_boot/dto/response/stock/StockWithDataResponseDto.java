@@ -17,5 +17,4 @@ public class StockWithDataResponseDto {
         this.itmsNm = itmsNm;
         this.stockData = stockData;
     }
-
 }

@@ -1,13 +1,16 @@
 package com.school.project_spring_boot.entity.stock;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class IndexData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "index_data_seq")
-    @SequenceGenerator(name = "index_data_seq", sequenceName = "index_data_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
 
@@ -31,46 +34,6 @@ public class IndexData {
         this.basDt = basDt;
         this.idxNm = idxNm;
         this.clpr = clpr;
-        this.fltRt = fltRt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getBasDt() {
-        return basDt;
-    }
-
-    public void setBasDt(String basDt) {
-        this.basDt = basDt;
-    }
-
-    public String getIdxNm() {
-        return idxNm;
-    }
-
-    public void setIdxNm(String idxNm) {
-        this.idxNm = idxNm;
-    }
-
-    public String getClpr() {
-        return clpr;
-    }
-
-    public void setClpr(String clpr) {
-        this.clpr = clpr;
-    }
-
-    public String getFltRt() {
-        return fltRt;
-    }
-
-    public void setFltRt(String fltRt) {
         this.fltRt = fltRt;
     }
 }

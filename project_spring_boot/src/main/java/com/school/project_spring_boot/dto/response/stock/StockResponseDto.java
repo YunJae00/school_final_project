@@ -23,5 +23,4 @@ public class StockResponseDto {
         this.itmsNm = itmsNm;
         this.isinCd = isinCd;
     }
-
 }

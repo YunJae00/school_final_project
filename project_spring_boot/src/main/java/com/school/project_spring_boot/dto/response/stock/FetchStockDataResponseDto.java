@@ -1,7 +1,5 @@
 package com.school.project_spring_boot.dto.response.stock;
 
-import com.school.project_spring_boot.common.ResponseCode;
-import com.school.project_spring_boot.common.ResponseMessage;
 import com.school.project_spring_boot.dto.response.ResponseDto;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

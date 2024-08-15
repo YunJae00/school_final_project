@@ -6,7 +6,6 @@ import com.school.project_spring_boot.entity.django.PredictionResult;
 import com.school.project_spring_boot.entity.django.TestResult;
 import com.school.project_spring_boot.entity.stock.Stock;
 import com.school.project_spring_boot.entity.stock.WeeklyStockRecommendation;
-import com.school.project_spring_boot.entity.stock.WeeklyStockRecommendationStock;
 import com.school.project_spring_boot.repository.django.PredictionResultRepository;
 import com.school.project_spring_boot.repository.django.TestResultRepository;
 import com.school.project_spring_boot.repository.stock.StockRepository;
@@ -114,14 +113,14 @@ public class DjangoService {
                 .map(weeklyStock -> {
                     Stock stock = weeklyStock.getStock();
                     String stockName = stock.getSrtnCd();
-                    return CompletableFuture.runAsync(() -> {
-                        ResponseEntity<String> predictResponse = restTemplate.getForEntity(
-                                String.format("http://127.0.0.1:8000/api/predict/?stock=%s&days_ago=%d&window_size=%d",
-                                        stockName, 0, 10), String.class);
-                        savePredictionResult(stock, predictResponse.getBody());
-                    });
-                }).toList();
 
+                    // 개별적으로 predictAction 메서드를 호출하여 비동기 작업 수행
+                    return predictAction(stockName, 0, 10)
+                            .thenAccept(response -> savePredictionResult(stock, response.getBody()));
+                })
+                .toList();
+
+        // 모든 비동기 작업이 완료될 때까지 기다림
         return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
     }
 
@@ -156,19 +155,5 @@ public class DjangoService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public LocalDate calculateTrainingStartDate(LocalDate startDate, double splitRatio) {
-        // Calculate the total period from startDate to now
-        LocalDate now = LocalDate.now();
-        long totalDays = ChronoUnit.DAYS.between(startDate, now);
-
-        // Calculate the required length of training data
-        long requiredTrainingDays = (long) (totalDays * splitRatio);
-
-        // Calculate the new start date for training
-        LocalDate trainingStartDate = now.minusDays(requiredTrainingDays);
-
-        return trainingStartDate;
     }
 }

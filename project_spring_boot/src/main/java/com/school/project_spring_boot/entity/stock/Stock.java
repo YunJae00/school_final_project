@@ -14,8 +14,7 @@ import java.util.List;
 public class Stock {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stock_seq")
-    @SequenceGenerator(name = "stock_seq", sequenceName = "stock_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(unique = true, nullable = false)
