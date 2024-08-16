@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/stock-analyze")
 public class StockAnalyzeController {
 
     private final TestResultService testResultService;

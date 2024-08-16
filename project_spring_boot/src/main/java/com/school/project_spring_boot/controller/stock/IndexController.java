@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/index")
+@RequestMapping("/api/v1/index")
 public class IndexController {
 
     private final IndexService indexService;
