@@ -6,6 +6,7 @@ import com.school.project_spring_boot.dto.response.stock.IndexDataDto;
 import com.school.project_spring_boot.entity.stock.IndexData;
 import com.school.project_spring_boot.repository.stock.IndexDataRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.net.HttpURLConnection;
@@ -31,6 +32,7 @@ public class IndexService {
         this.serviceKey = serviceKey;
     }
 
+    @Async
     public void fetchAndSaveLatestIndexData(String indexName) {
         String urlTemplate = "https://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex";
 

@@ -66,7 +66,7 @@ public class StockController {
         }
     }
 
-    // 전체 stock data 채우 (가장 먼저 해야할거)
+    // 전체 stock data 채우기 (가장 먼저 해야할거)
     @PostMapping("/fetch-all-stocks-info")
     public ResponseEntity<String> fetchAndSaveAllStocksInfo() {
         try {

@@ -25,20 +25,18 @@ import java.util.concurrent.CompletableFuture;
 public class DjangoService {
 
     private final RestTemplate restTemplate;
-    private final StockRepository stockRepository;
     private final WeeklyStockRecommendationRepository weeklyStockRecommendationRepository;
     private final TestResultRepository testResultRepository;
     private final PredictionResultRepository predictionResultRepository;
 
     private final ObjectMapper objectMapper;
 
-    public DjangoService(RestTemplate restTemplate, StockRepository stockRepository,
+    public DjangoService(RestTemplate restTemplate,
                          WeeklyStockRecommendationRepository weeklyStockRecommendationRepository,
                          TestResultRepository testResultRepository,
                          PredictionResultRepository predictionResultRepository,
                          ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
-        this.stockRepository = stockRepository;
         this.weeklyStockRecommendationRepository = weeklyStockRecommendationRepository;
         this.testResultRepository = testResultRepository;
         this.predictionResultRepository = predictionResultRepository;

@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -108,6 +109,7 @@ public class StockService {
     }
 
     // 주차별 주식 데이터 저장
+    @Async
     public void saveWeeklyStockData(LocalDate startDate) {
         WeeklyStockRecommendation weeklyStocks = weeklyStockRecommendationRepository.findByStartDate(startDate)
                 .orElseThrow(() -> new RuntimeException("해당 주차의 추천 목록을 찾을 수 없습니다."));
@@ -129,6 +131,7 @@ public class StockService {
     }
 
     // 전체 주식 정보 가져오기 및 저장
+    @Async
     @Transactional
     public void fetchAndSaveAllStocksInfo() {
         String urlTemplate = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo";
@@ -237,6 +240,7 @@ public class StockService {
     }
 
     // 주식 데이터 가져오기 및 저장
+    @Async
     public ResponseEntity<? super FetchStockDataResponseDto> fetchStockDataByCodeAndDate(StockDataRequestDto requestBody) {
         try {
             LocalDate today = LocalDate.now();
