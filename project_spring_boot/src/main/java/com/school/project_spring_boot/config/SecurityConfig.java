@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
-            "/api/auth/**", "/h2-console/**", "/api/members/**", "/api/stocks/public/**", "/api/index/**", "/api/v1/**", "/api/v1/stock/**"
+            "/api/v1/**", "/h2-console/**",
     };
 
     @Bean
