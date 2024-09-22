@@ -53,7 +53,7 @@ const Header = () => {
     return(
         <HeaderWrapper>
             <HeaderContainer>
-                <Title onClick={titleOnClickHandler}>Trand Trader</Title>
+                <Title onClick={titleOnClickHandler}>STOPICKR</Title>
                 <NavBox>
                     <Nav>AI 성과 분석</Nav>
                     <Nav>내 포트폴리오</Nav>
