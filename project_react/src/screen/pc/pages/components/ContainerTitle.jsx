@@ -18,7 +18,7 @@ const Title = styled.span`
 const ContainerTitle = ({subTitle}) => {
     return(
         <TitleWrapper>
-            <Title style={{display: "flex"}}><Title style={{fontWeight: "bold", fontFamily: "Inter"}}>Trand Trader</Title>에서</Title>
+            <Title style={{display: "flex"}}><Title style={{fontWeight: "bold", fontFamily: "Inter"}}>STOPICKR</Title>에서</Title>
             <Title>{subTitle}</Title>
         </TitleWrapper>
     );

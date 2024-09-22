@@ -72,7 +72,7 @@ const StockSection = () => {
                     <IntroductionBox
                         onClick={buttonClickHandler}
                         subTitle={"AI 모델 성과"}
-                        title={`${getYear(startDate)}\n${formatDate(startDate)} ~ ${formatDate(endDate)}\nTrand Trader\n선정 주식 종목`}
+                        title={`${getYear(startDate)}\n${formatDate(startDate)} ~ ${formatDate(endDate)}\nSTOPICKR\n선정 주식 종목`}
                         content={"서비스에서 선정된\n자산별 현황을 확인해보세요"}
                         detail={"⦁ 종목은 매 주 시가총액 상위 10개 종목으로 선정됩니다."}
                         buttonText={"10 종목 모두 확인하러가기"} />
